@@ -1,0 +1,19 @@
+{
+  "@@locale": "en",
+  "homeScreenTitle": "Cashu",
+  "homeScreenCurrentBalance": "Current Balance",
+  "homeScreenRecentTransactions": "Recent Transactions",
+  "homeScreenCurrentMint": "Current Mint",
+  "homeScreenSend": "Send",
+  "homeScreenReceive": "Receive",
+  "homeScreenScan": "Scan",
+  "drawerTitle": "Cashu Wallet",
+  "drawerSubtitle": "Ecash for everyone",
+  "drawerMenuHome": "Home",
+  "drawerMenuTransactionHistory": "Transaction History",
+  "drawerMenuSettings": "Settings",
+  "drawerMenuDarkMode": "Dark Mode",
+  "drawerMenuLightMode": "Light Mode",
+  "drawerMenuAbout": "About"
+
+}

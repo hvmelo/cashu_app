@@ -1,0 +1,6 @@
+arb-dir: lib/ui/core/l10n
+template-arb-file: app_en.arb
+synthetic-package: false
+output-dir: lib/ui/core/l10n/gen_l10n
+output-localization-file: app_localizations.dart
+nullable-getter: false
