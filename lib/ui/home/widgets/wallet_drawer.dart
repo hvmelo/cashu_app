@@ -44,18 +44,18 @@ class WalletDrawer extends ConsumerWidget {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  'Cashu Wallet',
+                  context.l10n.drawerTitle,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: Theme.of(context).colorScheme.onPrimary,
                       ),
                 ),
                 Text(
-                  'Ecash for everyone',
+                  context.l10n.drawerSubtitle,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Theme.of(context)
                             .colorScheme
                             .onPrimary
-                            .withOpacity(0.7),
+                            .withAlpha(100),
                       ),
                 ),
               ],
@@ -63,7 +63,7 @@ class WalletDrawer extends ConsumerWidget {
           ),
           ListTile(
             leading: const Icon(Icons.home_outlined),
-            title: const Text('Home'),
+            title: Text(context.l10n.drawerMenuHome),
             selected: true,
             onTap: () {
               Navigator.pop(context);
@@ -71,7 +71,7 @@ class WalletDrawer extends ConsumerWidget {
           ),
           ListTile(
             leading: const Icon(Icons.history_outlined),
-            title: const Text('Transaction History'),
+            title: Text(context.l10n.drawerMenuTransactionHistory),
             onTap: () {
               Navigator.pop(context);
               // TODO: Navigate to transaction history
@@ -79,7 +79,7 @@ class WalletDrawer extends ConsumerWidget {
           ),
           ListTile(
             leading: const Icon(Icons.settings_outlined),
-            title: const Text('Settings'),
+            title: Text(context.l10n.drawerMenuSettings),
             onTap: () {
               Navigator.pop(context);
               // TODO: Navigate to settings
@@ -90,7 +90,9 @@ class WalletDrawer extends ConsumerWidget {
             secondary: Icon(
               isDarkMode ? Icons.dark_mode : Icons.light_mode,
             ),
-            title: Text(isDarkMode ? 'Dark Mode' : 'Light Mode'),
+            title: Text(isDarkMode
+                ? context.l10n.drawerMenuDarkMode
+                : context.l10n.drawerMenuLightMode),
             value: isDarkMode,
             onChanged: (value) {
               ref.read(themeProvider.notifier).setThemeMode(
@@ -101,7 +103,7 @@ class WalletDrawer extends ConsumerWidget {
           const Divider(),
           ListTile(
             leading: const Icon(Icons.info_outline),
-            title: const Text('About'),
+            title: Text(context.l10n.drawerMenuAbout),
             onTap: () {
               Navigator.pop(context);
               // TODO: Navigate to about

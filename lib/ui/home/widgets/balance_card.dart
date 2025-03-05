@@ -1,23 +1,23 @@
+import 'package:cashu_app/config/providers.dart';
 import 'package:cashu_app/ui/core/themes/colors.dart';
 import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class BalanceCard extends StatelessWidget {
-  final AsyncValue<BigInt> balanceAsync;
-
+class BalanceCard extends ConsumerWidget {
   const BalanceCard({
     super.key,
-    required this.balanceAsync,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final balanceAsync = ref.watch(walletBalanceProvider);
+
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final textColor = isDarkMode ? Colors.white : context.colorScheme.onPrimary;
+    final textColor = isDarkMode ? Colors.white : AppColors.black;
     final fadedTextColor = isDarkMode
         ? Colors.white.withAlpha(178) // 0.7 * 255 = 178
-        : context.colorScheme.onPrimary.withAlpha(178);
+        : AppColors.black.withAlpha(178);
 
     return Container(
       width: double.infinity,
@@ -32,32 +32,23 @@ class BalanceCard extends StatelessWidget {
                   Color(0xFF1A1A1A), // Slightly lighter black
                 ]
               : [
-                  context.colorScheme.primary,
-                  context.colorScheme.primary.withAlpha(204), // 0.8 * 255 = 204
+                  AppColors.white,
+                  AppColors.grey100,
                 ],
         ),
         borderRadius: BorderRadius.circular(20),
-        border: isDarkMode
-            ? Border.all(
-                color: Colors.white.withAlpha(51), // 0.2 * 255 = 51
-                width: 1.5,
-              )
-            : null,
-        boxShadow: [
-          BoxShadow(
-            color: isDarkMode
-                ? AppColors.blackTransparent
-                : context.colorScheme.primary.withAlpha(76), // 0.3 * 255 = 76
-            blurRadius: 15,
-            offset: const Offset(0, 10),
-          ),
-        ],
+        border: Border.all(
+          color: isDarkMode
+              ? Colors.white.withAlpha(51) // 0.2 * 255 = 51
+              : AppColors.black.withAlpha(51),
+          width: 1.5,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Current Balance',
+            context.l10n.homeScreenCurrentBalance,
             style: context.textTheme.bodyMedium?.copyWith(
               color: fadedTextColor,
             ),

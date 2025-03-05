@@ -119,6 +119,12 @@ abstract class AppLocalizations {
   /// **'Current Mint'**
   String get homeScreenCurrentMint;
 
+  /// No description provided for @homeScreenMintNotConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Not connected'**
+  String get homeScreenMintNotConnected;
+
   /// No description provided for @homeScreenSend.
   ///
   /// In en, this message translates to:
@@ -136,6 +142,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Scan'**
   String get homeScreenScan;
+
+  /// No description provided for @homeScreenEcash.
+  ///
+  /// In en, this message translates to:
+  /// **'Ecash'**
+  String get homeScreenEcash;
+
+  /// No description provided for @homeScreenEcashSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get homeScreenEcashSend;
+
+  /// No description provided for @homeScreenEcashSendSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send eCash to someone'**
+  String get homeScreenEcashSendSubtitle;
+
+  /// No description provided for @homeScreenEcashMelt.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay'**
+  String get homeScreenEcashMelt;
+
+  /// No description provided for @homeScreenEcashMeltSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay Lightning Network invoice'**
+  String get homeScreenEcashMeltSubtitle;
+
+  /// No description provided for @homeScreenEcashReceive.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive'**
+  String get homeScreenEcashReceive;
+
+  /// No description provided for @homeScreenEcashReceiveSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive eCash from someone'**
+  String get homeScreenEcashReceiveSubtitle;
+
+  /// No description provided for @homeScreenMintEcash.
+  ///
+  /// In en, this message translates to:
+  /// **'Mint'**
+  String get homeScreenMintEcash;
+
+  /// No description provided for @homeScreenMintEcashSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mint eCash via Lightning Network'**
+  String get homeScreenMintEcashSubtitle;
 
   /// No description provided for @drawerTitle.
   ///

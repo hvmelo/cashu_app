@@ -4,6 +4,7 @@
   "homeScreenCurrentBalance": "Saldo Actual",
   "homeScreenRecentTransactions": "Transacciones Recientes",
   "homeScreenCurrentMint": "Mint Actual",
+  "homeScreenMintNotConnected": "No conectado",
   "homeScreenSend": "Enviar",
   "homeScreenReceive": "Recibir",
   "homeScreenScan": "Escanear",

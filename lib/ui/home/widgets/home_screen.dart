@@ -1,4 +1,5 @@
 import 'package:cashu_app/config/providers.dart';
+import 'package:cashu_app/ui/core/widgets/option_bottom_sheet.dart';
 import 'package:cashu_app/ui/home/widgets/balance_card.dart';
 import 'package:cashu_app/ui/home/widgets/mint_info_card.dart';
 import 'package:cashu_app/ui/home/widgets/recent_transactions/recent_transactions_widget.dart';
@@ -51,11 +52,11 @@ class HomeScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 16),
-                BalanceCard(balanceAsync: balanceAsync),
+                BalanceCard(),
                 const SizedBox(height: 24),
                 _buildActionButtons(context),
                 const SizedBox(height: 24),
-                MintInfoCard(wallet: walletAsync),
+                MintInfoCard(),
                 const SizedBox(height: 24),
                 const Expanded(
                   child: RecentTransactionsWidget(),
@@ -77,7 +78,7 @@ class HomeScreen extends ConsumerWidget {
           icon: Icons.arrow_upward_rounded,
           label: context.l10n.homeScreenSend,
           onTap: () {
-            // TODO: Implement send
+            _showPaymentOptionsBottomSheet(context, PaymentAction.send);
           },
           color: AppColors.actionColors['send']!,
         ),
@@ -86,7 +87,7 @@ class HomeScreen extends ConsumerWidget {
           icon: Icons.arrow_downward_rounded,
           label: context.l10n.homeScreenReceive,
           onTap: () {
-            // TODO: Implement receive
+            _showPaymentOptionsBottomSheet(context, PaymentAction.receive);
           },
           color: AppColors.actionColors['receive']!,
         ),
@@ -100,6 +101,57 @@ class HomeScreen extends ConsumerWidget {
           color: AppColors.actionColors['scan']!,
         ),
       ],
+    );
+  }
+
+  void _showPaymentOptionsBottomSheet(
+      BuildContext context, PaymentAction action) {
+    final isReceive = action == PaymentAction.receive;
+    final title = isReceive
+        ? context.l10n.homeScreenReceive
+        : context.l10n.homeScreenSend;
+
+    final items = [
+      OptionItem(
+        title: isReceive
+            ? context.l10n.homeScreenEcashReceive
+            : context.l10n.homeScreenEcashSend,
+        subtitle: isReceive
+            ? context.l10n.homeScreenEcashReceiveSubtitle
+            : context.l10n.homeScreenEcashSendSubtitle,
+        icon: Icons.monetization_on,
+        onTap: () {
+          // TODO: Implement Ecash send/receive
+          if (isReceive) {
+            // Handle receive via Ecash
+          } else {
+            // Handle send via Ecash
+          }
+        },
+      ),
+      OptionItem(
+        title: isReceive
+            ? context.l10n.homeScreenEcashMelt
+            : context.l10n.homeScreenMintEcash,
+        subtitle: isReceive
+            ? context.l10n.homeScreenEcashMeltSubtitle
+            : context.l10n.homeScreenMintEcashSubtitle,
+        icon: Icons.bolt,
+        onTap: () {
+          // TODO: Implement Lightning send/receive
+          if (isReceive) {
+            // Handle receive via Lightning
+          } else {
+            // Handle send via Lightning
+          }
+        },
+      ),
+    ];
+
+    OptionBottomSheet.show(
+      context: context,
+      title: title,
+      items: items,
     );
   }
 
@@ -143,4 +195,9 @@ class HomeScreen extends ConsumerWidget {
       ),
     );
   }
+}
+
+enum PaymentAction {
+  send,
+  receive,
 }

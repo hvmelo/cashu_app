@@ -21,6 +21,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeScreenCurrentMint => 'Current Mint';
 
   @override
+  String get homeScreenMintNotConnected => 'Not connected';
+
+  @override
   String get homeScreenSend => 'Send';
 
   @override
@@ -28,6 +31,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeScreenScan => 'Scan';
+
+  @override
+  String get homeScreenEcash => 'Ecash';
+
+  @override
+  String get homeScreenEcashSend => 'Send';
+
+  @override
+  String get homeScreenEcashSendSubtitle => 'Send eCash to someone';
+
+  @override
+  String get homeScreenEcashMelt => 'Pay';
+
+  @override
+  String get homeScreenEcashMeltSubtitle => 'Pay Lightning Network invoice';
+
+  @override
+  String get homeScreenEcashReceive => 'Receive';
+
+  @override
+  String get homeScreenEcashReceiveSubtitle => 'Receive eCash from someone';
+
+  @override
+  String get homeScreenMintEcash => 'Mint';
+
+  @override
+  String get homeScreenMintEcashSubtitle => 'Mint eCash via Lightning Network';
 
   @override
   String get drawerTitle => 'Cashu Wallet';
