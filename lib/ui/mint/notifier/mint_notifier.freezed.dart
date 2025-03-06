@@ -17,7 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$MintState {
   int get amount => throw _privateConstructorUsedError;
-  bool get isLoading => throw _privateConstructorUsedError;
+  bool get isGeneratingInvoice => throw _privateConstructorUsedError;
   String? get invoice => throw _privateConstructorUsedError;
   String? get error => throw _privateConstructorUsedError;
 
@@ -33,7 +33,8 @@ abstract class $MintStateCopyWith<$Res> {
   factory $MintStateCopyWith(MintState value, $Res Function(MintState) then) =
       _$MintStateCopyWithImpl<$Res, MintState>;
   @useResult
-  $Res call({int amount, bool isLoading, String? invoice, String? error});
+  $Res call(
+      {int amount, bool isGeneratingInvoice, String? invoice, String? error});
 }
 
 /// @nodoc
@@ -52,7 +53,7 @@ class _$MintStateCopyWithImpl<$Res, $Val extends MintState>
   @override
   $Res call({
     Object? amount = null,
-    Object? isLoading = null,
+    Object? isGeneratingInvoice = null,
     Object? invoice = freezed,
     Object? error = freezed,
   }) {
@@ -61,9 +62,9 @@ class _$MintStateCopyWithImpl<$Res, $Val extends MintState>
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
               as int,
-      isLoading: null == isLoading
-          ? _value.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
+      isGeneratingInvoice: null == isGeneratingInvoice
+          ? _value.isGeneratingInvoice
+          : isGeneratingInvoice // ignore: cast_nullable_to_non_nullable
               as bool,
       invoice: freezed == invoice
           ? _value.invoice
@@ -85,7 +86,8 @@ abstract class _$$MintStateImplCopyWith<$Res>
       __$$MintStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int amount, bool isLoading, String? invoice, String? error});
+  $Res call(
+      {int amount, bool isGeneratingInvoice, String? invoice, String? error});
 }
 
 /// @nodoc
@@ -102,7 +104,7 @@ class __$$MintStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? amount = null,
-    Object? isLoading = null,
+    Object? isGeneratingInvoice = null,
     Object? invoice = freezed,
     Object? error = freezed,
   }) {
@@ -111,9 +113,9 @@ class __$$MintStateImplCopyWithImpl<$Res>
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
               as int,
-      isLoading: null == isLoading
-          ? _value.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
+      isGeneratingInvoice: null == isGeneratingInvoice
+          ? _value.isGeneratingInvoice
+          : isGeneratingInvoice // ignore: cast_nullable_to_non_nullable
               as bool,
       invoice: freezed == invoice
           ? _value.invoice
@@ -132,7 +134,7 @@ class __$$MintStateImplCopyWithImpl<$Res>
 class _$MintStateImpl extends _MintState {
   _$MintStateImpl(
       {required this.amount,
-      required this.isLoading,
+      required this.isGeneratingInvoice,
       required this.invoice,
       required this.error})
       : super._();
@@ -140,7 +142,7 @@ class _$MintStateImpl extends _MintState {
   @override
   final int amount;
   @override
-  final bool isLoading;
+  final bool isGeneratingInvoice;
   @override
   final String? invoice;
   @override
@@ -148,7 +150,7 @@ class _$MintStateImpl extends _MintState {
 
   @override
   String toString() {
-    return 'MintState(amount: $amount, isLoading: $isLoading, invoice: $invoice, error: $error)';
+    return 'MintState(amount: $amount, isGeneratingInvoice: $isGeneratingInvoice, invoice: $invoice, error: $error)';
   }
 
   @override
@@ -157,15 +159,15 @@ class _$MintStateImpl extends _MintState {
         (other.runtimeType == runtimeType &&
             other is _$MintStateImpl &&
             (identical(other.amount, amount) || other.amount == amount) &&
-            (identical(other.isLoading, isLoading) ||
-                other.isLoading == isLoading) &&
+            (identical(other.isGeneratingInvoice, isGeneratingInvoice) ||
+                other.isGeneratingInvoice == isGeneratingInvoice) &&
             (identical(other.invoice, invoice) || other.invoice == invoice) &&
             (identical(other.error, error) || other.error == error));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, amount, isLoading, invoice, error);
+      Object.hash(runtimeType, amount, isGeneratingInvoice, invoice, error);
 
   /// Create a copy of MintState
   /// with the given fields replaced by the non-null parameter values.
@@ -179,7 +181,7 @@ class _$MintStateImpl extends _MintState {
 abstract class _MintState extends MintState {
   factory _MintState(
       {required final int amount,
-      required final bool isLoading,
+      required final bool isGeneratingInvoice,
       required final String? invoice,
       required final String? error}) = _$MintStateImpl;
   _MintState._() : super._();
@@ -187,7 +189,7 @@ abstract class _MintState extends MintState {
   @override
   int get amount;
   @override
-  bool get isLoading;
+  bool get isGeneratingInvoice;
   @override
   String? get invoice;
   @override

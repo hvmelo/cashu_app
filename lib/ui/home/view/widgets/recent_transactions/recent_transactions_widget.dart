@@ -66,19 +66,18 @@ class RecentTransactionsWidget extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 8),
-        Expanded(
-          child: transactions.isEmpty
-              ? const EmptyTransactionsList()
-              : ListView.separated(
-                  padding: EdgeInsets.zero,
-                  itemCount: transactions.length,
-                  separatorBuilder: (context, index) => const Divider(),
-                  itemBuilder: (context, index) {
-                    final transaction = transactions[index];
-                    return TransactionListItem(transaction: transaction);
-                  },
-                ),
-        ),
+        transactions.isEmpty
+            ? const EmptyTransactionsList()
+            : ListView.separated(
+                padding: EdgeInsets.zero,
+                itemCount: transactions.length,
+                shrinkWrap: true,
+                separatorBuilder: (context, index) => const Divider(),
+                itemBuilder: (context, index) {
+                  final transaction = transactions[index];
+                  return TransactionListItem(transaction: transaction);
+                },
+              ),
       ],
     );
   }

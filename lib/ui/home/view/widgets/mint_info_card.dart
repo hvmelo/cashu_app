@@ -3,6 +3,8 @@ import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../core/widgets/default_card.dart';
+
 class MintInfoCard extends ConsumerWidget {
   const MintInfoCard({
     super.key,
@@ -12,23 +14,7 @@ class MintInfoCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final wallet = ref.watch(walletProvider);
 
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: context.colorScheme.primary.withAlpha(10),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: context.colorScheme.primary.withAlpha(10),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
+    return DefaultCard(
       child: Row(
         children: [
           Container(

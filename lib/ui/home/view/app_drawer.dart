@@ -1,15 +1,11 @@
 import 'package:cashu_app/config/providers.dart';
 import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
-import 'package:cdk_flutter/cdk_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class WalletDrawer extends ConsumerWidget {
-  final Wallet? wallet;
-
-  const WalletDrawer({
+class AppDrawer extends ConsumerWidget {
+  const AppDrawer({
     super.key,
-    required this.wallet,
   });
 
   @override

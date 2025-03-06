@@ -6,7 +6,7 @@ part of 'mint_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$mintNotifierHash() => r'471e466f5c12a11803349628284ff3ad99332e0c';
+String _$mintNotifierHash() => r'2e1b86158439023252d25ebaf668b55289b4a1bf';
 
 /// Notifier for the mint screen
 ///

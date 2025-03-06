@@ -24,15 +24,10 @@ class BalanceCard extends ConsumerWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: isDarkMode
-              ? [
-                  context.colorScheme.surfaceContainerHighest,
-                  context.colorScheme.surfaceContainerHighest.withAlpha(204),
-                ]
-              : [
-                  context.colorScheme.surfaceContainerHighest,
-                  context.colorScheme.surfaceContainerHighest.withAlpha(204),
-                ],
+          colors: [
+            context.colorScheme.surfaceContainerHighest,
+            context.colorScheme.surfaceContainerHighest.withAlpha(204),
+          ],
         ),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(

@@ -42,10 +42,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeScreenEcashSendSubtitle => 'Send eCash to someone';
 
   @override
-  String get homeScreenEcashMelt => 'Pay';
+  String get homeScreenEcashMelt => 'Melt';
 
   @override
-  String get homeScreenEcashMeltSubtitle => 'Pay Lightning Network invoice';
+  String get homeScreenEcashMeltSubtitle => 'Exchange eCash for BTC';
 
   @override
   String get homeScreenEcashReceive => 'Receive';
@@ -57,13 +57,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeScreenMintEcash => 'Mint';
 
   @override
-  String get homeScreenMintEcashSubtitle => 'Mint eCash via Lightning Network';
+  String get homeScreenMintEcashSubtitle => 'Exchange BTC for eCash';
 
   @override
   String get drawerTitle => 'Cashu Wallet';
 
   @override
-  String get drawerSubtitle => 'Ecash for everyone';
+  String get drawerSubtitle => 'eCash for everyone';
 
   @override
   String get drawerMenuHome => 'Home';
@@ -84,16 +84,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get drawerMenuAbout => 'About';
 
   @override
-  String get mintScreenTitle => 'Mint';
+  String get mintScreenTitle => 'Mint eCash';
 
   @override
-  String get mintScreenSubtitle => 'Enter the amount in sats to mint';
+  String get mintScreenMintCardTitle => 'Mint';
 
   @override
-  String get mintScreenAmountHint => 'Amount in sats';
+  String get mintScreenAmountInSatsLabel => 'Amount in sats';
 
   @override
-  String get mintScreenGenerateInvoice => 'Generate Invoice';
+  String get mintScreenCreateInvoice => 'Create Invoice';
 
   @override
   String get mintScreenInvoiceTitle => 'Lightning Invoice';
@@ -111,8 +111,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mintScreenClose => 'Close';
 
   @override
-  String get mintScreenError => 'Error generating invoice';
+  String get mintScreenError => 'Error creating invoice';
 
   @override
-  String get mintScreenLoading => 'Generating invoice...';
+  String get mintScreenLoading => 'Creating invoice...';
+
+  @override
+  String get mintScreenAmountError => 'Please enter a valid amount';
+
+  @override
+  String get mintScreenAmountEmpty => 'Please enter an amount';
 }

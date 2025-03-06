@@ -12,13 +12,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get homeScreenTitle => 'Cashu';
 
   @override
-  String get homeScreenCurrentBalance => 'Saldo Actual';
+  String get homeScreenCurrentBalance => 'Saldo actual';
 
   @override
-  String get homeScreenRecentTransactions => 'Transacciones Recientes';
+  String get homeScreenRecentTransactions => 'Transacciones recientes';
 
   @override
-  String get homeScreenCurrentMint => 'Mint Actual';
+  String get homeScreenCurrentMint => 'Mint actual';
 
   @override
   String get homeScreenMintNotConnected => 'No conectado';
@@ -36,34 +36,34 @@ class AppLocalizationsEs extends AppLocalizations {
   String get homeScreenEcash => 'Ecash';
 
   @override
-  String get homeScreenEcashSend => 'Send';
+  String get homeScreenEcashSend => 'Enviar';
 
   @override
-  String get homeScreenEcashSendSubtitle => 'Send eCash to someone';
+  String get homeScreenEcashSendSubtitle => 'Enviar eCash a alguien';
 
   @override
-  String get homeScreenEcashMelt => 'Pay';
+  String get homeScreenEcashMelt => 'Derretir';
 
   @override
-  String get homeScreenEcashMeltSubtitle => 'Pay Lightning Network invoice';
+  String get homeScreenEcashMeltSubtitle => 'Cambiar eCash por BTC';
 
   @override
-  String get homeScreenEcashReceive => 'Receive';
+  String get homeScreenEcashReceive => 'Recibir';
 
   @override
-  String get homeScreenEcashReceiveSubtitle => 'Receive eCash from someone';
+  String get homeScreenEcashReceiveSubtitle => 'Recibir eCash de alguien';
 
   @override
   String get homeScreenMintEcash => 'Mint';
 
   @override
-  String get homeScreenMintEcashSubtitle => 'Mint eCash via Lightning Network';
+  String get homeScreenMintEcashSubtitle => 'Cambiar BTC por eCash';
 
   @override
   String get drawerTitle => 'Cashu Wallet';
 
   @override
-  String get drawerSubtitle => 'Ecash para Todos';
+  String get drawerSubtitle => 'eCash para todos';
 
   @override
   String get drawerMenuHome => 'Inicio';
@@ -87,32 +87,38 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mintScreenTitle => 'Mint';
 
   @override
-  String get mintScreenSubtitle => 'Enter the amount in sats to mint';
+  String get mintScreenMintCardTitle => 'Mint';
 
   @override
-  String get mintScreenAmountHint => 'Amount in sats';
+  String get mintScreenAmountInSatsLabel => 'Cantidad en sats';
 
   @override
-  String get mintScreenGenerateInvoice => 'Generate Invoice';
+  String get mintScreenCreateInvoice => 'Crear Factura';
 
   @override
-  String get mintScreenInvoiceTitle => 'Lightning Invoice';
+  String get mintScreenInvoiceTitle => 'Factura de Lightning';
 
   @override
-  String get mintScreenInvoiceSubtitle => 'Scan this QR code to pay the invoice';
+  String get mintScreenInvoiceSubtitle => 'Escanea este código QR para pagar la factura';
 
   @override
-  String get mintScreenCopyInvoice => 'Copy Invoice';
+  String get mintScreenCopyInvoice => 'Copiar Factura';
 
   @override
-  String get mintScreenInvoiceCopied => 'Invoice copied to clipboard';
+  String get mintScreenInvoiceCopied => 'Factura copiada al portapapeles';
 
   @override
-  String get mintScreenClose => 'Close';
+  String get mintScreenClose => 'Cerrar';
 
   @override
-  String get mintScreenError => 'Error generating invoice';
+  String get mintScreenError => 'Error creando la factura';
 
   @override
-  String get mintScreenLoading => 'Generating invoice...';
+  String get mintScreenLoading => 'Creando factura...';
+
+  @override
+  String get mintScreenAmountError => 'Por favor, ingrese una cantidad válida';
+
+  @override
+  String get mintScreenAmountEmpty => 'Por favor, ingrese una cantidad';
 }

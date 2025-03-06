@@ -14,6 +14,15 @@ final walletBalanceProvider = FutureProvider<BigInt>((ref) async {
   return wallet.balance();
 });
 
+// Provider para a URL do mint
+final mintUrlProvider = Provider<String>((ref) {
+  final wallet = ref.watch(walletProvider);
+  if (wallet == null) {
+    return 'Not connected';
+  }
+  return wallet.mintUrl;
+});
+
 // Provider para verificar se o wallet está pronto
 final isWalletReadyProvider = Provider<bool>((ref) {
   return ref.watch(walletProvider) != null;

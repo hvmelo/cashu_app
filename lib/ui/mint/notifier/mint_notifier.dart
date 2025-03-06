@@ -16,7 +16,8 @@ class MintNotifier extends _$MintNotifier {
   /// Generates a Lightning invoice for the specified amount
   Future<void> generateInvoice(int amount) async {
     // Set loading state
-    state = state.copyWith(amount: amount, isLoading: true, error: null);
+    state =
+        state.copyWith(amount: amount, isGeneratingInvoice: true, error: null);
 
     try {
       final wallet = ref.read(walletProvider);
@@ -38,10 +39,10 @@ class MintNotifier extends _$MintNotifier {
           'rvnz';
 
       // Update state with the invoice
-      state = state.copyWith(invoice: mockInvoice, isLoading: false);
+      state = state.copyWith(invoice: mockInvoice, isGeneratingInvoice: false);
     } catch (e) {
       // Update state with the error
-      state = state.copyWith(error: e.toString(), isLoading: false);
+      state = state.copyWith(error: e.toString(), isGeneratingInvoice: false);
     }
   }
 
@@ -58,14 +59,14 @@ class MintState with _$MintState {
 
   factory MintState({
     required int amount,
-    required bool isLoading,
+    required bool isGeneratingInvoice,
     required String? invoice,
     required String? error,
   }) = _MintState;
 
   factory MintState.initial() => MintState(
         amount: 0,
-        isLoading: false,
+        isGeneratingInvoice: false,
         invoice: null,
         error: null,
       );

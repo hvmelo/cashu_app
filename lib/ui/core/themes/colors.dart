@@ -76,5 +76,7 @@ abstract final class AppColors {
     'send': orange,
     'receive': green,
     'scan': blue,
+    'mint': purple,
+    'melt': blue,
   };
 }

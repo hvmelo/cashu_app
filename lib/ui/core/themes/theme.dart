@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'colors.dart';
 
@@ -35,12 +36,33 @@ abstract final class AppTheme {
     ),
   );
 
+  // Light theme system UI overlay style
+  static final _lightSystemUiOverlayStyle = SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.dark, // Dark icons for light theme
+    statusBarBrightness: Brightness.light, // iOS status bar with dark content
+    systemNavigationBarColor: AppColors.lightColorScheme.surface,
+    systemNavigationBarIconBrightness: Brightness.dark,
+  );
+
+  // Dark theme system UI overlay style
+  static final _darkSystemUiOverlayStyle = SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.light, // Light icons for dark theme
+    statusBarBrightness: Brightness.dark, // iOS status bar with light content
+    systemNavigationBarColor: AppColors.darkColorScheme.surface,
+    systemNavigationBarIconBrightness: Brightness.light,
+  );
+
   static ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     colorScheme: AppColors.lightColorScheme,
     textTheme: _textTheme,
     inputDecorationTheme: _inputDecorationTheme,
     useMaterial3: true,
+    appBarTheme: AppBarTheme(
+      systemOverlayStyle: _lightSystemUiOverlayStyle,
+    ),
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -49,5 +71,8 @@ abstract final class AppTheme {
     textTheme: _textTheme,
     inputDecorationTheme: _inputDecorationTheme,
     useMaterial3: true,
+    appBarTheme: AppBarTheme(
+      systemOverlayStyle: _darkSystemUiOverlayStyle,
+    ),
   );
 }

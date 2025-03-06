@@ -164,13 +164,13 @@ abstract class AppLocalizations {
   /// No description provided for @homeScreenEcashMelt.
   ///
   /// In en, this message translates to:
-  /// **'Pay'**
+  /// **'Melt'**
   String get homeScreenEcashMelt;
 
   /// No description provided for @homeScreenEcashMeltSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Pay Lightning Network invoice'**
+  /// **'Exchange eCash for BTC'**
   String get homeScreenEcashMeltSubtitle;
 
   /// No description provided for @homeScreenEcashReceive.
@@ -194,7 +194,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeScreenMintEcashSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Mint eCash via Lightning Network'**
+  /// **'Exchange BTC for eCash'**
   String get homeScreenMintEcashSubtitle;
 
   /// No description provided for @drawerTitle.
@@ -206,7 +206,7 @@ abstract class AppLocalizations {
   /// No description provided for @drawerSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Ecash for everyone'**
+  /// **'eCash for everyone'**
   String get drawerSubtitle;
 
   /// No description provided for @drawerMenuHome.
@@ -248,26 +248,26 @@ abstract class AppLocalizations {
   /// No description provided for @mintScreenTitle.
   ///
   /// In en, this message translates to:
-  /// **'Mint'**
+  /// **'Mint eCash'**
   String get mintScreenTitle;
 
-  /// No description provided for @mintScreenSubtitle.
+  /// No description provided for @mintScreenMintCardTitle.
   ///
   /// In en, this message translates to:
-  /// **'Enter the amount in sats to mint'**
-  String get mintScreenSubtitle;
+  /// **'Mint'**
+  String get mintScreenMintCardTitle;
 
-  /// No description provided for @mintScreenAmountHint.
+  /// No description provided for @mintScreenAmountInSatsLabel.
   ///
   /// In en, this message translates to:
   /// **'Amount in sats'**
-  String get mintScreenAmountHint;
+  String get mintScreenAmountInSatsLabel;
 
-  /// No description provided for @mintScreenGenerateInvoice.
+  /// No description provided for @mintScreenCreateInvoice.
   ///
   /// In en, this message translates to:
-  /// **'Generate Invoice'**
-  String get mintScreenGenerateInvoice;
+  /// **'Create Invoice'**
+  String get mintScreenCreateInvoice;
 
   /// No description provided for @mintScreenInvoiceTitle.
   ///
@@ -302,14 +302,26 @@ abstract class AppLocalizations {
   /// No description provided for @mintScreenError.
   ///
   /// In en, this message translates to:
-  /// **'Error generating invoice'**
+  /// **'Error creating invoice'**
   String get mintScreenError;
 
   /// No description provided for @mintScreenLoading.
   ///
   /// In en, this message translates to:
-  /// **'Generating invoice...'**
+  /// **'Creating invoice...'**
   String get mintScreenLoading;
+
+  /// No description provided for @mintScreenAmountError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid amount'**
+  String get mintScreenAmountError;
+
+  /// No description provided for @mintScreenAmountEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter an amount'**
+  String get mintScreenAmountEmpty;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
