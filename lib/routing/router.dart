@@ -14,12 +14,14 @@ GoRouter router() => GoRouter(
           builder: (context, state) {
             return const HomeScreen();
           },
-        ),
-        GoRoute(
-          path: Routes.mint,
-          builder: (context, state) {
-            return const MintScreen();
-          },
+          routes: [
+            GoRoute(
+              path: 'mint',
+              builder: (context, state) {
+                return const MintScreen();
+              },
+            ),
+          ],
         ),
       ],
     );

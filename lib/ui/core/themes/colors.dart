@@ -60,7 +60,7 @@ abstract final class AppColors {
     onError: white,
     surface: Color(0xFF1E1E1E),
     onSurface: white,
-    surfaceContainerHighest: grey800,
+    surfaceContainerHighest: black,
     onSurfaceVariant: grey100,
     outline: grey500,
     outlineVariant: grey800,

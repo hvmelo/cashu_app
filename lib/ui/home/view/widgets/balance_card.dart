@@ -14,10 +14,8 @@ class BalanceCard extends ConsumerWidget {
     final balanceAsync = ref.watch(walletBalanceProvider);
 
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final textColor = isDarkMode ? Colors.white : AppColors.black;
-    final fadedTextColor = isDarkMode
-        ? Colors.white.withAlpha(178) // 0.7 * 255 = 178
-        : AppColors.black.withAlpha(178);
+    final textColor = context.colorScheme.onSurface;
+    final fadedTextColor = context.colorScheme.onSurface.withAlpha(178);
 
     return Container(
       width: double.infinity,
@@ -28,12 +26,12 @@ class BalanceCard extends ConsumerWidget {
           end: Alignment.bottomRight,
           colors: isDarkMode
               ? [
-                  AppColors.black,
-                  Color(0xFF1A1A1A), // Slightly lighter black
+                  context.colorScheme.surfaceContainerHighest,
+                  context.colorScheme.surfaceContainerHighest.withAlpha(204),
                 ]
               : [
-                  AppColors.white,
-                  AppColors.grey100,
+                  context.colorScheme.surfaceContainerHighest,
+                  context.colorScheme.surfaceContainerHighest.withAlpha(204),
                 ],
         ),
         borderRadius: BorderRadius.circular(20),
