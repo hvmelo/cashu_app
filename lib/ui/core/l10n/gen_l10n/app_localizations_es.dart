@@ -82,4 +82,37 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get drawerMenuAbout => 'Acerca';
+
+  @override
+  String get mintScreenTitle => 'Mint';
+
+  @override
+  String get mintScreenSubtitle => 'Enter the amount in sats to mint';
+
+  @override
+  String get mintScreenAmountHint => 'Amount in sats';
+
+  @override
+  String get mintScreenGenerateInvoice => 'Generate Invoice';
+
+  @override
+  String get mintScreenInvoiceTitle => 'Lightning Invoice';
+
+  @override
+  String get mintScreenInvoiceSubtitle => 'Scan this QR code to pay the invoice';
+
+  @override
+  String get mintScreenCopyInvoice => 'Copy Invoice';
+
+  @override
+  String get mintScreenInvoiceCopied => 'Invoice copied to clipboard';
+
+  @override
+  String get mintScreenClose => 'Close';
+
+  @override
+  String get mintScreenError => 'Error generating invoice';
+
+  @override
+  String get mintScreenLoading => 'Generating invoice...';
 }

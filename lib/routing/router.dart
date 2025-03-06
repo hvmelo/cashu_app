@@ -1,4 +1,5 @@
-import 'package:cashu_app/ui/home/widgets/home_screen.dart';
+import 'package:cashu_app/ui/home/view/widgets/home_screen.dart';
+import 'package:cashu_app/ui/mint/view/mint_screen.dart';
 import 'package:go_router/go_router.dart';
 
 import 'routes.dart';
@@ -13,7 +14,12 @@ GoRouter router() => GoRouter(
           builder: (context, state) {
             return const HomeScreen();
           },
-          routes: [],
+        ),
+        GoRoute(
+          path: Routes.mint,
+          builder: (context, state) {
+            return const MintScreen();
+          },
         ),
       ],
     );

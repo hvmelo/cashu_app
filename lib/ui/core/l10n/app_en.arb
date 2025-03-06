@@ -24,6 +24,16 @@
   "drawerMenuSettings": "Settings",
   "drawerMenuDarkMode": "Dark Mode",
   "drawerMenuLightMode": "Light Mode",
-  "drawerMenuAbout": "About"
-
+  "drawerMenuAbout": "About",
+  "mintScreenTitle": "Mint",
+  "mintScreenSubtitle": "Enter the amount in sats to mint",
+  "mintScreenAmountHint": "Amount in sats",
+  "mintScreenGenerateInvoice": "Generate Invoice",
+  "mintScreenInvoiceTitle": "Lightning Invoice",
+  "mintScreenInvoiceSubtitle": "Scan this QR code to pay the invoice",
+  "mintScreenCopyInvoice": "Copy Invoice",
+  "mintScreenInvoiceCopied": "Invoice copied to clipboard",
+  "mintScreenClose": "Close",
+  "mintScreenError": "Error generating invoice",
+  "mintScreenLoading": "Generating invoice..."
 }

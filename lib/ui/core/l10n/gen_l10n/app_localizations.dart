@@ -244,6 +244,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'About'**
   String get drawerMenuAbout;
+
+  /// No description provided for @mintScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mint'**
+  String get mintScreenTitle;
+
+  /// No description provided for @mintScreenSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the amount in sats to mint'**
+  String get mintScreenSubtitle;
+
+  /// No description provided for @mintScreenAmountHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount in sats'**
+  String get mintScreenAmountHint;
+
+  /// No description provided for @mintScreenGenerateInvoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate Invoice'**
+  String get mintScreenGenerateInvoice;
+
+  /// No description provided for @mintScreenInvoiceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Lightning Invoice'**
+  String get mintScreenInvoiceTitle;
+
+  /// No description provided for @mintScreenInvoiceSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan this QR code to pay the invoice'**
+  String get mintScreenInvoiceSubtitle;
+
+  /// No description provided for @mintScreenCopyInvoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Invoice'**
+  String get mintScreenCopyInvoice;
+
+  /// No description provided for @mintScreenInvoiceCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Invoice copied to clipboard'**
+  String get mintScreenInvoiceCopied;
+
+  /// No description provided for @mintScreenClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get mintScreenClose;
+
+  /// No description provided for @mintScreenError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error generating invoice'**
+  String get mintScreenError;
+
+  /// No description provided for @mintScreenLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Generating invoice...'**
+  String get mintScreenLoading;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

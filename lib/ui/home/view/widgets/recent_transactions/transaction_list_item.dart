@@ -1,4 +1,4 @@
-import 'package:cashu_app/ui/home/widgets/recent_transactions/recent_transactions_widget.dart';
+import 'package:cashu_app/ui/home/view/widgets/recent_transactions/recent_transactions_widget.dart';
 import 'package:flutter/material.dart';
 
 class TransactionListItem extends StatelessWidget {
