@@ -61,7 +61,7 @@ class MintScreen extends HookConsumerWidget {
               context.l10n.mintScreenSubtitle,
               style: context.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w500,
-                color: context.colorScheme.onSurface.withOpacity(0.8),
+                color: context.colorScheme.onSurface.withAlpha(100),
               ),
             ),
           ),
@@ -107,7 +107,7 @@ class MintScreen extends HookConsumerWidget {
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             color: AppColors.actionColors['receive']!
-                                .withOpacity(0.1),
+                                .withAlpha(10),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Icon(
@@ -133,14 +133,14 @@ class MintScreen extends HookConsumerWidget {
                               hintStyle:
                                   context.textTheme.headlineSmall?.copyWith(
                                 color: context.colorScheme.onSurface
-                                    .withOpacity(0.3),
+                                    .withAlpha(100),
                                 fontWeight: FontWeight.bold,
                               ),
                               suffixText: 'sats',
                               suffixStyle:
                                   context.textTheme.titleMedium?.copyWith(
                                 color: context.colorScheme.onSurface
-                                    .withOpacity(0.7),
+                                    .withAlpha(100),
                               ),
                             ),
                             validator: (value) {
@@ -164,7 +164,7 @@ class MintScreen extends HookConsumerWidget {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: context.colorScheme.error.withOpacity(0.1),
+                        color: context.colorScheme.error.withAlpha(10),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
@@ -261,7 +261,7 @@ class MintScreen extends HookConsumerWidget {
               borderRadius: BorderRadius.circular(24),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withAlpha(5),
                   blurRadius: 10,
                   offset: const Offset(0, 5),
                 ),
@@ -273,7 +273,7 @@ class MintScreen extends HookConsumerWidget {
                   context.l10n.mintScreenInvoiceSubtitle,
                   style: context.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w500,
-                    color: context.colorScheme.onSurface.withOpacity(0.8),
+                    color: context.colorScheme.onSurface.withAlpha(100),
                   ),
                 ),
 
@@ -287,7 +287,7 @@ class MintScreen extends HookConsumerWidget {
                     borderRadius: BorderRadius.circular(24),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
+                        color: Colors.black.withAlpha(5),
                         blurRadius: 10,
                         offset: const Offset(0, 5),
                       ),

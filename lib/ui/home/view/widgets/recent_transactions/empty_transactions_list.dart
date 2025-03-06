@@ -12,7 +12,7 @@ class EmptyTransactionsList extends StatelessWidget {
           Icon(
             Icons.history,
             size: 48,
-            color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+            color: Theme.of(context).colorScheme.primary.withAlpha(100),
           ),
           const SizedBox(height: 16),
           Text(

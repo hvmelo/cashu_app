@@ -1,5 +1,4 @@
 import 'package:cashu_app/ui/home/view/widgets/recent_transactions/empty_transactions_list.dart';
-import 'package:cashu_app/ui/home/view/widgets/home_screen.dart';
 import 'package:cashu_app/ui/home/view/widgets/recent_transactions/transaction_list_item.dart';
 import 'package:flutter/material.dart';
 
