@@ -84,7 +84,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get drawerMenuAbout => 'About';
 
   @override
-  String get mintScreenTitle => 'Mint eCash';
+  String get mintScreenTitle => 'Mint';
 
   @override
   String get mintScreenMintCardTitle => 'Mint';
@@ -121,4 +121,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mintScreenAmountEmpty => 'Please enter an amount';
+
+  @override
+  String get generalUnknownError => 'An unknown error occurred';
 }

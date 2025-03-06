@@ -248,7 +248,7 @@ abstract class AppLocalizations {
   /// No description provided for @mintScreenTitle.
   ///
   /// In en, this message translates to:
-  /// **'Mint eCash'**
+  /// **'Mint'**
   String get mintScreenTitle;
 
   /// No description provided for @mintScreenMintCardTitle.
@@ -322,6 +322,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter an amount'**
   String get mintScreenAmountEmpty;
+
+  /// No description provided for @generalUnknownError.
+  ///
+  /// In en, this message translates to:
+  /// **'An unknown error occurred'**
+  String get generalUnknownError;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -121,4 +121,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get mintScreenAmountEmpty => 'Por favor, ingrese una cantidad';
+
+  @override
+  String get generalUnknownError => 'An unknown error occurred';
 }

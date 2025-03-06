@@ -1,144 +1,81 @@
 import 'package:flutter/material.dart';
 
-/// Primary button with consistent styling across the app
-class AppPrimaryButton extends StatelessWidget {
-  final String label;
-  final VoidCallback onPressed;
-  final IconData? icon;
-  final bool fullWidth;
-  final EdgeInsetsGeometry? padding;
+import '../themes/colors.dart';
 
-  const AppPrimaryButton({
+class PrimaryActionButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final String text;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
+  final double height;
+  final double borderRadius;
+  final double elevation;
+  final TextStyle? textStyle;
+  final bool isFullWidth;
+  final Widget? icon;
+
+  const PrimaryActionButton({
     super.key,
-    required this.label,
     required this.onPressed,
+    required this.text,
+    this.backgroundColor,
+    this.foregroundColor = Colors.white,
+    this.height = 56,
+    this.borderRadius = 16,
+    this.elevation = 0,
+    this.textStyle,
+    this.isFullWidth = true,
     this.icon,
-    this.fullWidth = false,
-    this.padding,
   });
 
   @override
   Widget build(BuildContext context) {
-    final buttonWidget = ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        padding:
-            padding ?? const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+    final buttonStyle = ElevatedButton.styleFrom(
+      backgroundColor: backgroundColor ?? AppColors.actionColors['receive'],
+      foregroundColor: foregroundColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(borderRadius),
       ),
-      child: icon != null
-          ? Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(icon),
-                const SizedBox(width: 8),
-                Text(label),
-              ],
-            )
-          : Text(label),
+      elevation: elevation,
     );
 
-    return fullWidth
-        ? SizedBox(width: double.infinity, child: buttonWidget)
-        : buttonWidget;
-  }
-}
-
-/// Secondary (outlined) button with consistent styling across the app
-class AppOutlinedButton extends StatelessWidget {
-  final String label;
-  final VoidCallback onPressed;
-  final IconData? icon;
-  final bool fullWidth;
-  final EdgeInsetsGeometry? padding;
-
-  const AppOutlinedButton({
-    super.key,
-    required this.label,
-    required this.onPressed,
-    this.icon,
-    this.fullWidth = false,
-    this.padding,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final buttonWidget = OutlinedButton(
-      onPressed: onPressed,
-      style: OutlinedButton.styleFrom(
-        padding:
-            padding ?? const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-      child: icon != null
-          ? Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(icon),
-                const SizedBox(width: 8),
-                Text(label),
-              ],
-            )
-          : Text(label),
+    final defaultTextStyle = TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.bold,
     );
 
-    return fullWidth
-        ? SizedBox(width: double.infinity, child: buttonWidget)
-        : buttonWidget;
-  }
-}
-
-/// Icon button with text label
-class AppIconButton extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final VoidCallback onPressed;
-  final bool isPrimary;
-  final EdgeInsetsGeometry? padding;
-
-  const AppIconButton({
-    super.key,
-    required this.label,
-    required this.icon,
-    required this.onPressed,
-    this.isPrimary = true,
-    this.padding,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final buttonStyle = isPrimary
-        ? ElevatedButton.styleFrom(
-            padding: padding ??
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
+    final buttonChild = icon != null
+        ? Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              icon!,
+              const SizedBox(width: 8),
+              Text(
+                text,
+                style: textStyle ?? defaultTextStyle,
+              ),
+            ],
           )
-        : OutlinedButton.styleFrom(
-            padding: padding ??
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
+        : Text(
+            text,
+            style: textStyle ?? defaultTextStyle,
           );
 
-    return isPrimary
-        ? ElevatedButton.icon(
-            onPressed: onPressed,
-            icon: Icon(icon),
-            label: Text(label),
-            style: buttonStyle,
+    final button = ElevatedButton(
+      onPressed: onPressed,
+      style: buttonStyle,
+      child: buttonChild,
+    );
+
+    return isFullWidth
+        ? SizedBox(
+            width: double.infinity,
+            height: height,
+            child: button,
           )
-        : OutlinedButton.icon(
-            onPressed: onPressed,
-            icon: Icon(icon),
-            label: Text(label),
-            style: buttonStyle,
+        : SizedBox(
+            height: height,
+            child: button,
           );
   }
 }

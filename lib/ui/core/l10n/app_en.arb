@@ -25,7 +25,7 @@
   "drawerMenuDarkMode": "Dark Mode",
   "drawerMenuLightMode": "Light Mode",
   "drawerMenuAbout": "About",
-  "mintScreenTitle": "Mint eCash",
+  "mintScreenTitle": "Mint",
   "mintScreenMintCardTitle": "Mint",
   "mintScreenAmountInSatsLabel": "Amount in sats",
   "mintScreenCreateInvoice": "Create Invoice",
@@ -37,5 +37,6 @@
   "mintScreenError": "Error creating invoice",
   "mintScreenLoading": "Creating invoice...",
   "mintScreenAmountError": "Please enter a valid amount",
-  "mintScreenAmountEmpty": "Please enter an amount"
+  "mintScreenAmountEmpty": "Please enter an amount",
+  "generalUnknownError": "An unknown error occurred"
 }
