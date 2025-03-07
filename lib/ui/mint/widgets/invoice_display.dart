@@ -1,6 +1,6 @@
 import 'package:cashu_app/ui/core/themes/colors.dart';
+import 'package:cashu_app/ui/core/widgets/app_buttons.dart';
 import 'package:cashu_app/ui/core/widgets/app_qr_code.dart';
-import 'package:cashu_app/ui/core/widgets/default_card.dart';
 import 'package:cashu_app/ui/mint/notifiers/invoice_display_notifier.dart';
 import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
 import 'package:flutter/material.dart';
@@ -66,7 +66,7 @@ class InvoiceDisplay extends ConsumerWidget {
               AppQrCode(
                 data: state.invoice!,
                 size: MediaQuery.of(context).size.width - 82,
-                backgroundColor: context.colorScheme.surface,
+                backgroundColor: Colors.white,
                 padding: const EdgeInsets.all(16),
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: null,
@@ -80,41 +80,31 @@ class InvoiceDisplay extends ConsumerWidget {
                 Expanded(
                   child: SizedBox(
                     height: 56,
-                    child: ElevatedButton.icon(
+                    child: PrimaryActionButton(
                       onPressed: () => _copyInvoiceToClipboard(
                         context,
                         state.invoice!,
                       ),
-                      icon: const Icon(Icons.copy, size: 20),
-                      label: Text(context.l10n.mintScreenCopyInvoice),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.actionColors['receive'],
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        elevation: 0,
+                      text: context.l10n.mintScreenCopyInvoice,
+                      icon: Icon(
+                        Icons.copy,
+                        size: 20,
+                        color: Colors.white,
                       ),
                     ),
                   ),
                 ),
                 const SizedBox(width: 16),
-                SizedBox(
+                OutlinedActionButton(
+                  onPressed: onClose,
                   height: 56,
-                  child: OutlinedButton.icon(
-                    onPressed: onClose,
-                    icon: const Icon(Icons.close, size: 20),
-                    label: Text(context.l10n.mintScreenClose),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: context.colorScheme.onSurface,
-                      side: BorderSide(
-                        color: context.colorScheme.outline,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                    ),
+                  text: context.l10n.mintScreenClose,
+                  icon: Icon(
+                    Icons.close,
+                    size: 20,
+                    color: context.colorScheme.onSurface,
                   ),
+                  isFullWidth: false,
                 ),
               ],
             ),
