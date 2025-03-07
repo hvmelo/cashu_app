@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../core/widgets/app_snackbar.dart';
+
 class InvoiceDisplay extends ConsumerWidget {
   final BigInt amount;
   final VoidCallback onClose;
@@ -116,16 +118,7 @@ class InvoiceDisplay extends ConsumerWidget {
 
   void _copyInvoiceToClipboard(BuildContext context, String invoice) {
     Clipboard.setData(ClipboardData(text: invoice));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(context.l10n.mintScreenInvoiceCopied),
-        duration: const Duration(seconds: 2),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        backgroundColor: AppColors.actionColors['receive'],
-      ),
-    );
+    AppSnackBar.showInfo(context,
+        message: context.l10n.mintScreenInvoiceCopied);
   }
 }
