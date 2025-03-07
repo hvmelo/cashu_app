@@ -54,25 +54,43 @@ abstract final class AppTheme {
     systemNavigationBarIconBrightness: Brightness.light,
   );
 
-  static ThemeData lightTheme = ThemeData(
-    brightness: Brightness.light,
-    colorScheme: AppColors.lightColorScheme,
-    textTheme: _textTheme,
-    inputDecorationTheme: _inputDecorationTheme,
-    useMaterial3: true,
-    appBarTheme: AppBarTheme(
-      systemOverlayStyle: _lightSystemUiOverlayStyle,
+  static ThemeData lightTheme = _applyCommonTheme(
+    ThemeData(
+      brightness: Brightness.light,
+      colorScheme: AppColors.lightColorScheme,
+      textTheme: _textTheme,
+      inputDecorationTheme: _inputDecorationTheme,
+      useMaterial3: true,
+      appBarTheme: AppBarTheme(
+        systemOverlayStyle: _lightSystemUiOverlayStyle,
+      ),
     ),
   );
 
-  static ThemeData darkTheme = ThemeData(
-    brightness: Brightness.dark,
-    colorScheme: AppColors.darkColorScheme,
-    textTheme: _textTheme,
-    inputDecorationTheme: _inputDecorationTheme,
-    useMaterial3: true,
-    appBarTheme: AppBarTheme(
-      systemOverlayStyle: _darkSystemUiOverlayStyle,
+  static ThemeData darkTheme = _applyCommonTheme(
+    ThemeData(
+      brightness: Brightness.dark,
+      colorScheme: AppColors.darkColorScheme,
+      textTheme: _textTheme,
+      inputDecorationTheme: _inputDecorationTheme,
+      useMaterial3: true,
+      appBarTheme: AppBarTheme(
+        systemOverlayStyle: _darkSystemUiOverlayStyle,
+      ),
     ),
   );
+
+  // Método para aplicar configurações comuns a ambos os temas
+  static ThemeData _applyCommonTheme(ThemeData theme) {
+    return theme.copyWith(
+      // Configurações de splash e highlight para todo o app
+      splashColor: theme.colorScheme.surfaceContainerHighest,
+      highlightColor: theme.colorScheme.surfaceContainerHighest,
+      splashFactory: InkRipple.splashFactory,
+
+      // Opcional: outras configurações de interação
+      hoverColor: theme.colorScheme.surfaceContainerHighest,
+      focusColor: theme.colorScheme.surfaceContainerHighest,
+    );
+  }
 }

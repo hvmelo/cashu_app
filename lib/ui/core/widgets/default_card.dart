@@ -23,6 +23,9 @@ class DefaultCard extends StatelessWidget {
   /// Whether to use a thin border instead of elevation
   final bool useBorder;
 
+  /// Optional onTap callback for the card
+  final VoidCallback? onTap;
+
   const DefaultCard({
     super.key,
     required this.child,
@@ -32,42 +35,69 @@ class DefaultCard extends StatelessWidget {
     this.backgroundColor,
     this.useBorder = true,
     this.title,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: padding ?? const EdgeInsets.all(16),
-      margin: margin,
-      decoration: BoxDecoration(
-        color: backgroundColor ?? context.colorScheme.surface,
-        borderRadius: borderRadius ?? BorderRadius.circular(16),
-        border: useBorder
-            ? Border.all(
-                color: context.colorScheme.primary.withAlpha(15),
-              )
-            : null,
-        boxShadow: [
-          BoxShadow(
-            color: context.colorScheme.primary.withAlpha(5),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (title != null)
-            Text(
-              title!,
-              style: context.textTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: context.colorScheme.onSurface.withAlpha(178),
-              ),
+    final cardContent = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (title != null)
+          Text(
+            title!,
+            style: context.textTheme.titleSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: context.colorScheme.onSurface.withAlpha(178),
             ),
-          child,
-        ],
+          ),
+        if (title != null) const SizedBox(height: 8),
+        child,
+      ],
+    );
+
+    final cardDecoration = BoxDecoration(
+      color: backgroundColor ?? context.colorScheme.surface,
+      borderRadius: borderRadius ?? BorderRadius.circular(16),
+      border: useBorder
+          ? Border.all(
+              color: context.colorScheme.primary.withAlpha(15),
+            )
+          : null,
+      boxShadow: [
+        BoxShadow(
+          color: context.colorScheme.primary.withAlpha(5),
+          blurRadius: 10,
+          offset: const Offset(0, 4),
+        ),
+      ],
+    );
+
+    // Se não houver onTap, retorna um Container simples
+    if (onTap == null) {
+      return Container(
+        padding: padding ?? const EdgeInsets.all(16),
+        margin: margin,
+        decoration: cardDecoration,
+        child: cardContent,
+      );
+    }
+
+    // Se houver onTap, retorna um Material com InkWell para efeito de splash
+    return Container(
+      margin: margin,
+      decoration: cardDecoration,
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: borderRadius ?? BorderRadius.circular(16),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: borderRadius ?? BorderRadius.circular(16),
+          child: Padding(
+            padding: padding ?? const EdgeInsets.all(16),
+            child: cardContent,
+          ),
+        ),
       ),
     );
   }
