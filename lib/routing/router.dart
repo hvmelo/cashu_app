@@ -1,5 +1,5 @@
-import 'package:cashu_app/ui/home/view/home_screen.dart';
-import 'package:cashu_app/ui/mint/view/mint_screen.dart';
+import 'package:cashu_app/ui/home/widgets/home_screen.dart';
+import 'package:cashu_app/ui/mint/widgets/mint_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

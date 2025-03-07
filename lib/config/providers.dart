@@ -1,41 +1,59 @@
 import 'package:cdk_flutter/cdk_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-// Provider global para o Wallet
-final walletProvider = StateProvider<Wallet?>((ref) => null);
+part 'providers.g.dart';
 
-// Provider para o saldo do wallet que depende do walletProvider
-final walletBalanceProvider = FutureProvider<BigInt>((ref) async {
+// Global provider for the Wallet
+@riverpod
+Wallet? wallet(Ref ref) {
+  return null;
+}
+
+// Provider for the wallet balance
+@riverpod
+Stream<BigInt> walletBalanceStream(Ref ref) {
   final wallet = ref.watch(walletProvider);
   if (wallet == null) {
     throw Exception('Wallet is not initialized');
   }
-  return wallet.balance();
-});
+  return wallet.streamBalance();
+}
 
-// Provider para a URL do mint
-final mintUrlProvider = Provider<String>((ref) {
+// Provider for the mint URL
+@riverpod
+String? mintUrl(Ref ref) {
   final wallet = ref.watch(walletProvider);
   if (wallet == null) {
-    return 'Not connected';
+    return null;
   }
   return wallet.mintUrl;
-});
+}
 
-// Provider para verificar se o wallet está pronto
-final isWalletReadyProvider = Provider<bool>((ref) {
+// Provider for the mint stream
+@riverpod
+Stream<MintQuote> mintQuoteStream(Ref ref, BigInt amount) {
+  final wallet = ref.watch(walletProvider);
+  if (wallet == null) {
+    throw Exception('Wallet is not initialized');
+  }
+  return wallet.mint(amount: amount);
+}
+
+// Provider to check if the wallet is ready
+@riverpod
+bool isWalletReady(Ref ref) {
   return ref.watch(walletProvider) != null;
-});
+}
 
-// Provider para gerenciar o tema do aplicativo
-final themeProvider = StateNotifierProvider<ThemeNotifier, ThemeMode>((ref) {
-  return ThemeNotifier();
-});
-
-// Notifier para controlar o tema
-class ThemeNotifier extends StateNotifier<ThemeMode> {
-  ThemeNotifier() : super(ThemeMode.system);
+// Notifier to control the app theme
+@riverpod
+class ThemeNotifier extends _$ThemeNotifier {
+  @override
+  ThemeMode build() {
+    return ThemeMode.system;
+  }
 
   void toggleTheme() {
     state = state == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;

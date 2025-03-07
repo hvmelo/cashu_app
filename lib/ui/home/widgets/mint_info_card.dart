@@ -3,7 +3,7 @@ import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../core/widgets/default_card.dart';
+import '../../core/widgets/default_card.dart';
 
 class MintInfoCard extends ConsumerWidget {
   const MintInfoCard({

@@ -28,7 +28,7 @@ Future<void> main() async {
   final db = WalletDatabase(path: '${path.path}/wallet.db');
 
   final wallet = Wallet.newFromHexSeed(
-      mintUrl: 'https://testnut.cachu.space',
+      mintUrl: 'https://testnut.cashu.space',
       unit: 'sat',
       seed: seed,
       localstore: db);

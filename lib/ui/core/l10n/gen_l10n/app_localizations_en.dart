@@ -99,7 +99,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mintScreenInvoiceTitle => 'Lightning Invoice';
 
   @override
-  String get mintScreenInvoiceSubtitle => 'Scan this QR code to pay the invoice';
+  String get mintScreenInvoiceSubtitle => 'Scan to pay the Lightning invoice';
 
   @override
   String get mintScreenCopyInvoice => 'Copy Invoice';

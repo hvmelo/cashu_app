@@ -1,3 +1,4 @@
+import 'package:cashu_app/ui/core/widgets/default_card.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -24,20 +25,10 @@ class AppQrCode extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return DefaultCard(
+      backgroundColor: backgroundColor,
       padding: padding,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: borderRadius,
-        boxShadow: boxShadow ??
-            [
-              BoxShadow(
-                color: Colors.black.withAlpha(10),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
-      ),
+      borderRadius: borderRadius,
       child: QrImageView(
         data: data,
         version: QrVersions.auto,

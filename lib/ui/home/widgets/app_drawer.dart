@@ -10,7 +10,7 @@ class AppDrawer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentThemeMode = ref.watch(themeProvider);
+    final currentThemeMode = ref.watch(themeNotifierProvider);
     final isDarkMode = currentThemeMode == ThemeMode.dark;
 
     return Drawer(
@@ -91,7 +91,7 @@ class AppDrawer extends ConsumerWidget {
                 : context.l10n.drawerMenuLightMode),
             value: isDarkMode,
             onChanged: (value) {
-              ref.read(themeProvider.notifier).setThemeMode(
+              ref.read(themeNotifierProvider.notifier).setThemeMode(
                     value ? ThemeMode.dark : ThemeMode.light,
                   );
             },

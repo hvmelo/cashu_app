@@ -29,7 +29,7 @@ class MintCard extends ConsumerWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  mintUrl,
+                  mintUrl ?? '',
                   style: context.textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.w500,
                   ),

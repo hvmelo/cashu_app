@@ -30,7 +30,7 @@
   "mintScreenAmountInSatsLabel": "Amount in sats",
   "mintScreenCreateInvoice": "Create Invoice",
   "mintScreenInvoiceTitle": "Lightning Invoice",
-  "mintScreenInvoiceSubtitle": "Scan this QR code to pay the invoice",
+  "mintScreenInvoiceSubtitle": "Scan to pay the Lightning invoice",
   "mintScreenCopyInvoice": "Copy Invoice",
   "mintScreenInvoiceCopied": "Invoice copied to clipboard",
   "mintScreenClose": "Close",

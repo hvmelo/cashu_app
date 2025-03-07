@@ -11,7 +11,7 @@ class BalanceCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final balanceAsync = ref.watch(walletBalanceProvider);
+    final balanceAsync = ref.watch(walletBalanceStreamProvider);
 
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final textColor = context.colorScheme.onSurface;

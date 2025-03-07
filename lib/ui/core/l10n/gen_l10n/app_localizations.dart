@@ -278,7 +278,7 @@ abstract class AppLocalizations {
   /// No description provided for @mintScreenInvoiceSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Scan this QR code to pay the invoice'**
+  /// **'Scan to pay the Lightning invoice'**
   String get mintScreenInvoiceSubtitle;
 
   /// No description provided for @mintScreenCopyInvoice.
