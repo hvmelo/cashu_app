@@ -23,13 +23,13 @@ class InvoiceDisplay extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(invoiceDisplayNotifierProvider(amount));
 
-    // ref.listen(invoiceDisplayNotifierProvider(amount), (previous, next) {
-    //   if (next.isIssued) {
-    //     Future.delayed(const Duration(seconds: 1), () {
-    //       onClose();
-    //     });
-    //   }
-    // });
+    ref.listen(invoiceDisplayNotifierProvider(amount), (previous, next) {
+      if (next.isIssued) {
+        Future.delayed(const Duration(seconds: 1), () {
+          onClose();
+        });
+      }
+    });
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

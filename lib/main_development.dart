@@ -27,8 +27,11 @@ Future<void> main() async {
   }
   final db = WalletDatabase(path: '${path.path}/wallet.db');
 
+  // https://mint.refugio.com.br
+  // https://testnut.cashu.space
+
   final wallet = Wallet.newFromHexSeed(
-      mintUrl: 'https://testnut.cashu.space',
+      mintUrl: 'https://mint.refugio.com.br',
       unit: 'sat',
       seed: seed,
       localstore: db);
