@@ -28,34 +28,7 @@ class MintScreenNotifier extends _$MintScreenNotifier {
     }
 
     state = state.copyWith(isSubmitted: true);
-
     return;
-    // try {
-    //   final wallet = ref.read(walletProvider);
-    //   if (wallet == null) {
-    //     throw Exception('Wallet is not initialized');
-    //   }
-
-    //   // For demonstration purposes, we're using a mock invoice
-    //   // In a real implementation, you would call the appropriate CDK Flutter API
-    //   // method to generate a Lightning invoice
-    //   await Future.delayed(const Duration(seconds: 2)); // Simulate API call
-
-    //   // This is a placeholder - in a real app, you would use the actual invoice from the API
-    //   final mockInvoice =
-    //       'lnbc${state.amount}n1pj4d03xpp5f70hy4qk9pza9zd8zawhv9hexs8q3xpj'
-    //       'wvj08pj3vxf5ayxgj0yqdpzxyucrqvpsxqcqzpgxqyz5vqsp5usyc4lk9chsfp53kvcnvq4n'
-    //       'vl9rlzw4qka6mwm7qmjm4y5yt6wq9qyyssqy9hdnr5ckn0zy95h90zqk4qxvmllskzlzcnw'
-    //       'vju4e9d5u5c4qku5xdj7j8pjwl7hnkzrm3e9c5vgd63m2gc5v7wmqj0ys6v5ycqj6gpgq7m'
-    //       'rvnz';
-
-    //   // Update state with the invoice
-    //   state = state.copyWith(invoice: mockInvoice, isGeneratingInvoice: false);
-    // } catch (e) {
-    //   // Update state with the error
-    //   state = state.copyWith(
-    //       error: MintScreenError.invalidAmount(), isGeneratingInvoice: false);
-    // }
   }
 
   MintScreenError? validate() {

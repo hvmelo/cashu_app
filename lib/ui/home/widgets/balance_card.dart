@@ -1,8 +1,9 @@
-import 'package:cashu_app/config/providers.dart';
 import 'package:cashu_app/ui/core/themes/colors.dart';
 import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../../../config/cashu_providers.dart';
 
 class BalanceCard extends ConsumerWidget {
   const BalanceCard({
@@ -11,7 +12,7 @@ class BalanceCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final balanceAsync = ref.watch(walletBalanceStreamProvider);
+    final balanceAsync = ref.watch(multiWalletBalanceStreamProvider);
 
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final textColor = context.colorScheme.onSurface;

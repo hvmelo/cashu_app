@@ -84,6 +84,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get drawerMenuAbout => 'About';
 
   @override
+  String get currentMintCardTitle => 'Current Mint';
+
+  @override
+  String get currentMintCardNoMintSelected => 'No mint selected';
+
+  @override
+  String get currentMintCardSelectMint => 'Select Mint';
+
+  @override
   String get mintScreenTitle => 'Mint';
 
   @override
@@ -108,6 +117,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mintScreenInvoiceCopied => 'Invoice copied to clipboard';
 
   @override
+  String get mintScreenNoMintSelected => 'No mint selected';
+
+  @override
   String get mintScreenClose => 'Close';
 
   @override
@@ -121,6 +133,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mintScreenAmountEmpty => 'Please enter an amount';
+
+  @override
+  String get generalCancelButtonLabel => 'Cancel';
 
   @override
   String get generalUnknownError => 'An unknown error occurred';

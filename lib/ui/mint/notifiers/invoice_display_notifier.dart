@@ -1,7 +1,10 @@
-import 'package:cashu_app/config/providers.dart';
-import 'package:cdk_flutter/cdk_flutter.dart';
+import 'package:cashu_app/config/app_providers.dart';
+import 'package:cashu_app/utils/result.dart';
+import 'package:cdk_flutter/cdk_flutter.dart' hide Error;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../../../config/cashu_providers.dart';
 
 part 'invoice_display_notifier.freezed.dart';
 part 'invoice_display_notifier.g.dart';
@@ -11,28 +14,48 @@ part 'invoice_display_notifier.g.dart';
 class InvoiceDisplayNotifier extends _$InvoiceDisplayNotifier {
   @override
   InvoiceDisplayState build(BigInt amount) {
-    final mintQuoteAsync = ref.watch(mintQuoteStreamProvider(amount));
+    final currentMint = ref.watch(currentMintProvider);
 
-    return switch (mintQuoteAsync) {
-      AsyncData(:final value) => InvoiceDisplayState(
-          invoice: value.request,
-          isIssued: value.state == MintQuoteState.issued,
-          isLoading: false,
-          error: null,
-        ),
-      AsyncError(:final error) => InvoiceDisplayState(
+    if (currentMint == null) {
+      throw Exception('No mint selected');
+    }
+
+    final mintQuoteAsync =
+        ref.watch(mintQuoteStreamProvider(currentMint.url, amount));
+
+    switch (mintQuoteAsync) {
+      case AsyncData(value: final result):
+        switch (result) {
+          case Ok(:final value):
+            return InvoiceDisplayState(
+              invoice: value.request,
+              isIssued: value.state == MintQuoteState.issued,
+              isLoading: false,
+              error: null,
+            );
+          case Error(:final error):
+            return InvoiceDisplayState(
+              invoice: null,
+              isIssued: false,
+              isLoading: false,
+              error: InvoiceDisplayError.mintQuoteError(error),
+            );
+        }
+      case AsyncError(:final error):
+        return InvoiceDisplayState(
           invoice: null,
           isIssued: false,
           isLoading: false,
           error: InvoiceDisplayError.mintQuoteError(error),
-        ),
-      _ => InvoiceDisplayState(
+        );
+      default:
+        return InvoiceDisplayState(
           invoice: null,
           isIssued: false,
           isLoading: true,
           error: null,
-        ),
-    };
+        );
+    }
   }
 }
 

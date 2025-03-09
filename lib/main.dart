@@ -1,4 +1,4 @@
-import 'package:cashu_app/config/providers.dart';
+import 'package:cashu_app/config/app_providers.dart';
 import 'package:cashu_app/ui/core/l10n/gen_l10n/app_localizations.dart';
 import 'package:cashu_app/ui/core/themes/theme.dart';
 import 'package:flutter/material.dart';

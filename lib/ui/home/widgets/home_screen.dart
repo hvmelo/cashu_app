@@ -1,17 +1,23 @@
+import 'package:cashu_app/config/cashu_providers.dart';
+import 'package:cashu_app/ui/core/widgets/current_mint_card.dart';
 import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../routing/routes.dart';
 import '../../core/themes/colors.dart';
 import 'app_drawer.dart';
 import 'widgets.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final multiWallet = ref.watch(multiWalletProvider);
+    final balanceAsync = ref.watch(multiWalletBalanceStreamProvider);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -49,7 +55,7 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(height: 16),
                 _buildActionGrid(context),
                 const SizedBox(height: 24),
-                MintInfoCard(),
+                const CurrentMintCard(),
                 const SizedBox(height: 16),
                 const RecentTransactionsWidget(),
               ],

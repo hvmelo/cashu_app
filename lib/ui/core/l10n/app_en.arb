@@ -25,6 +25,9 @@
   "drawerMenuDarkMode": "Dark Mode",
   "drawerMenuLightMode": "Light Mode",
   "drawerMenuAbout": "About",
+  "currentMintCardTitle": "Current Mint",
+  "currentMintCardNoMintSelected": "No mint selected",
+  "currentMintCardSelectMint": "Select Mint",
   "mintScreenTitle": "Mint",
   "mintScreenMintCardTitle": "Mint",
   "mintScreenAmountInSatsLabel": "Amount in sats",
@@ -33,10 +36,12 @@
   "mintScreenInvoiceSubtitle": "Scan to pay the Lightning invoice",
   "mintScreenCopyInvoice": "Copy Invoice",
   "mintScreenInvoiceCopied": "Invoice copied to clipboard",
+  "mintScreenNoMintSelected": "No mint selected",
   "mintScreenClose": "Close",
   "mintScreenError": "Error creating invoice",
   "mintScreenLoading": "Creating invoice...",
   "mintScreenAmountError": "Please enter a valid amount",
   "mintScreenAmountEmpty": "Please enter an amount",
+  "generalCancelButtonLabel": "Cancel",
   "generalUnknownError": "An unknown error occurred"
 }

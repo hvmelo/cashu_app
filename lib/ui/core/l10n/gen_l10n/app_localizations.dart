@@ -245,6 +245,24 @@ abstract class AppLocalizations {
   /// **'About'**
   String get drawerMenuAbout;
 
+  /// No description provided for @currentMintCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Mint'**
+  String get currentMintCardTitle;
+
+  /// No description provided for @currentMintCardNoMintSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'No mint selected'**
+  String get currentMintCardNoMintSelected;
+
+  /// No description provided for @currentMintCardSelectMint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Mint'**
+  String get currentMintCardSelectMint;
+
   /// No description provided for @mintScreenTitle.
   ///
   /// In en, this message translates to:
@@ -293,6 +311,12 @@ abstract class AppLocalizations {
   /// **'Invoice copied to clipboard'**
   String get mintScreenInvoiceCopied;
 
+  /// No description provided for @mintScreenNoMintSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'No mint selected'**
+  String get mintScreenNoMintSelected;
+
   /// No description provided for @mintScreenClose.
   ///
   /// In en, this message translates to:
@@ -322,6 +346,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter an amount'**
   String get mintScreenAmountEmpty;
+
+  /// No description provided for @generalCancelButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get generalCancelButtonLabel;
 
   /// No description provided for @generalUnknownError.
   ///

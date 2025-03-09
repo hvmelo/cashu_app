@@ -1,3 +1,5 @@
+import 'package:cashu_app/routing/routes.dart';
+import 'package:cashu_app/ui/core/widgets/current_mint_card.dart';
 import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -11,11 +13,11 @@ class MintScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final mintState = ref.watch(mintScreenNotifierProvider);
+    final mintScreenState = ref.watch(mintScreenNotifierProvider);
 
     void handleCloseInvoice() {
       ref.read(mintScreenNotifierProvider.notifier).reset();
-      context.pop();
+      context.go(Routes.home);
     }
 
     return Scaffold(
@@ -45,14 +47,14 @@ class MintScreen extends HookConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Display the mint card
-                const MintCard(),
+                const CurrentMintCard(),
                 const SizedBox(height: 24),
 
-                if (!mintState.isSubmitted)
+                if (!mintScreenState.isSubmitted)
                   AmountInputForm()
                 else
                   InvoiceDisplay(
-                    amount: BigInt.from(mintState.amount),
+                    amount: BigInt.from(mintScreenState.amount),
                     onClose: handleCloseInvoice,
                   ),
               ],
