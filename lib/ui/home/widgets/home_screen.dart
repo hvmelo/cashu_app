@@ -15,9 +15,6 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final multiWallet = ref.watch(multiWalletProvider);
-    final balanceAsync = ref.watch(multiWalletBalanceStreamProvider);
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,

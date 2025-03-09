@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:cashu_app/config/app_providers.dart';
+import 'package:cashu_app/config/cashu_providers.dart';
 import 'package:cashu_app/domain/models/user_mint.dart';
 import 'package:cashu_app/utils/provider_logger.dart';
 import 'package:cdk_flutter/cdk_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'main.dart';
@@ -15,24 +19,38 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CdkFlutter.init();
 
-  // final path = await getApplicationDocumentsDirectory();
-  // final dbFile = File('${path.path}/wallet.db');
-  // if (dbFile.existsSync()) {
-  //   dbFile.deleteSync();
-  // }
+  final path = await getApplicationDocumentsDirectory();
+
+  final seedFile = File('${path.path}/seed.txt');
+
+  String seed;
+  if (await seedFile.exists()) {
+    seed = await seedFile.readAsString();
+  } else {
+    seed = generateHexSeed();
+    await seedFile.writeAsString(seed);
+  }
+  final db = WalletDatabase(path: '${path.path}/wallet.db');
+
+  final multiMintWallet = await MultiMintWallet.newFromHexSeed(
+    unit: 'sat',
+    seed: seed,
+    localstore: db,
+  );
+
   // Get initial mint URL from the available mints
   final sharedPreferences = await SharedPreferences.getInstance();
   // Create a provider container with overrides
   final container = ProviderContainer(
     overrides: [
       sharedPreferencesProvider.overrideWith((ref) => sharedPreferences),
+      multiMintWalletProvider.overrideWith((ref) => multiMintWallet),
     ],
     observers: [ProviderLogger()],
   );
 
   // Add initial mints to the user mints repository
   final userMintRepository = container.read(userMintRepositoryProvider);
-
   final userMints = userMintRepository.retrieveAllUserMints();
 
   if (userMints.isEmpty) {
@@ -47,7 +65,9 @@ Future<void> main() async {
       ),
     ];
     for (final mint in initialMints) {
-      userMintRepository.saveUserMint(mint);
+      await container
+          .read(addMintUseCaseProvider)
+          .execute(mint.url, nickName: mint.nickName);
     }
   }
 
