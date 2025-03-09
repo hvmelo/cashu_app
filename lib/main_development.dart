@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cashu_app/config/providers.dart';
+import 'package:cashu_app/ui/home/widgets/mint_selector.dart';
 import 'package:cdk_flutter/cdk_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -30,16 +31,45 @@ Future<void> main() async {
   // https://mint.refugio.com.br
   // https://testnut.cashu.space
 
-  final wallet = Wallet.newFromHexSeed(
-      mintUrl: 'https://mint.refugio.com.br',
-      unit: 'sat',
-      seed: seed,
-      localstore: db);
+  // Get initial mint URL from the available mints
+  final initialMintUrl = availableMints[1]; // Default to testnut.cashu.space
 
-  runApp(ProviderScope(
+  // Create the wallet with the initial mint
+  final wallet = Wallet.newFromHexSeed(
+      mintUrl: initialMintUrl, unit: 'sat', seed: seed, localstore: db);
+
+  // Create a provider container with overrides
+  final container = ProviderContainer(
     overrides: [
       walletProvider.overrideWith((ref) => wallet),
+      // Initialize the current mint provider with the wallet's mint URL
+      currentMintProvider.overrideWith((ref) => wallet.mintUrl),
     ],
-    child: MainApp(),
-  ));
+  );
+
+  // Listen to changes in the current mint provider
+  container.listen<String>(
+    currentMintProvider,
+    (previous, next) {
+      if (previous != next && previous != null) {
+        // Mint URL has changed, recreate the wallet
+        final newWallet = Wallet.newFromHexSeed(
+          mintUrl: next,
+          unit: 'sat',
+          seed: seed,
+          localstore: db,
+        );
+
+        // Update the wallet provider
+        container.read(walletProvider.notifier).state = newWallet;
+      }
+    },
+  );
+
+  runApp(
+    UncontrolledProviderScope(
+      container: container,
+      child: MainApp(),
+    ),
+  );
 }
