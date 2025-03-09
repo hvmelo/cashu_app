@@ -14,15 +14,14 @@ import 'main.dart';
 
 /// Development config entry point.
 /// Launch with `flutter run --target lib/main_development.dart`.
-/// Uses test mint.
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CdkFlutter.init();
 
   final path = await getApplicationDocumentsDirectory();
 
+  // Create a seed file if it doesn't exist
   final seedFile = File('${path.path}/seed.txt');
-
   String seed;
   if (await seedFile.exists()) {
     seed = await seedFile.readAsString();
@@ -30,16 +29,20 @@ Future<void> main() async {
     seed = generateHexSeed();
     await seedFile.writeAsString(seed);
   }
+
+  // Initialize the wallet database
   final db = WalletDatabase(path: '${path.path}/wallet.db');
 
+  // Initialize the multi-mint wallet
   final multiMintWallet = await MultiMintWallet.newFromHexSeed(
     unit: 'sat',
     seed: seed,
     localstore: db,
   );
 
-  // Get initial mint URL from the available mints
+  // Initialize the shared preferences
   final sharedPreferences = await SharedPreferences.getInstance();
+
   // Create a provider container with overrides
   final container = ProviderContainer(
     overrides: [
