@@ -84,6 +84,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get drawerMenuAbout => 'Acerca';
 
   @override
+  String get drawerMenuManageMints => 'Mints';
+
+  @override
   String get currentMintCardTitle => 'Current Mint';
 
   @override
@@ -133,6 +136,95 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get mintScreenAmountEmpty => 'Por favor, ingrese una cantidad';
+
+  @override
+  String get addMintScreenTitle => 'Add Mint';
+
+  @override
+  String get addMintScreenDescription => 'Add a new mint to your wallet. You can add any Cashu mint by entering its URL.';
+
+  @override
+  String get addMintScreenUrlLabel => 'Mint URL';
+
+  @override
+  String get addMintScreenUrlRequired => 'Mint URL is required';
+
+  @override
+  String get addMintScreenUrlInvalid => 'Please enter a valid URL';
+
+  @override
+  String get addMintScreenNicknameLabel => 'Nickname (Optional)';
+
+  @override
+  String get addMintScreenNicknameHint => 'A friendly name for this mint';
+
+  @override
+  String get addMintScreenAddButton => 'Add Mint';
+
+  @override
+  String get addMintScreenSuccess => 'Mint added successfully';
+
+  @override
+  String get addMintScreenPasteFromClipboard => 'Paste from clipboard';
+
+  @override
+  String get manageMintScreenTitle => 'Manage Mints';
+
+  @override
+  String get manageMintScreenRefresh => 'Refresh mints';
+
+  @override
+  String get manageMintScreenNoMints => 'No mints added yet';
+
+  @override
+  String get manageMintScreenAddMintPrompt => 'Add a mint to start using your wallet';
+
+  @override
+  String get manageMintScreenAddMintButton => 'Add Mint';
+
+  @override
+  String get manageMintScreenCurrentMint => 'Current';
+
+  @override
+  String get manageMintScreenSetAsCurrentButton => 'Set as current mint';
+
+  @override
+  String get manageMintScreenEditButton => 'Edit mint';
+
+  @override
+  String get manageMintScreenDeleteButton => 'Delete mint';
+
+  @override
+  String get manageMintScreenDeleteMintTitle => 'Delete Mint';
+
+  @override
+  String manageMintScreenDeleteMintConfirmation(String mintName) {
+    return 'Are you sure you want to delete $mintName?';
+  }
+
+  @override
+  String get manageMintScreenEditMintTitle => 'Edit Mint';
+
+  @override
+  String get manageMintScreenSaveButton => 'Save';
+
+  @override
+  String get manageMintScreenMintDetailsTitle => 'Mint Details';
+
+  @override
+  String get manageMintScreenMintUrl => 'URL';
+
+  @override
+  String get manageMintScreenMintNickname => 'Nickname';
+
+  @override
+  String get manageMintScreenCloseButton => 'Close';
+
+  @override
+  String get manageMintScreenCopyToClipboard => 'Copy to clipboard';
+
+  @override
+  String get manageMintScreenCopiedToClipboard => 'Copied to clipboard';
 
   @override
   String get generalCancelButtonLabel => 'Cancel';

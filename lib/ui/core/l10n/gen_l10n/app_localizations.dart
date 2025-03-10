@@ -245,6 +245,12 @@ abstract class AppLocalizations {
   /// **'About'**
   String get drawerMenuAbout;
 
+  /// No description provided for @drawerMenuManageMints.
+  ///
+  /// In en, this message translates to:
+  /// **'Mints'**
+  String get drawerMenuManageMints;
+
   /// No description provided for @currentMintCardTitle.
   ///
   /// In en, this message translates to:
@@ -346,6 +352,180 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter an amount'**
   String get mintScreenAmountEmpty;
+
+  /// No description provided for @addMintScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Mint'**
+  String get addMintScreenTitle;
+
+  /// No description provided for @addMintScreenDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a new mint to your wallet. You can add any Cashu mint by entering its URL.'**
+  String get addMintScreenDescription;
+
+  /// No description provided for @addMintScreenUrlLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Mint URL'**
+  String get addMintScreenUrlLabel;
+
+  /// No description provided for @addMintScreenUrlRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Mint URL is required'**
+  String get addMintScreenUrlRequired;
+
+  /// No description provided for @addMintScreenUrlInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid URL'**
+  String get addMintScreenUrlInvalid;
+
+  /// No description provided for @addMintScreenNicknameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Nickname (Optional)'**
+  String get addMintScreenNicknameLabel;
+
+  /// No description provided for @addMintScreenNicknameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A friendly name for this mint'**
+  String get addMintScreenNicknameHint;
+
+  /// No description provided for @addMintScreenAddButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Mint'**
+  String get addMintScreenAddButton;
+
+  /// No description provided for @addMintScreenSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Mint added successfully'**
+  String get addMintScreenSuccess;
+
+  /// No description provided for @addMintScreenPasteFromClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste from clipboard'**
+  String get addMintScreenPasteFromClipboard;
+
+  /// No description provided for @manageMintScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Mints'**
+  String get manageMintScreenTitle;
+
+  /// No description provided for @manageMintScreenRefresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh mints'**
+  String get manageMintScreenRefresh;
+
+  /// No description provided for @manageMintScreenNoMints.
+  ///
+  /// In en, this message translates to:
+  /// **'No mints added yet'**
+  String get manageMintScreenNoMints;
+
+  /// No description provided for @manageMintScreenAddMintPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a mint to start using your wallet'**
+  String get manageMintScreenAddMintPrompt;
+
+  /// No description provided for @manageMintScreenAddMintButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Mint'**
+  String get manageMintScreenAddMintButton;
+
+  /// No description provided for @manageMintScreenCurrentMint.
+  ///
+  /// In en, this message translates to:
+  /// **'Current'**
+  String get manageMintScreenCurrentMint;
+
+  /// No description provided for @manageMintScreenSetAsCurrentButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Set as current mint'**
+  String get manageMintScreenSetAsCurrentButton;
+
+  /// No description provided for @manageMintScreenEditButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit mint'**
+  String get manageMintScreenEditButton;
+
+  /// No description provided for @manageMintScreenDeleteButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete mint'**
+  String get manageMintScreenDeleteButton;
+
+  /// No description provided for @manageMintScreenDeleteMintTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Mint'**
+  String get manageMintScreenDeleteMintTitle;
+
+  /// No description provided for @manageMintScreenDeleteMintConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete {mintName}?'**
+  String manageMintScreenDeleteMintConfirmation(String mintName);
+
+  /// No description provided for @manageMintScreenEditMintTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Mint'**
+  String get manageMintScreenEditMintTitle;
+
+  /// No description provided for @manageMintScreenSaveButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get manageMintScreenSaveButton;
+
+  /// No description provided for @manageMintScreenMintDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mint Details'**
+  String get manageMintScreenMintDetailsTitle;
+
+  /// No description provided for @manageMintScreenMintUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'URL'**
+  String get manageMintScreenMintUrl;
+
+  /// No description provided for @manageMintScreenMintNickname.
+  ///
+  /// In en, this message translates to:
+  /// **'Nickname'**
+  String get manageMintScreenMintNickname;
+
+  /// No description provided for @manageMintScreenCloseButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get manageMintScreenCloseButton;
+
+  /// No description provided for @manageMintScreenCopyToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy to clipboard'**
+  String get manageMintScreenCopyToClipboard;
+
+  /// No description provided for @manageMintScreenCopiedToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get manageMintScreenCopiedToClipboard;
 
   /// No description provided for @generalCancelButtonLabel.
   ///

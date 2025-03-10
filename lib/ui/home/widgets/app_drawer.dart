@@ -1,6 +1,8 @@
 import 'package:cashu_app/config/app_providers.dart';
+import 'package:cashu_app/routing/routes.dart';
 import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AppDrawer extends ConsumerWidget {
@@ -62,7 +64,7 @@ class AppDrawer extends ConsumerWidget {
             title: Text(context.l10n.drawerMenuHome),
             selected: true,
             onTap: () {
-              Navigator.pop(context);
+              context.go(Routes.home);
             },
           ),
           ListTile(
@@ -71,6 +73,14 @@ class AppDrawer extends ConsumerWidget {
             onTap: () {
               Navigator.pop(context);
               // TODO: Navigate to transaction history
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.account_balance_outlined),
+            title: Text(context.l10n.drawerMenuManageMints),
+            onTap: () {
+              Navigator.pop(context);
+              context.go(Routes.manageMints);
             },
           ),
           ListTile(

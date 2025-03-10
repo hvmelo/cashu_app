@@ -25,6 +25,7 @@
   "drawerMenuDarkMode": "Dark Mode",
   "drawerMenuLightMode": "Light Mode",
   "drawerMenuAbout": "About",
+  "drawerMenuManageMints": "Mints",
   "currentMintCardTitle": "Current Mint",
   "currentMintCardNoMintSelected": "No mint selected",
   "currentMintCardSelectMint": "Select Mint",
@@ -42,6 +43,43 @@
   "mintScreenLoading": "Creating invoice...",
   "mintScreenAmountError": "Please enter a valid amount",
   "mintScreenAmountEmpty": "Please enter an amount",
+  "addMintScreenTitle": "Add Mint",
+  "addMintScreenDescription": "Add a new mint to your wallet. You can add any Cashu mint by entering its URL.",
+  "addMintScreenUrlLabel": "Mint URL",
+  "addMintScreenUrlRequired": "Mint URL is required",
+  "addMintScreenUrlInvalid": "Please enter a valid URL",
+  "addMintScreenNicknameLabel": "Nickname (Optional)",
+  "addMintScreenNicknameHint": "A friendly name for this mint",
+  "addMintScreenAddButton": "Add Mint",
+  "addMintScreenSuccess": "Mint added successfully",
+  "addMintScreenPasteFromClipboard": "Paste from clipboard",
+  "manageMintScreenTitle": "Manage Mints",
+  "manageMintScreenRefresh": "Refresh mints",
+  "manageMintScreenNoMints": "No mints added yet",
+  "manageMintScreenAddMintPrompt": "Add a mint to start using your wallet",
+  "manageMintScreenAddMintButton": "Add Mint",
+  "manageMintScreenCurrentMint": "Current",
+  "manageMintScreenSetAsCurrentButton": "Set as current mint",
+  "manageMintScreenEditButton": "Edit mint",
+  "manageMintScreenDeleteButton": "Delete mint",
+  "manageMintScreenDeleteMintTitle": "Delete Mint",
+  "manageMintScreenDeleteMintConfirmation": "Are you sure you want to delete {mintName}?",
+  "@manageMintScreenDeleteMintConfirmation": {
+    "placeholders": {
+      "mintName": {
+        "type": "String",
+        "example": "My Mint"
+      }
+    }
+  },
+  "manageMintScreenEditMintTitle": "Edit Mint",
+  "manageMintScreenSaveButton": "Save",
+  "manageMintScreenMintDetailsTitle": "Mint Details",
+  "manageMintScreenMintUrl": "URL",
+  "manageMintScreenMintNickname": "Nickname",
+  "manageMintScreenCloseButton": "Close",
+  "manageMintScreenCopyToClipboard": "Copy to clipboard",
+  "manageMintScreenCopiedToClipboard": "Copied to clipboard",
   "generalCancelButtonLabel": "Cancel",
   "generalUnknownError": "An unknown error occurred"
 }

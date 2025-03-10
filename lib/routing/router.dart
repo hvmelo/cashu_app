@@ -1,5 +1,6 @@
 import 'package:cashu_app/ui/home/widgets/home_screen.dart';
 import 'package:cashu_app/ui/mint/widgets/mint_screen.dart';
+import 'package:cashu_app/ui/mint_manager/widgets/mint_manager_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -26,6 +27,12 @@ GoRouter router() => GoRouter(
               },
             ),
           ],
+        ),
+        GoRoute(
+          path: Routes.manageMints,
+          builder: (context, state) {
+            return const MintManagerScreen();
+          },
         ),
       ],
     );
