@@ -3,8 +3,7 @@ import 'package:cashu_app/data/repositories/mint_info/mint_info_repository.dart'
 import 'package:cashu_app/data/repositories/mint_info/mint_info_repository_remote.dart';
 import 'package:cashu_app/data/repositories/user_mints/user_mints_repository.dart';
 import 'package:cashu_app/data/repositories/user_mints/user_mints_repository_local.dart';
-import 'package:cashu_app/domain/models/mint_info.dart';
-import 'package:cashu_app/domain/models/user_mint.dart';
+import 'package:cashu_app/domain/models/mint_wrapper.dart';
 import 'package:cashu_app/domain/use-cases/add_mint_use_case.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -51,12 +50,11 @@ UserMintsRepository userMintRepository(Ref ref) {
 
 @riverpod
 AddMintUseCase addMintUseCase(Ref ref) {
-  final multiMintWallet = ref.read(multiMintWalletProvider);
-  final userMintsRepository = ref.read(userMintRepositoryProvider);
-
+  final multiMintWallet = ref.watch(multiMintWalletProvider).valueOrNull;
   if (multiMintWallet == null) {
     throw Exception('MultiMintWallet not found');
   }
+  final userMintsRepository = ref.read(userMintRepositoryProvider);
 
   return AddMintUseCase(
     multiMintWallet: multiMintWallet,
@@ -64,12 +62,13 @@ AddMintUseCase addMintUseCase(Ref ref) {
   );
 }
 
-@riverpod
-List<UserMint> allUserMints(Ref ref) {
-  final userMintRepository = ref.read(userMintRepositoryProvider);
-  return userMintRepository.retrieveAllUserMints();
-}
-
+/// A provider that manages the current mint selection.
+///
+/// This provider:
+/// - Retrieves the current mint URL from the repository on initialization
+/// - Provides a method to update the current mint selection
+/// - Persists the selected mint URL to storage
+/// - Caches the current mint value to avoid unnecessary repository lookups
 @riverpod
 class CurrentMint extends _$CurrentMint {
   @override
@@ -89,8 +88,8 @@ class CurrentMint extends _$CurrentMint {
   }
 }
 
-@riverpod
-Future<MintInfo> mintInfo(Ref ref, String mintUrl) async {
-  final mintInfoRepository = ref.read(mintInfoRepositoryProvider);
-  return mintInfoRepository.getMintInfo(mintUrl);
-}
+// @riverpod
+// Future<MintInfo> mintInfo(Ref ref, String mintUrl) async {
+//   final mintInfoRepository = ref.read(mintInfoRepositoryProvider);
+//   return mintInfoRepository.getMintInfo(mintUrl);
+// }

@@ -4,4 +4,4 @@ export 'app_qr_code.dart';
 export 'app_snackbar.dart';
 export 'current_mint_card.dart';
 export 'default_card.dart';
-export 'loading_overlay.dart';
+export 'app_shell.dart';

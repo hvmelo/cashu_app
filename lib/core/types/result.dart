@@ -26,6 +26,9 @@ sealed class Result<T> {
     Object error, {
     StackTrace? stackTrace,
   }) = Error._;
+
+  bool get isOk => this is Ok;
+  bool get isError => this is Error;
 }
 
 /// Subclass of Result for values

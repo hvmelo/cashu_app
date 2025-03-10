@@ -1,13 +1,12 @@
-import 'package:cashu_app/domain/models/user_mint.dart';
+import 'package:cashu_app/domain/models/mint_wrapper.dart';
 import 'package:cashu_app/ui/core/themes/colors.dart';
 import 'package:cashu_app/ui/core/widgets/default_card.dart';
-import 'package:cashu_app/ui/home/widgets/app_drawer.dart';
-import 'package:cashu_app/ui/mint_manager/notifiers/mint_manager_notifier.dart';
 import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
 import 'package:cashu_app/utils/url_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../notifiers/mint_manager_notifier.dart';
 import 'widgets.dart';
 
 class MintManagerScreen extends ConsumerWidget {
@@ -31,7 +30,6 @@ class MintManagerScreen extends ConsumerWidget {
         ],
       ),
       backgroundColor: context.colorScheme.surface,
-      drawer: const AppDrawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddMintDialog(context, ref),
         backgroundColor: AppColors.actionColors['mint'],

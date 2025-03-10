@@ -7,7 +7,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../routing/routes.dart';
 import '../../core/themes/colors.dart';
-import 'app_drawer.dart';
 import 'widgets.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -28,7 +27,6 @@ class HomeScreen extends ConsumerWidget {
         ],
       ),
       backgroundColor: context.colorScheme.surface,
-      drawer: const AppDrawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // TODO: Implement QR scan

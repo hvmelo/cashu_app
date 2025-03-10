@@ -197,59 +197,29 @@ abstract class AppLocalizations {
   /// **'Exchange BTC for eCash'**
   String get homeScreenMintEcashSubtitle;
 
-  /// No description provided for @drawerTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Cashu Wallet'**
-  String get drawerTitle;
-
-  /// No description provided for @drawerSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'eCash for everyone'**
-  String get drawerSubtitle;
-
-  /// No description provided for @drawerMenuHome.
+  /// No description provided for @navBarHome.
   ///
   /// In en, this message translates to:
   /// **'Home'**
-  String get drawerMenuHome;
+  String get navBarHome;
 
-  /// No description provided for @drawerMenuTransactionHistory.
-  ///
-  /// In en, this message translates to:
-  /// **'Transaction History'**
-  String get drawerMenuTransactionHistory;
-
-  /// No description provided for @drawerMenuSettings.
-  ///
-  /// In en, this message translates to:
-  /// **'Settings'**
-  String get drawerMenuSettings;
-
-  /// No description provided for @drawerMenuDarkMode.
-  ///
-  /// In en, this message translates to:
-  /// **'Dark Mode'**
-  String get drawerMenuDarkMode;
-
-  /// No description provided for @drawerMenuLightMode.
-  ///
-  /// In en, this message translates to:
-  /// **'Light Mode'**
-  String get drawerMenuLightMode;
-
-  /// No description provided for @drawerMenuAbout.
-  ///
-  /// In en, this message translates to:
-  /// **'About'**
-  String get drawerMenuAbout;
-
-  /// No description provided for @drawerMenuManageMints.
+  /// No description provided for @navBarMints.
   ///
   /// In en, this message translates to:
   /// **'Mints'**
-  String get drawerMenuManageMints;
+  String get navBarMints;
+
+  /// No description provided for @navBarHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get navBarHistory;
+
+  /// No description provided for @navBarSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get navBarSettings;
 
   /// No description provided for @currentMintCardTitle.
   ///
@@ -526,6 +496,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Copied to clipboard'**
   String get manageMintScreenCopiedToClipboard;
+
+  /// No description provided for @transactionHistoryScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction History'**
+  String get transactionHistoryScreenTitle;
+
+  /// No description provided for @transactionHistoryScreenDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'View your transaction history'**
+  String get transactionHistoryScreenDescription;
+
+  /// No description provided for @transactionHistoryScreenEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions yet'**
+  String get transactionHistoryScreenEmpty;
+
+  /// No description provided for @settingsScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsScreenTitle;
+
+  /// No description provided for @settingsScreenAppearanceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get settingsScreenAppearanceTitle;
+
+  /// No description provided for @settingsScreenAboutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get settingsScreenAboutTitle;
+
+  /// No description provided for @settingsScreenVersionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Version'**
+  String get settingsScreenVersionTitle;
 
   /// No description provided for @generalCancelButtonLabel.
   ///

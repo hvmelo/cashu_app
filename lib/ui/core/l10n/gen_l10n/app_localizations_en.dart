@@ -60,31 +60,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeScreenMintEcashSubtitle => 'Exchange BTC for eCash';
 
   @override
-  String get drawerTitle => 'Cashu Wallet';
+  String get navBarHome => 'Home';
 
   @override
-  String get drawerSubtitle => 'eCash for everyone';
+  String get navBarMints => 'Mints';
 
   @override
-  String get drawerMenuHome => 'Home';
+  String get navBarHistory => 'History';
 
   @override
-  String get drawerMenuTransactionHistory => 'Transaction History';
-
-  @override
-  String get drawerMenuSettings => 'Settings';
-
-  @override
-  String get drawerMenuDarkMode => 'Dark Mode';
-
-  @override
-  String get drawerMenuLightMode => 'Light Mode';
-
-  @override
-  String get drawerMenuAbout => 'About';
-
-  @override
-  String get drawerMenuManageMints => 'Mints';
+  String get navBarSettings => 'Settings';
 
   @override
   String get currentMintCardTitle => 'Current Mint';
@@ -225,6 +210,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get manageMintScreenCopiedToClipboard => 'Copied to clipboard';
+
+  @override
+  String get transactionHistoryScreenTitle => 'Transaction History';
+
+  @override
+  String get transactionHistoryScreenDescription => 'View your transaction history';
+
+  @override
+  String get transactionHistoryScreenEmpty => 'No transactions yet';
+
+  @override
+  String get settingsScreenTitle => 'Settings';
+
+  @override
+  String get settingsScreenAppearanceTitle => 'Appearance';
+
+  @override
+  String get settingsScreenAboutTitle => 'About';
+
+  @override
+  String get settingsScreenVersionTitle => 'Version';
 
   @override
   String get generalCancelButtonLabel => 'Cancel';
