@@ -113,7 +113,7 @@ lib/
 
 The project uses several code generation tools:
 
-- **Riverpod**: For state management and dependency injetion
+- **Riverpod**: For state management and dependency injection
 - **Freezed**: For immutable models
 - **JSON Serializable**: For JSON serialization/deserialization
 
