@@ -13,8 +13,6 @@ Cashu is a privacy-focused ecash protocol for Bitcoin that enables:
 - **Programmable money**: Support for script conditions like time locks, public key locks, and more
 - **Lightning Network integration**: Seamless interoperability with the Lightning Network
 
-Cashu is designed to improve the experience for users of custodial services by bringing privacy, censorship resistance, and flexibility to Bitcoin transactions.
-
 ## Features
 
 - 🔒 **Private Transactions**: Send and receive Cashu tokens with complete privacy
