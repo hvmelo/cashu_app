@@ -1,12 +1,13 @@
-import 'package:cashu_app/domain/models/user_mint.dart';
-import 'package:cashu_app/ui/core/themes/colors.dart';
 import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
-import 'package:cashu_app/utils/url_utils.dart';
 import 'package:flutter/material.dart';
+
+import '../../../domain/models/mint_wrapper.dart';
+import '../../../utils/url_utils.dart';
+import '../../core/themes/colors.dart';
 
 /// Bottom sheet for mint options
 class MintOptionsBottomSheet extends StatelessWidget {
-  final UserMint mint;
+  final MintWrapper mint;
   final bool isCurrentMint;
   final VoidCallback? onSetAsCurrent;
   final VoidCallback onEdit;
@@ -38,7 +39,7 @@ class MintOptionsBottomSheet extends StatelessWidget {
                     height: 48,
                     decoration: BoxDecoration(
                       color: isCurrentMint
-                          ? AppColors.actionColors['mint']!.withOpacity(0.15)
+                          ? AppColors.actionColors['mint']!.withAlpha(39)
                           : context.colorScheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -56,13 +57,15 @@ class MintOptionsBottomSheet extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          mint.nickName ?? UrlUtils.extractHost(mint.url),
+                          mint.nickName ??
+                              mint.mint.info?.name ??
+                              UrlUtils.extractHost(mint.mint.url),
                           style: context.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
-                          mint.url,
+                          mint.mint.url,
                           style: context.textTheme.bodySmall?.copyWith(
                             color:
                                 context.colorScheme.onSurface.withOpacity(0.6),
@@ -81,14 +84,14 @@ class MintOptionsBottomSheet extends StatelessWidget {
               _buildOptionTile(
                 context,
                 Icons.check_circle_outline,
-                context.l10n.manageMintScreenSetAsCurrentButton,
+                context.l10n.mintManagerScreenSetAsCurrentButton,
                 AppColors.actionColors['mint']!,
                 onSetAsCurrent,
               ),
             _buildOptionTile(
               context,
               Icons.edit_outlined,
-              context.l10n.manageMintScreenEditButton,
+              context.l10n.mintManagerScreenEditButton,
               context.colorScheme.primary,
               onEdit,
             ),
@@ -96,7 +99,7 @@ class MintOptionsBottomSheet extends StatelessWidget {
               _buildOptionTile(
                 context,
                 Icons.delete_outline,
-                context.l10n.manageMintScreenDeleteButton,
+                context.l10n.mintManagerScreenDeleteButton,
                 AppColors.red,
                 onDelete,
               ),
@@ -118,7 +121,7 @@ class MintOptionsBottomSheet extends StatelessWidget {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
+          color: color.withAlpha(25),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Icon(

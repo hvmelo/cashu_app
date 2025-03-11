@@ -1,10 +1,8 @@
-import 'package:cashu_app/config/app_providers.dart';
-import 'package:cashu_app/utils/result.dart';
 import 'package:cdk_flutter/cdk_flutter.dart' hide Error;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../config/cashu_providers.dart';
+import '../../core/notifiers/current_mint_notifier.dart';
 
 part 'invoice_display_notifier.freezed.dart';
 part 'invoice_display_notifier.g.dart';
@@ -14,15 +12,31 @@ part 'invoice_display_notifier.g.dart';
 class InvoiceDisplayNotifier extends _$InvoiceDisplayNotifier {
   @override
   InvoiceDisplayState build(BigInt amount) {
-    final currentMint = ref.watch(currentMintProvider);
+    final currentMintAsync = ref.watch(currentMintNotifierProvider);
 
-    if (currentMint == null) {
-      throw Exception('No mint selected');
+    switch (currentMintAsync) {
+      case AsyncData(value: final currentMint):
+        if (currentMint == null) {
+          throw Exception('A mint should be selected at this point');
+        }
+        final mintQuoteAsync =
+            ref.watch(mintQuoteStreamProvider(currentMint.mint.url, amount));
+        break;
+      case AsyncError(:final error):
+        return InvoiceDisplayState(
+          invoice: null,
+          isIssued: false,
+          isLoading: false,
+          error: InvoiceDisplayError.unexpectedError(error),
+        );
+      default:
+        return InvoiceDisplayState(
+          invoice: null,
+          isIssued: false,
+          isLoading: true,
+          error: null,
+        );
     }
-
-    final mintQuoteAsync =
-        ref.watch(mintQuoteStreamProvider(currentMint.url, amount));
-
     switch (mintQuoteAsync) {
       case AsyncData(value: final result):
         switch (result) {
@@ -76,4 +90,5 @@ class InvoiceDisplayState with _$InvoiceDisplayState {
 sealed class InvoiceDisplayError with _$InvoiceDisplayError {
   const InvoiceDisplayError._();
   factory InvoiceDisplayError.mintQuoteError(Object error) = MintQuoteError;
+  factory InvoiceDisplayError.unexpectedError(Object error) = UnexpectedError;
 }

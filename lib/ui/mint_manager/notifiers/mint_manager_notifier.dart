@@ -1,9 +1,9 @@
-import 'package:cashu_app/config/app_providers.dart';
-import 'package:cashu_app/domain/models/user_mint.dart';
-import 'package:cashu_app/utils/result.dart';
-import 'package:cashu_app/utils/unit.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../../../data/data_providers.dart';
+import '../../../domain/models/mint_wrapper.dart';
+import '../../core/notifiers/current_mint_notifier.dart';
 
 part 'mint_manager_notifier.freezed.dart';
 part 'mint_manager_notifier.g.dart';
@@ -12,145 +12,70 @@ part 'mint_manager_notifier.g.dart';
 @riverpod
 class MintManagerNotifier extends _$MintManagerNotifier {
   @override
-  MintManagementState build() {
+  Future<MintManagerState> build() async {
     // Load the initial list of mints
-    final mints = ref.read(allUserMintsProvider);
-    final currentMint = ref.read(currentMintProvider);
+    final availableMints = await ref.watch(listMintsProvider.future);
+    final currentMint = await ref.watch(currentMintNotifierProvider.future);
 
-    return MintManagementState(
-      mints: mints,
-      currentMintUrl: currentMint?.url,
+    return MintManagerState(
+      availableMints: availableMints,
+      currentMint: currentMint,
       selectedMint: null,
-      isLoading: false,
-      error: null,
     );
   }
 
   /// Refreshes the list of mints
-  void refreshMints() {
-    final mints = ref.read(allUserMintsProvider);
-    final currentMint = ref.read(currentMintProvider);
+  Future<void> refreshMints() async {
+    state = AsyncLoading();
 
-    state = state.copyWith(
-      mints: mints,
-      currentMintUrl: currentMint?.url,
-      isLoading: false,
-    );
+    ref.invalidateSelf();
   }
 
   /// Selects a mint for editing or viewing details
-  void selectMint(UserMint mint) {
-    state = state.copyWith(
-      selectedMint: mint,
-    );
+  void selectMint(MintWrapper mint) {
+    update((state) => state.copyWith(selectedMint: mint));
   }
 
   /// Clears the selected mint
   void clearSelectedMint() {
-    state = state.copyWith(
-      selectedMint: null,
-    );
+    update((state) => state.copyWith(selectedMint: null));
   }
 
   /// Sets a mint as the current mint
-  Future<Result<UserMint>> setCurrentMint(String mintUrl) async {
-    try {
-      state = state.copyWith(isLoading: true, error: null);
+  Future<void> setCurrentMint(String mintUrl) async {
+    state = AsyncLoading();
 
-      ref.read(currentMintProvider.notifier).setCurrentMint(mintUrl);
+    ref.read(currentMintNotifierProvider.notifier).setCurrentMint(mintUrl);
 
-      // Refresh the state to reflect the change
-      refreshMints();
-
-      // Find the mint that was set as current
-      final mint = state.mints.firstWhere((m) => m.url == mintUrl);
-
-      return Result.ok(mint);
-    } catch (e, stackTrace) {
-      state = state.copyWith(
-        isLoading: false,
-        error: MintManagementError.unknown(e.toString()),
-      );
-      return Result.error(e, stackTrace: stackTrace);
-    }
+    // Refresh the state to reflect the change
+    ref.invalidateSelf();
   }
 
   /// Updates a mint's nickname
-  Future<Result<UserMint>> updateMintNickname(
-      String mintUrl, String? nickname) async {
-    try {
-      state = state.copyWith(isLoading: true, error: null);
+  Future<void> updateMintNickname(String mintUrl, String? nickname) async {
+    state = AsyncLoading();
 
-      // Get the mint to update
-      final mintToUpdate = state.mints.firstWhere((m) => m.url == mintUrl);
+    ref.read(mintRepositoryProvider).updateMintNickname(mintUrl, nickname);
 
-      // Create updated mint
-      final updatedMint = UserMint(
-        url: mintUrl,
-        nickName: nickname,
-      );
-
-      // Save the updated mint
-      ref.read(userMintRepositoryProvider).saveUserMint(updatedMint);
-
-      // Refresh the state to reflect the change
-      refreshMints();
-
-      return Result.ok(updatedMint);
-    } catch (e, stackTrace) {
-      state = state.copyWith(
-        isLoading: false,
-        error: MintManagementError.unknown(e.toString()),
-      );
-      return Result.error(e, stackTrace: stackTrace);
-    }
-  }
-
-  /// Deletes a mint
-  Future<Result<Unit>> deleteMint(String mintUrl) async {
-    try {
-      state = state.copyWith(isLoading: true, error: null);
-
-      // Delete the mint
-      ref.read(userMintRepositoryProvider).deleteUserMint(mintUrl);
-
-      // If the deleted mint was the current mint, clear the current mint
-      final currentMintUrl = ref.read(currentMintProvider)?.url;
-      if (currentMintUrl == mintUrl) {
-        ref.read(userMintRepositoryProvider).deleteCurrentMintUrl();
-      }
-
-      // Refresh the state to reflect the change
-      refreshMints();
-
-      return const Result.ok(unit);
-    } catch (e, stackTrace) {
-      state = state.copyWith(
-        isLoading: false,
-        error: MintManagementError.unknown(e.toString()),
-      );
-      return Result.error(e, stackTrace: stackTrace);
-    }
+    ref.invalidateSelf();
   }
 }
 
 /// State for the mint management screen
 @freezed
-class MintManagementState with _$MintManagementState {
-  const factory MintManagementState({
-    required List<UserMint> mints,
-    required String? currentMintUrl,
-    required UserMint? selectedMint,
-    required bool isLoading,
-    required MintManagementError? error,
-  }) = _MintManagementState;
+class MintManagerState with _$MintManagerState {
+  const factory MintManagerState({
+    required List<MintWrapper> availableMints,
+    required MintWrapper? currentMint,
+    required MintWrapper? selectedMint,
+  }) = _MintManagerState;
 }
 
 @freezed
-sealed class MintManagementError with _$MintManagementError {
-  const MintManagementError._();
+sealed class MintManagerError with _$MintManagerError {
+  const MintManagerError._();
 
-  factory MintManagementError.unknown(String message) = UnknownError;
+  factory MintManagerError.unknown(String message) = UnknownError;
 
   @override
   String get message {

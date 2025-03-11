@@ -41,7 +41,7 @@ class AddMintDialog extends ConsumerWidget {
             Text(
               context.l10n.addMintScreenDescription,
               style: context.textTheme.bodyMedium?.copyWith(
-                color: context.colorScheme.onSurface.withOpacity(0.7),
+                color: context.colorScheme.onSurface.withAlpha(178),
               ),
             ),
             const SizedBox(height: 24),
@@ -54,7 +54,9 @@ class AddMintDialog extends ConsumerWidget {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                errorText: state.urlError?.message,
+                errorText: state.error != null
+                    ? _getErrorMessage(context, state.error!)
+                    : null,
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.content_paste),
                   onPressed: () async {
@@ -89,7 +91,7 @@ class AddMintDialog extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: AppColors.red.withOpacity(0.1),
+                  color: AppColors.red.withAlpha(23),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
@@ -98,7 +100,7 @@ class AddMintDialog extends ConsumerWidget {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        state.error!.message,
+                        _getErrorMessage(context, state.error!),
                         style: context.textTheme.bodySmall?.copyWith(
                           color: AppColors.red,
                         ),
@@ -138,5 +140,13 @@ class AddMintDialog extends ConsumerWidget {
         ),
       ],
     );
+  }
+
+  String _getErrorMessage(BuildContext context, AddMintError error) {
+    return switch (error) {
+      EmptyUrlError() => context.l10n.addMintScreenErrorEmptyUrl,
+      InvalidUrlError() => context.l10n.addMintScreenErrorInvalidUrl,
+      UnknownError(:final message) => message,
+    };
   }
 }

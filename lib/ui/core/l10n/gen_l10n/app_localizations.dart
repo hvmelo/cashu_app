@@ -239,6 +239,12 @@ abstract class AppLocalizations {
   /// **'Select Mint'**
   String get currentMintCardSelectMint;
 
+  /// No description provided for @currentMintCardErrorLoadingMintData.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load mint data'**
+  String get currentMintCardErrorLoadingMintData;
+
   /// No description provided for @mintScreenTitle.
   ///
   /// In en, this message translates to:
@@ -377,125 +383,191 @@ abstract class AppLocalizations {
   /// **'Mint added successfully'**
   String get addMintScreenSuccess;
 
+  /// No description provided for @addMintScreenErrorEmptyUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Mint URL is required'**
+  String get addMintScreenErrorEmptyUrl;
+
+  /// No description provided for @addMintScreenErrorInvalidUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid URL'**
+  String get addMintScreenErrorInvalidUrl;
+
+  /// No description provided for @addMintScreenErrorUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'An unknown error occurred'**
+  String get addMintScreenErrorUnknown;
+
   /// No description provided for @addMintScreenPasteFromClipboard.
   ///
   /// In en, this message translates to:
   /// **'Paste from clipboard'**
   String get addMintScreenPasteFromClipboard;
 
-  /// No description provided for @manageMintScreenTitle.
+  /// No description provided for @mintManagerScreenTitle.
   ///
   /// In en, this message translates to:
   /// **'Manage Mints'**
-  String get manageMintScreenTitle;
+  String get mintManagerScreenTitle;
 
-  /// No description provided for @manageMintScreenRefresh.
+  /// No description provided for @mintManagerScreenRefresh.
   ///
   /// In en, this message translates to:
   /// **'Refresh mints'**
-  String get manageMintScreenRefresh;
+  String get mintManagerScreenRefresh;
 
-  /// No description provided for @manageMintScreenNoMints.
+  /// No description provided for @mintManagerScreenNoMints.
   ///
   /// In en, this message translates to:
   /// **'No mints added yet'**
-  String get manageMintScreenNoMints;
+  String get mintManagerScreenNoMints;
 
-  /// No description provided for @manageMintScreenAddMintPrompt.
+  /// No description provided for @mintManagerScreenAddMintPrompt.
   ///
   /// In en, this message translates to:
   /// **'Add a mint to start using your wallet'**
-  String get manageMintScreenAddMintPrompt;
+  String get mintManagerScreenAddMintPrompt;
 
-  /// No description provided for @manageMintScreenAddMintButton.
+  /// No description provided for @mintManagerScreenAddMintButton.
   ///
   /// In en, this message translates to:
   /// **'Add Mint'**
-  String get manageMintScreenAddMintButton;
+  String get mintManagerScreenAddMintButton;
 
-  /// No description provided for @manageMintScreenCurrentMint.
+  /// No description provided for @mintManagerScreenCurrentMint.
   ///
   /// In en, this message translates to:
   /// **'Current'**
-  String get manageMintScreenCurrentMint;
+  String get mintManagerScreenCurrentMint;
 
-  /// No description provided for @manageMintScreenSetAsCurrentButton.
+  /// No description provided for @mintManagerScreenSetAsCurrentButton.
   ///
   /// In en, this message translates to:
   /// **'Set as current mint'**
-  String get manageMintScreenSetAsCurrentButton;
+  String get mintManagerScreenSetAsCurrentButton;
 
-  /// No description provided for @manageMintScreenEditButton.
+  /// No description provided for @mintManagerScreenEditButton.
   ///
   /// In en, this message translates to:
   /// **'Edit mint'**
-  String get manageMintScreenEditButton;
+  String get mintManagerScreenEditButton;
 
-  /// No description provided for @manageMintScreenDeleteButton.
+  /// No description provided for @mintManagerScreenDeleteButton.
   ///
   /// In en, this message translates to:
   /// **'Delete mint'**
-  String get manageMintScreenDeleteButton;
+  String get mintManagerScreenDeleteButton;
 
-  /// No description provided for @manageMintScreenDeleteMintTitle.
+  /// No description provided for @mintManagerScreenDeleteMintTitle.
   ///
   /// In en, this message translates to:
   /// **'Delete Mint'**
-  String get manageMintScreenDeleteMintTitle;
+  String get mintManagerScreenDeleteMintTitle;
 
-  /// No description provided for @manageMintScreenDeleteMintConfirmation.
+  /// No description provided for @mintManagerScreenDeleteMintConfirmation.
   ///
   /// In en, this message translates to:
   /// **'Are you sure you want to delete {mintName}?'**
-  String manageMintScreenDeleteMintConfirmation(String mintName);
+  String mintManagerScreenDeleteMintConfirmation(Object mintName);
 
-  /// No description provided for @manageMintScreenEditMintTitle.
+  /// No description provided for @mintManagerScreenEditMintTitle.
   ///
   /// In en, this message translates to:
   /// **'Edit Mint'**
-  String get manageMintScreenEditMintTitle;
+  String get mintManagerScreenEditMintTitle;
 
-  /// No description provided for @manageMintScreenSaveButton.
-  ///
-  /// In en, this message translates to:
-  /// **'Save'**
-  String get manageMintScreenSaveButton;
-
-  /// No description provided for @manageMintScreenMintDetailsTitle.
+  /// No description provided for @mintManagerScreenMintDetailsTitle.
   ///
   /// In en, this message translates to:
   /// **'Mint Details'**
-  String get manageMintScreenMintDetailsTitle;
+  String get mintManagerScreenMintDetailsTitle;
 
-  /// No description provided for @manageMintScreenMintUrl.
+  /// No description provided for @mintManagerScreenMintUrl.
   ///
   /// In en, this message translates to:
   /// **'URL'**
-  String get manageMintScreenMintUrl;
+  String get mintManagerScreenMintUrl;
 
-  /// No description provided for @manageMintScreenMintNickname.
+  /// No description provided for @mintManagerScreenMintNickname.
   ///
   /// In en, this message translates to:
   /// **'Nickname'**
-  String get manageMintScreenMintNickname;
+  String get mintManagerScreenMintNickname;
 
-  /// No description provided for @manageMintScreenCloseButton.
+  /// No description provided for @mintManagerScreenCloseButton.
   ///
   /// In en, this message translates to:
   /// **'Close'**
-  String get manageMintScreenCloseButton;
+  String get mintManagerScreenCloseButton;
 
-  /// No description provided for @manageMintScreenCopyToClipboard.
+  /// No description provided for @mintManagerScreenCopyToClipboard.
   ///
   /// In en, this message translates to:
   /// **'Copy to clipboard'**
-  String get manageMintScreenCopyToClipboard;
+  String get mintManagerScreenCopyToClipboard;
 
-  /// No description provided for @manageMintScreenCopiedToClipboard.
+  /// No description provided for @mintManagerScreenCopiedToClipboard.
   ///
   /// In en, this message translates to:
   /// **'Copied to clipboard'**
-  String get manageMintScreenCopiedToClipboard;
+  String get mintManagerScreenCopiedToClipboard;
+
+  /// No description provided for @mintManagerScreenErrorLoadingMintData.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load mint data'**
+  String get mintManagerScreenErrorLoadingMintData;
+
+  /// No description provided for @editMintDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Mint'**
+  String get editMintDialogTitle;
+
+  /// No description provided for @editMintDialogUrlLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'URL'**
+  String get editMintDialogUrlLabel;
+
+  /// No description provided for @editMintDialogNicknameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Nickname (Optional)'**
+  String get editMintDialogNicknameLabel;
+
+  /// No description provided for @editMintDialogNicknameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a friendly name for this mint'**
+  String get editMintDialogNicknameHint;
+
+  /// No description provided for @editMintDialogSetAsCurrentButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Set as current'**
+  String get editMintDialogSetAsCurrentButton;
+
+  /// No description provided for @editMintDialogMintUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Mint updated successfully'**
+  String get editMintDialogMintUpdated;
+
+  /// No description provided for @editMintDialogDeleteMintTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Mint'**
+  String get editMintDialogDeleteMintTitle;
+
+  /// No description provided for @editMintDialogDeleteMintConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete {mintName}?'**
+  String editMintDialogDeleteMintConfirmation(Object mintName);
 
   /// No description provided for @transactionHistoryScreenTitle.
   ///
@@ -539,17 +611,53 @@ abstract class AppLocalizations {
   /// **'Version'**
   String get settingsScreenVersionTitle;
 
+  /// No description provided for @generalSaveButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get generalSaveButtonLabel;
+
   /// No description provided for @generalCancelButtonLabel.
   ///
   /// In en, this message translates to:
   /// **'Cancel'**
   String get generalCancelButtonLabel;
 
+  /// No description provided for @generalDeleteButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get generalDeleteButtonLabel;
+
   /// No description provided for @generalUnknownError.
   ///
   /// In en, this message translates to:
   /// **'An unknown error occurred'**
   String get generalUnknownError;
+
+  /// No description provided for @errorCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get errorCardTitle;
+
+  /// No description provided for @errorCardGenericMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get errorCardGenericMessage;
+
+  /// No description provided for @errorCardRetryButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get errorCardRetryButtonLabel;
+
+  /// No description provided for @errorCardDetailsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Technical details'**
+  String get errorCardDetailsLabel;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -1,6 +1,6 @@
 import 'package:cashu_app/ui/core/themes/colors.dart';
 import 'package:cashu_app/ui/core/widgets/app_buttons.dart';
-import 'package:cashu_app/ui/core/widgets/app_qr_code.dart';
+import 'package:cashu_app/ui/core/widgets/cards/qr_code_card.dart';
 import 'package:cashu_app/ui/mint/notifiers/invoice_display_notifier.dart';
 import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +65,7 @@ class InvoiceDisplay extends ConsumerWidget {
               Center(child: Text(state.error.toString()))
             else
               // QR Code
-              AppQrCode(
+              QrCodeCard(
                 data: state.invoice!,
                 size: MediaQuery.of(context).size.width - 82,
                 backgroundColor: Colors.white,

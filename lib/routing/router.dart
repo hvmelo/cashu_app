@@ -1,4 +1,4 @@
-import 'package:cashu_app/ui/core/widgets/app_shell.dart';
+import 'package:cashu_app/ui/core/widgets/app_navigation_shell.dart';
 import 'package:cashu_app/ui/home/widgets/home_screen.dart';
 import 'package:cashu_app/ui/mint/widgets/mint_screen.dart';
 import 'package:cashu_app/ui/mint_manager/widgets/mint_manager_screen.dart';
@@ -21,7 +21,7 @@ GoRouter router() => GoRouter(
         StatefulShellRoute.indexedStack(
           pageBuilder: (context, state, shell) => CustomTransitionPage(
             key: state.pageKey,
-            child: AppShell(navigationShell: shell),
+            child: AppNavigationShell(navigationShell: shell),
             transitionsBuilder: (_, animation, __, child) =>
                 FadeTransition(opacity: animation, child: child),
           ),

@@ -1,15 +1,12 @@
-import 'package:cashu_app/routing/routes.dart';
-import 'package:cashu_app/ui/core/themes/colors.dart';
 import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// Provides the shell for the app with bottom navigation
-class AppShell extends StatelessWidget {
+class AppNavigationShell extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
 
-  const AppShell({
+  const AppNavigationShell({
     super.key,
     required this.navigationShell,
   });

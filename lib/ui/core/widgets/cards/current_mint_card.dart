@@ -1,13 +1,27 @@
-import 'package:cashu_app/config/app_providers.dart';
-import 'package:cashu_app/domain/models/user_mint.dart';
+import 'package:cashu_app/ui/core/widgets/shimmer/shimmer_placeholder.dart';
 import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
-import 'package:cashu_app/utils/url_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../themes/colors.dart';
+import '../../../../data/data_providers.dart';
+import '../../../../domain/models/mint_wrapper.dart';
+import '../../../../utils/url_utils.dart';
+import '../../notifiers/current_mint_notifier.dart';
+import '../../themes/colors.dart';
 import 'default_card.dart';
+import 'error_card.dart';
+import '../shimmer/shimmer.dart';
+
+part 'current_mint_card.g.dart';
+
+@riverpod
+Future<(List<MintWrapper>, MintWrapper?)> combinedMintData(Ref ref) async {
+  final allMints = await ref.watch(listMintsProvider.future);
+  final currentMint = await ref.watch(currentMintNotifierProvider.future);
+  return (allMints, currentMint);
+}
 
 /// A reusable component that displays information about the current mint
 /// and allows the user to switch between available mints.
@@ -24,20 +38,42 @@ class CurrentMintCard extends ConsumerWidget {
   });
 
   /// Callback called when the user selects a new mint.
-  final void Function(UserMint mint)? onMintSelected;
+  final void Function(MintWrapper mint)? onMintSelected;
 
   /// Whether to show the switch mint button.
   final bool showSwitchButton;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final allUserMints = ref.watch(allUserMintsProvider);
-    final currentMint = ref.watch(currentMintProvider);
+    // Combines the two async values into a single value
+    final combinedMintDataAsync = ref.watch(combinedMintDataProvider);
 
+    return switch (combinedMintDataAsync) {
+      AsyncData(:final value) => _buildWidget(
+          context,
+          ref,
+          availableMints: value.$1,
+          currentMint: value.$2,
+        ),
+      AsyncError(:final error) => ErrorCard(
+          message: context.l10n.currentMintCardErrorLoadingMintData,
+          details: error.toString(),
+          onRetry: () => ref.refresh(combinedMintDataProvider),
+        ),
+      _ => _buildLoadingState(),
+    };
+  }
+
+  Widget _buildWidget(
+    BuildContext context,
+    WidgetRef ref, {
+    required List<MintWrapper> availableMints,
+    required MintWrapper? currentMint,
+  }) {
     return DefaultCard(
-      onTap: allUserMints.isNotEmpty
+      onTap: availableMints.isNotEmpty
           ? () {
-              _showMintSelector(context, ref, currentMint, allUserMints);
+              _showMintSelector(context, ref, currentMint, availableMints);
             }
           : null,
       child: Row(
@@ -69,7 +105,8 @@ class CurrentMintCard extends ConsumerWidget {
                 const SizedBox(height: 4),
                 Text(
                   currentMint?.nickName ??
-                      currentMint?.url ??
+                      currentMint?.mint.info?.name ??
+                      currentMint?.mint.url ??
                       context.l10n.currentMintCardNoMintSelected,
                   style: context.textTheme.bodySmall,
                   overflow: TextOverflow.ellipsis,
@@ -77,11 +114,11 @@ class CurrentMintCard extends ConsumerWidget {
               ],
             ),
           ),
-          if (showSwitchButton && allUserMints.length > 1)
+          if (showSwitchButton && availableMints.length > 1)
             IconButton(
               icon: const Icon(Icons.sync, size: 20),
               onPressed: () {
-                _showMintSelector(context, ref, currentMint, allUserMints);
+                _showMintSelector(context, ref, currentMint, availableMints);
               },
             ),
         ],
@@ -92,8 +129,8 @@ class CurrentMintCard extends ConsumerWidget {
   void _showMintSelector(
     BuildContext context,
     WidgetRef ref,
-    UserMint? currentMint,
-    List<UserMint> userMints,
+    MintWrapper? currentMint,
+    List<MintWrapper> availableMints,
   ) {
     showDialog(
       context: context,
@@ -126,12 +163,12 @@ class CurrentMintCard extends ConsumerWidget {
                 ),
                 child: ListView.separated(
                   shrinkWrap: true,
-                  itemCount: userMints.length,
+                  itemCount: availableMints.length,
                   separatorBuilder: (context, index) =>
                       const Divider(height: 1),
                   itemBuilder: (context, index) {
-                    final mint = userMints[index];
-                    final isSelected = mint.url == currentMint?.url;
+                    final mint = availableMints[index];
+                    final isSelected = mint.mint.url == currentMint?.mint.url;
 
                     return ListTile(
                       shape: RoundedRectangleBorder(
@@ -145,7 +182,9 @@ class CurrentMintCard extends ConsumerWidget {
                         vertical: 2,
                       ),
                       title: Text(
-                        mint.nickName ?? UrlUtils.extractHost(mint.url),
+                        mint.nickName ??
+                            mint.mint.info?.name ??
+                            UrlUtils.extractHost(mint.mint.url),
                         style: context.textTheme.titleMedium?.copyWith(
                           fontWeight:
                               isSelected ? FontWeight.bold : FontWeight.w500,
@@ -154,7 +193,7 @@ class CurrentMintCard extends ConsumerWidget {
                         ),
                       ),
                       subtitle: Text(
-                        mint.url,
+                        mint.mint.url,
                         style: context.textTheme.bodySmall,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -170,8 +209,8 @@ class CurrentMintCard extends ConsumerWidget {
                         } else {
                           // Update the current mint provider
                           ref
-                              .read(currentMintProvider.notifier)
-                              .setCurrentMint(mint.url);
+                              .read(currentMintNotifierProvider.notifier)
+                              .setCurrentMint(mint.mint.url);
                         }
                         context.pop();
                       },
@@ -198,6 +237,43 @@ class CurrentMintCard extends ConsumerWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildLoadingState() {
+    return DefaultCard(
+      child: Row(
+        children: [
+          ShimmerPlaceholder(
+            width: 40,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ShimmerPlaceholder(
+                  width: 120,
+                  height: 16,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                const SizedBox(height: 8),
+                ShimmerPlaceholder(
+                  width: 180,
+                  height: 12,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ],
+            ),
+          ),
+          ShimmerPlaceholder(
+            width: 24,
+            height: 24,
+            shape: BoxShape.circle,
+          ),
+        ],
       ),
     );
   }

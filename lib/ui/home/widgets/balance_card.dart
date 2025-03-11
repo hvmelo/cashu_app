@@ -1,9 +1,11 @@
-import 'package:cashu_app/ui/core/themes/colors.dart';
 import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../config/cashu_providers.dart';
+import '../../../data/data_providers.dart';
+import '../../core/themes/colors.dart';
+import '../../core/widgets/cards/error_card.dart';
+import '../../core/widgets/cards/loading_card.dart';
 
 class BalanceCard extends ConsumerWidget {
   const BalanceCard({
@@ -12,12 +14,29 @@ class BalanceCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final balanceAsync = ref.watch(multiMintWalletBalanceStreamProvider);
+    final balanceAsync = ref.watch(multiMintWalletStreamProvider);
 
+    return switch (balanceAsync) {
+      AsyncData(:final value) => _buildWidget(
+          context,
+          balance: value,
+        ),
+      AsyncError(:final error) => ErrorCard(
+          message: context.l10n.currentMintCardErrorLoadingMintData,
+          details: error.toString(),
+          onRetry: () => ref.refresh(multiMintWalletStreamProvider),
+        ),
+      _ => const LoadingCard(),
+    };
+  }
+
+  Container _buildWidget(
+    BuildContext context, {
+    required BigInt balance,
+  }) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final textColor = context.colorScheme.onSurface;
     final fadedTextColor = context.colorScheme.onSurface.withAlpha(178);
-
+    final textColor = context.colorScheme.onSurface;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
@@ -48,39 +67,28 @@ class BalanceCard extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 8),
-          balanceAsync.when(
-            data: (balance) => Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  balance.toString(),
-                  style: context.textTheme.headlineLarge?.copyWith(
-                    color: textColor,
-                    fontWeight: FontWeight.bold,
-                  ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                balance.toString(),
+                style: context.textTheme.headlineLarge?.copyWith(
+                  color: textColor,
+                  fontWeight: FontWeight.bold,
                 ),
-                const SizedBox(width: 4),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
-                  child: Text(
-                    'sats',
-                    style: context.textTheme.titleMedium?.copyWith(
-                      color: fadedTextColor,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            loading: () => CircularProgressIndicator(
-              color: textColor,
-            ),
-            error: (error, stack) => Text(
-              'Error loading balance',
-              style: context.textTheme.bodyLarge?.copyWith(
-                color: textColor,
               ),
-            ),
-          ),
+              const SizedBox(width: 4),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Text(
+                  'sats',
+                  style: context.textTheme.titleMedium?.copyWith(
+                    color: fadedTextColor,
+                  ),
+                ),
+              ),
+            ],
+          )
         ],
       ),
     );

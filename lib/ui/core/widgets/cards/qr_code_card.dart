@@ -1,9 +1,9 @@
-import 'package:cashu_app/ui/core/widgets/default_card.dart';
+import 'package:cashu_app/ui/core/widgets/cards/default_card.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 /// A reusable QR code component with consistent styling across the app
-class AppQrCode extends StatelessWidget {
+class QrCodeCard extends StatelessWidget {
   final String data;
   final double size;
   final Color backgroundColor;
@@ -12,7 +12,7 @@ class AppQrCode extends StatelessWidget {
   final BorderRadius borderRadius;
   final List<BoxShadow>? boxShadow;
 
-  const AppQrCode({
+  const QrCodeCard({
     super.key,
     required this.data,
     this.size = 250,

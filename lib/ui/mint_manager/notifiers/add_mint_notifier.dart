@@ -1,9 +1,10 @@
-import 'package:cashu_app/config/app_providers.dart';
-import 'package:cashu_app/domain/models/user_mint.dart';
-import 'package:cashu_app/utils/result.dart';
-import 'package:cashu_app/utils/url_utils.dart';
+import 'package:cashu_app/data/data_providers.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../../../core/types/result.dart';
+import '../../../utils/url_utils.dart';
+import '../../core/notifiers/current_mint_notifier.dart';
 
 part 'add_mint_notifier.freezed.dart';
 part 'add_mint_notifier.g.dart';
@@ -19,7 +20,6 @@ class AddMintNotifier extends _$AddMintNotifier {
   void urlChanged(String url) {
     state = state.copyWith(
       url: url.trim(),
-      urlError: null,
     );
   }
 
@@ -45,15 +45,14 @@ class AddMintNotifier extends _$AddMintNotifier {
   }
 
   /// Adds a new mint to the wallet
-  Future<Result<UserMint>> addMint() async {
+  Future<void> addMint() async {
     // Validate the form
     final error = validate();
     if (error != null) {
       state = state.copyWith(
-        urlError: error,
         isSubmitting: false,
       );
-      return Result.error(error);
+      return;
     }
 
     // Set submitting state
@@ -62,53 +61,41 @@ class AddMintNotifier extends _$AddMintNotifier {
       error: null,
     );
 
-    try {
-      // Add the mint
-      final result = await ref.read(addMintUseCaseProvider).execute(
-            state.url,
-            nickName: state.nickname.isNotEmpty ? state.nickname : null,
-          );
+    // Add the mint
+    final result = await ref.read(mintRepositoryProvider).addMint(
+          state.url,
+          nickName: state.nickname.isNotEmpty ? state.nickname : null,
+        );
 
-      // Handle the result
-      switch (result) {
-        case Ok():
-          // Create a UserMint object to return
-          final userMint = UserMint(
-            url: state.url,
-            nickName: state.nickname.isNotEmpty ? state.nickname : null,
-          );
+    // Handle the result
+    switch (result) {
+      case Ok():
 
-          // Set as current mint if it's the first one
-          final allMints = ref.read(allUserMintsProvider);
-          if (allMints.length == 1) {
-            ref.read(currentMintProvider.notifier).setCurrentMint(state.url);
-          }
+        // Set as current mint if it's the first one
+        final allMints = await ref.read(listMintsProvider.future);
+        if (allMints.length == 1) {
+          ref
+              .read(currentMintNotifierProvider.notifier)
+              .setCurrentMint(state.url);
+        }
 
-          // Reset the form
-          state = AddMintState.initial().copyWith(
-            isSuccess: true,
-          );
+        // Reset the form
+        state = state.copyWith(
+          isSuccess: true,
+        );
 
-          return Result.ok(userMint);
-        case Error():
-          state = state.copyWith(
-            isSubmitting: false,
-            error: AddMintError.unknown(result.error.toString()),
-          );
-          return Result.error(result.error, stackTrace: result.stackTrace);
-      }
-    } catch (e, stackTrace) {
-      state = state.copyWith(
-        isSubmitting: false,
-        error: AddMintError.unknown(e.toString()),
-      );
-      return Result.error(e, stackTrace: stackTrace);
+        return;
+      case Error():
+        state = state.copyWith(
+          isSubmitting: false,
+          error: AddMintError.unknown(result.error.toString()),
+        );
+        return;
     }
   }
 
   void clearErrors() {
     state = state.copyWith(
-      urlError: null,
       error: null,
     );
   }
@@ -128,7 +115,6 @@ class AddMintState with _$AddMintState {
     required String nickname,
     required bool isSubmitting,
     required bool isSuccess,
-    required AddMintError? urlError,
     required AddMintError? error,
   }) = _AddMintState;
 
@@ -137,7 +123,6 @@ class AddMintState with _$AddMintState {
         nickname: '',
         isSubmitting: false,
         isSuccess: false,
-        urlError: null,
         error: null,
       );
 }
@@ -149,12 +134,4 @@ sealed class AddMintError with _$AddMintError {
   factory AddMintError.emptyUrl() = EmptyUrlError;
   factory AddMintError.invalidUrl() = InvalidUrlError;
   factory AddMintError.unknown(String message) = UnknownError;
-
-  String get message {
-    return switch (this) {
-      EmptyUrlError() => 'Mint URL is required',
-      InvalidUrlError() => 'Please enter a valid URL',
-      UnknownError(:final message) => message,
-    };
-  }
 }

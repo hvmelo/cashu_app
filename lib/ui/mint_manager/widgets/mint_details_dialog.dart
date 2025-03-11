@@ -1,14 +1,15 @@
-import 'package:cashu_app/domain/models/user_mint.dart';
-import 'package:cashu_app/ui/core/themes/colors.dart';
+import 'package:cashu_app/ui/core/themes/colors.dart' show AppColors;
 import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
-import 'package:cashu_app/utils/url_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../domain/models/mint_wrapper.dart';
+import '../../../utils/url_utils.dart';
+
 /// Dialog for displaying mint details
 class MintDetailsDialog extends ConsumerWidget {
-  final UserMint mint;
+  final MintWrapper mint;
   final bool isCurrentMint;
 
   const MintDetailsDialog({
@@ -26,7 +27,7 @@ class MintDetailsDialog extends ConsumerWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       title: Text(
-        context.l10n.manageMintScreenMintDetailsTitle,
+        context.l10n.mintManagerScreenMintDetailsTitle,
         style: context.textTheme.titleLarge?.copyWith(
           fontWeight: FontWeight.bold,
         ),
@@ -42,7 +43,7 @@ class MintDetailsDialog extends ConsumerWidget {
                 height: 48,
                 decoration: BoxDecoration(
                   color: isCurrentMint
-                      ? AppColors.actionColors['mint']!.withOpacity(0.15)
+                      ? AppColors.actionColors['mint']!.withAlpha(39)
                       : context.colorScheme.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -60,7 +61,9 @@ class MintDetailsDialog extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      mint.nickName ?? UrlUtils.extractHost(mint.url),
+                      mint.nickName ??
+                          mint.mint.info?.name ??
+                          UrlUtils.extractHost(mint.mint.url),
                       style: context.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -75,7 +78,7 @@ class MintDetailsDialog extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
-                          context.l10n.manageMintScreenCurrentMint,
+                          context.l10n.mintManagerScreenCurrentMint,
                           style: context.textTheme.labelSmall?.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -91,14 +94,14 @@ class MintDetailsDialog extends ConsumerWidget {
           const SizedBox(height: 24),
           _buildDetailRow(
             context,
-            context.l10n.manageMintScreenMintUrl,
-            mint.url,
+            context.l10n.mintManagerScreenMintUrl,
+            mint.mint.url,
           ),
           if (mint.nickName != null) ...[
             const SizedBox(height: 16),
             _buildDetailRow(
               context,
-              context.l10n.manageMintScreenMintNickname,
+              context.l10n.mintManagerScreenMintNickname,
               mint.nickName!,
             ),
           ],
@@ -107,7 +110,7 @@ class MintDetailsDialog extends ConsumerWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text(context.l10n.manageMintScreenCloseButton),
+          child: Text(context.l10n.mintManagerScreenCloseButton),
         ),
       ],
     );
@@ -146,12 +149,12 @@ class MintDetailsDialog extends ConsumerWidget {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content:
-                          Text(context.l10n.manageMintScreenCopiedToClipboard),
+                          Text(context.l10n.mintManagerScreenCopiedToClipboard),
                       duration: const Duration(seconds: 2),
                     ),
                   );
                 },
-                tooltip: context.l10n.manageMintScreenCopyToClipboard,
+                tooltip: context.l10n.mintManagerScreenCopyToClipboard,
                 constraints: const BoxConstraints(
                   minWidth: 36,
                   minHeight: 36,

@@ -81,6 +81,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get currentMintCardSelectMint => 'Select Mint';
 
   @override
+  String get currentMintCardErrorLoadingMintData => 'Failed to load mint data';
+
+  @override
   String get mintScreenTitle => 'Mint';
 
   @override
@@ -150,66 +153,101 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addMintScreenSuccess => 'Mint added successfully';
 
   @override
+  String get addMintScreenErrorEmptyUrl => 'Mint URL is required';
+
+  @override
+  String get addMintScreenErrorInvalidUrl => 'Please enter a valid URL';
+
+  @override
+  String get addMintScreenErrorUnknown => 'An unknown error occurred';
+
+  @override
   String get addMintScreenPasteFromClipboard => 'Paste from clipboard';
 
   @override
-  String get manageMintScreenTitle => 'Manage Mints';
+  String get mintManagerScreenTitle => 'Manage Mints';
 
   @override
-  String get manageMintScreenRefresh => 'Refresh mints';
+  String get mintManagerScreenRefresh => 'Refresh mints';
 
   @override
-  String get manageMintScreenNoMints => 'No mints added yet';
+  String get mintManagerScreenNoMints => 'No mints added yet';
 
   @override
-  String get manageMintScreenAddMintPrompt => 'Add a mint to start using your wallet';
+  String get mintManagerScreenAddMintPrompt => 'Add a mint to start using your wallet';
 
   @override
-  String get manageMintScreenAddMintButton => 'Add Mint';
+  String get mintManagerScreenAddMintButton => 'Add Mint';
 
   @override
-  String get manageMintScreenCurrentMint => 'Current';
+  String get mintManagerScreenCurrentMint => 'Current';
 
   @override
-  String get manageMintScreenSetAsCurrentButton => 'Set as current mint';
+  String get mintManagerScreenSetAsCurrentButton => 'Set as current mint';
 
   @override
-  String get manageMintScreenEditButton => 'Edit mint';
+  String get mintManagerScreenEditButton => 'Edit mint';
 
   @override
-  String get manageMintScreenDeleteButton => 'Delete mint';
+  String get mintManagerScreenDeleteButton => 'Delete mint';
 
   @override
-  String get manageMintScreenDeleteMintTitle => 'Delete Mint';
+  String get mintManagerScreenDeleteMintTitle => 'Delete Mint';
 
   @override
-  String manageMintScreenDeleteMintConfirmation(String mintName) {
+  String mintManagerScreenDeleteMintConfirmation(Object mintName) {
     return 'Are you sure you want to delete $mintName?';
   }
 
   @override
-  String get manageMintScreenEditMintTitle => 'Edit Mint';
+  String get mintManagerScreenEditMintTitle => 'Edit Mint';
 
   @override
-  String get manageMintScreenSaveButton => 'Save';
+  String get mintManagerScreenMintDetailsTitle => 'Mint Details';
 
   @override
-  String get manageMintScreenMintDetailsTitle => 'Mint Details';
+  String get mintManagerScreenMintUrl => 'URL';
 
   @override
-  String get manageMintScreenMintUrl => 'URL';
+  String get mintManagerScreenMintNickname => 'Nickname';
 
   @override
-  String get manageMintScreenMintNickname => 'Nickname';
+  String get mintManagerScreenCloseButton => 'Close';
 
   @override
-  String get manageMintScreenCloseButton => 'Close';
+  String get mintManagerScreenCopyToClipboard => 'Copy to clipboard';
 
   @override
-  String get manageMintScreenCopyToClipboard => 'Copy to clipboard';
+  String get mintManagerScreenCopiedToClipboard => 'Copied to clipboard';
 
   @override
-  String get manageMintScreenCopiedToClipboard => 'Copied to clipboard';
+  String get mintManagerScreenErrorLoadingMintData => 'Failed to load mint data';
+
+  @override
+  String get editMintDialogTitle => 'Edit Mint';
+
+  @override
+  String get editMintDialogUrlLabel => 'URL';
+
+  @override
+  String get editMintDialogNicknameLabel => 'Nickname (Optional)';
+
+  @override
+  String get editMintDialogNicknameHint => 'Enter a friendly name for this mint';
+
+  @override
+  String get editMintDialogSetAsCurrentButton => 'Set as current';
+
+  @override
+  String get editMintDialogMintUpdated => 'Mint updated successfully';
+
+  @override
+  String get editMintDialogDeleteMintTitle => 'Delete Mint';
+
+  @override
+  String editMintDialogDeleteMintConfirmation(Object mintName) {
+    return 'Are you sure you want to delete $mintName?';
+  }
 
   @override
   String get transactionHistoryScreenTitle => 'Transaction History';
@@ -233,8 +271,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsScreenVersionTitle => 'Version';
 
   @override
+  String get generalSaveButtonLabel => 'Save';
+
+  @override
   String get generalCancelButtonLabel => 'Cancel';
 
   @override
+  String get generalDeleteButtonLabel => 'Delete';
+
+  @override
   String get generalUnknownError => 'An unknown error occurred';
+
+  @override
+  String get errorCardTitle => 'Error';
+
+  @override
+  String get errorCardGenericMessage => 'Something went wrong. Please try again.';
+
+  @override
+  String get errorCardRetryButtonLabel => 'Retry';
+
+  @override
+  String get errorCardDetailsLabel => 'Technical details';
 }

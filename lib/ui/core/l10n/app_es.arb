@@ -30,5 +30,11 @@
   "mintScreenLoading": "Creando factura...",
   "mintScreenAmountError": "Por favor, ingrese una cantidad válida",
   "mintScreenAmountEmpty": "Por favor, ingrese una cantidad",
-  "mintScreenAmountHint": "Cantidad en sats"
+  "mintScreenAmountHint": "Cantidad en sats",
+  "generalCancelButtonLabel": "Cancelar",
+  "generalUnknownError": "Ha ocurrido un error desconocido",
+  "errorCardTitle": "Error",
+  "errorCardGenericMessage": "Algo salió mal. Por favor, inténtalo de nuevo.",
+  "errorCardRetryButtonLabel": "Reintentar",
+  "errorCardDetailsLabel": "Detalles técnicos"
 }
