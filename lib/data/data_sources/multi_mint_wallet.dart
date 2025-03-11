@@ -1,12 +1,9 @@
 import 'dart:io';
+
 import 'package:cdk_flutter/cdk_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:path_provider/path_provider.dart';
 
-part 'multi_mint_wallet.g.dart';
-
-@Riverpod(keepAlive: true)
 Future<MultiMintWallet> multiMintWallet(Ref ref) async {
   await CdkFlutter.init(); // Initialize the SDK
 

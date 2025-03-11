@@ -1,4 +1,3 @@
-import 'package:cashu_app/config/cashu_providers.dart';
 import 'package:cashu_app/ui/core/widgets/current_mint_card.dart';
 import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
 import 'package:flutter/material.dart';
