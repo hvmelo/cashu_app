@@ -7,3 +7,4 @@ export 'cards/default_card.dart';
 export '../navigation/navigation_shell.dart';
 export 'cards/error_card.dart';
 export 'shimmer/shimmer.dart';
+export 'balance_chip.dart';

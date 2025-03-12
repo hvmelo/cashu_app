@@ -24,118 +24,101 @@ class MintOptionsBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Row(
-                children: [
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: isCurrentMint
-                          ? AppColors.actionColors['mint']!.withAlpha(39)
-                          : context.colorScheme.surfaceContainerHighest,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Icon(
-                      Icons.account_balance,
+    final mintName = mint.nickName ?? UrlUtils.extractHost(mint.mint.url);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 24),
+      decoration: BoxDecoration(
+        color: context.colorScheme.surfaceContainerHighest,
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(16),
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Row(
+              children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: isCurrentMint
+                        ? AppColors.actionColors['mint']!.withAlpha(30)
+                        : context.colorScheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(
+                    Icons.account_balance_rounded,
+                    color: isCurrentMint
+                        ? AppColors.actionColors['mint']
+                        : context.colorScheme.onSurfaceVariant,
+                    size: 22,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    mintName,
+                    style: context.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
                       color: isCurrentMint
                           ? AppColors.actionColors['mint']
-                          : context.colorScheme.onSurfaceVariant,
-                      size: 24,
+                          : context.colorScheme.onSurface,
                     ),
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          mint.nickName ??
-                              mint.mint.info?.name ??
-                              UrlUtils.extractHost(mint.mint.url),
-                          style: context.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          mint.mint.url,
-                          style: context.textTheme.bodySmall?.copyWith(
-                            color: context.colorScheme.onSurface.withAlpha(153),
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const Divider(),
-            if (onSetAsCurrent != null)
-              _buildOptionTile(
-                context,
+          ),
+          const SizedBox(height: 16),
+          const Divider(height: 1),
+          if (!isCurrentMint) ...[
+            ListTile(
+              onTap: onSetAsCurrent,
+              leading: Icon(
                 Icons.check_circle_outline,
-                context.l10n.mintManagerScreenSetAsCurrentButton,
-                AppColors.actionColors['mint']!,
-                onSetAsCurrent,
+                color: AppColors.actionColors['mint'],
               ),
-            _buildOptionTile(
-              context,
-              Icons.edit_outlined,
-              context.l10n.mintManagerScreenEditButton,
-              context.colorScheme.primary,
-              onEdit,
+              title: Text(
+                'Set as Current',
+                style: context.textTheme.bodyMedium?.copyWith(
+                  color: AppColors.actionColors['mint'],
+                ),
+              ),
             ),
-            if (onDelete != null)
-              _buildOptionTile(
-                context,
-                Icons.delete_outline,
-                context.l10n.mintManagerScreenDeleteButton,
-                AppColors.red,
-                onDelete,
-              ),
           ],
-        ),
+          ListTile(
+            onTap: onEdit,
+            leading: Icon(
+              Icons.edit_outlined,
+              color: context.colorScheme.onSurface,
+            ),
+            title: Text(
+              'Edit',
+              style: context.textTheme.bodyMedium,
+            ),
+          ),
+          if (!isCurrentMint) ...[
+            ListTile(
+              onTap: onDelete,
+              leading: Icon(
+                Icons.delete_outline,
+                color: context.colorScheme.error,
+              ),
+              title: Text(
+                'Delete',
+                style: context.textTheme.bodyMedium?.copyWith(
+                  color: context.colorScheme.error,
+                ),
+              ),
+            ),
+          ],
+        ],
       ),
-    );
-  }
-
-  Widget _buildOptionTile(
-    BuildContext context,
-    IconData icon,
-    String title,
-    Color color,
-    VoidCallback? onTap,
-  ) {
-    return ListTile(
-      leading: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: color.withAlpha(25),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Icon(
-          icon,
-          color: color,
-          size: 20,
-        ),
-      ),
-      title: Text(
-        title,
-        style: context.textTheme.titleMedium?.copyWith(
-          color: color == AppColors.red ? color : null,
-        ),
-      ),
-      onTap: onTap,
     );
   }
 }

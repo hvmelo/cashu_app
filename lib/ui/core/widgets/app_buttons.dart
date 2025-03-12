@@ -156,3 +156,67 @@ class OutlinedActionButton extends StatelessWidget {
           );
   }
 }
+
+class DialogActionButton extends StatelessWidget {
+  final VoidCallback? onPressed;
+  final String text;
+  final bool isSubmitting;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
+
+  const DialogActionButton({
+    super.key,
+    this.onPressed,
+    required this.text,
+    this.isSubmitting = false,
+    this.backgroundColor,
+    this.foregroundColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return FilledButton(
+      onPressed: onPressed,
+      style: FilledButton.styleFrom(
+        backgroundColor: backgroundColor ?? AppColors.actionColors['mint'],
+        foregroundColor: foregroundColor ?? Colors.white,
+      ),
+      child: isSubmitting
+          ? SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              ),
+            )
+          : Text(text),
+    );
+  }
+}
+
+class DialogCancelButton extends StatelessWidget {
+  final String? text;
+  final VoidCallback? onPressed;
+  final Color? textColor;
+
+  const DialogCancelButton({
+    super.key,
+    this.text,
+    this.onPressed,
+    this.textColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: onPressed,
+      child: Text(
+        text ?? context.l10n.generalCancelButtonLabel,
+        style: TextStyle(
+          color: textColor ?? context.colorScheme.onSurfaceVariant,
+        ),
+      ),
+    );
+  }
+}
