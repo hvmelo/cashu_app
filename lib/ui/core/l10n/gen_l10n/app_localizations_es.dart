@@ -9,58 +9,7 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
-  String get homeScreenTitle => 'Cashu';
-
-  @override
-  String get homeScreenCurrentBalance => 'Saldo actual';
-
-  @override
-  String get homeScreenRecentTransactions => 'Transacciones recientes';
-
-  @override
-  String get homeScreenCurrentMint => 'Mint actual';
-
-  @override
-  String get homeScreenMintNotConnected => 'No conectado';
-
-  @override
-  String get homeScreenSend => 'Enviar';
-
-  @override
-  String get homeScreenReceive => 'Recibir';
-
-  @override
-  String get homeScreenScan => 'Escanear';
-
-  @override
-  String get homeScreenEcash => 'Ecash';
-
-  @override
-  String get homeScreenEcashSend => 'Enviar';
-
-  @override
-  String get homeScreenEcashSendSubtitle => 'Enviar eCash a alguien';
-
-  @override
-  String get homeScreenEcashMelt => 'Derretir';
-
-  @override
-  String get homeScreenEcashMeltSubtitle => 'Cambiar eCash por BTC';
-
-  @override
-  String get homeScreenEcashReceive => 'Recibir';
-
-  @override
-  String get homeScreenEcashReceiveSubtitle => 'Recibir eCash de alguien';
-
-  @override
-  String get homeScreenMintEcash => 'Mint';
-
-  @override
-  String get homeScreenMintEcashSubtitle => 'Cambiar BTC por eCash';
-
-  @override
-  String get navBarHome => 'Home';
+  String get navBarWallet => 'Wallet';
 
   @override
   String get navBarMints => 'Mints';
@@ -70,6 +19,42 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get navBarSettings => 'Settings';
+
+  @override
+  String get walletScreenCurrentBalance => 'Current Balance';
+
+  @override
+  String get walletScreenRecentTransactions => 'Recent Transactions';
+
+  @override
+  String get walletScreenCurrentMint => 'Current Mint';
+
+  @override
+  String get walletScreenMintNotConnected => 'Not connected';
+
+  @override
+  String get walletScreenSend => 'Send';
+
+  @override
+  String get walletScreenSendSubtitle => 'Send eCash to someone';
+
+  @override
+  String get walletScreenReceive => 'Receive';
+
+  @override
+  String get walletScreenReceiveSubtitle => 'Receive eCash from someone';
+
+  @override
+  String get walletScreenMint => 'Mint';
+
+  @override
+  String get walletScreenMintSubtitle => 'Exchange BTC for eCash';
+
+  @override
+  String get walletScreenMelt => 'Melt';
+
+  @override
+  String get walletScreenMeltSubtitle => 'Exchange eCash for BTC';
 
   @override
   String get currentMintCardTitle => 'Current Mint';

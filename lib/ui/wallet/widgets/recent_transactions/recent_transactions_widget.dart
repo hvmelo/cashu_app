@@ -1,5 +1,5 @@
-import 'package:cashu_app/ui/home/widgets/recent_transactions/empty_transactions_list.dart';
-import 'package:cashu_app/ui/home/widgets/recent_transactions/transaction_list_item.dart';
+import 'package:cashu_app/ui/wallet/widgets/recent_transactions/empty_transactions_list.dart';
+import 'package:cashu_app/ui/wallet/widgets/recent_transactions/transaction_list_item.dart';
 import 'package:flutter/material.dart';
 
 enum TransactionType { sent, received }

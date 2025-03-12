@@ -1,11 +1,11 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LocalPropertiesService {
+class LocalStorageService {
   final SharedPreferences _sharedPreferences;
 
-  LocalPropertiesService(this._sharedPreferences);
+  LocalStorageService(this._sharedPreferences);
 
-  Future<void> setProperty(String key, dynamic value) async {
+  Future<void> saveProperty(String key, dynamic value) async {
     if (value is String) {
       _sharedPreferences.setString(key, value);
     } else if (value is bool) {
@@ -30,5 +30,5 @@ class LocalPropertiesService {
 
   Future<void> clearProperties() => _sharedPreferences.clear();
 
-  bool hasProperty(String key) => _sharedPreferences.containsKey(key);
+  bool propertyExists(String key) => _sharedPreferences.containsKey(key);
 }

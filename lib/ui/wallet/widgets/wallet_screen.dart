@@ -1,15 +1,15 @@
-import 'package:cashu_app/ui/core/widgets/current_mint_card.dart';
 import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../routing/routes.dart';
+import '../../core/routing/routes.dart';
 import '../../core/themes/colors.dart';
+import '../../core/widgets/widgets.dart';
 import 'widgets.dart';
 
-class HomeScreen extends ConsumerWidget {
-  const HomeScreen({super.key});
+class WalletScreen extends ConsumerWidget {
+  const WalletScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -72,8 +72,8 @@ class HomeScreen extends ConsumerWidget {
         // Send Button
         ActionCard(
           icon: Icons.arrow_upward_rounded,
-          title: context.l10n.homeScreenEcashSend,
-          subtitle: context.l10n.homeScreenEcashSendSubtitle,
+          title: context.l10n.walletScreenSend,
+          subtitle: context.l10n.walletScreenSendSubtitle,
           color: AppColors.actionColors['send']!,
           onTap: () {
             // TODO: Navigate to send screen
@@ -83,8 +83,8 @@ class HomeScreen extends ConsumerWidget {
         // Receive Button
         ActionCard(
           icon: Icons.arrow_downward_rounded,
-          title: context.l10n.homeScreenEcashReceive,
-          subtitle: context.l10n.homeScreenEcashReceiveSubtitle,
+          title: context.l10n.walletScreenReceive,
+          subtitle: context.l10n.walletScreenReceiveSubtitle,
           color: AppColors.actionColors['receive']!,
           onTap: () {
             // TODO: Navigate to receive screen
@@ -94,8 +94,8 @@ class HomeScreen extends ConsumerWidget {
         // Mint Button
         ActionCard(
           icon: Icons.local_atm_rounded,
-          title: context.l10n.homeScreenMintEcash,
-          subtitle: context.l10n.homeScreenMintEcashSubtitle,
+          title: context.l10n.walletScreenMint,
+          subtitle: context.l10n.walletScreenMintSubtitle,
           color: AppColors.actionColors['mint']!,
           onTap: () {
             context.go(Routes.mint);
@@ -105,8 +105,8 @@ class HomeScreen extends ConsumerWidget {
         // Melt Button
         ActionCard(
           icon: Icons.currency_bitcoin,
-          title: context.l10n.homeScreenEcashMelt,
-          subtitle: context.l10n.homeScreenEcashMeltSubtitle,
+          title: context.l10n.walletScreenMelt,
+          subtitle: context.l10n.walletScreenMeltSubtitle,
           color: AppColors.actionColors['melt']!,
           onTap: () {
             // TODO: Navigate to melt screen

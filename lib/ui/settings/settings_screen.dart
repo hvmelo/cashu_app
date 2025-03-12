@@ -96,7 +96,7 @@ class SettingsScreen extends ConsumerWidget {
           Text(
             'eCash for everyone',
             style: context.textTheme.bodyMedium?.copyWith(
-              color: context.colorScheme.onSurface.withOpacity(0.7),
+              color: context.colorScheme.onSurface.withAlpha(179),
             ),
           ),
         ],

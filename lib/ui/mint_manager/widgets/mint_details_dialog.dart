@@ -123,7 +123,7 @@ class MintDetailsDialog extends ConsumerWidget {
         Text(
           label,
           style: context.textTheme.bodySmall?.copyWith(
-            color: context.colorScheme.onSurface.withOpacity(0.6),
+            color: context.colorScheme.onSurface.withAlpha(153),
             fontWeight: FontWeight.bold,
           ),
         ),

@@ -67,8 +67,7 @@ class MintOptionsBottomSheet extends StatelessWidget {
                         Text(
                           mint.mint.url,
                           style: context.textTheme.bodySmall?.copyWith(
-                            color:
-                                context.colorScheme.onSurface.withOpacity(0.6),
+                            color: context.colorScheme.onSurface.withAlpha(153),
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,

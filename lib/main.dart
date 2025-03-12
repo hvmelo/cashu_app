@@ -1,12 +1,14 @@
-import 'package:cashu_app/config/app_providers.dart';
-import 'package:cashu_app/ui/core/l10n/gen_l10n/app_localizations.dart';
-import 'package:cashu_app/ui/core/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'config/app_config.dart';
+import 'core/core_providers.dart';
 import 'main_development.dart' as development;
-import 'routing/router.dart';
+import 'ui/core/routing/router.dart';
+import 'ui/core/l10n/gen_l10n/app_localizations.dart';
+import 'ui/core/themes/theme.dart';
+import 'ui/core/widgets/environment_banner.dart';
 
 /// Default main method
 Future<void> main() async {
@@ -26,10 +28,14 @@ class MainApp extends ConsumerWidget {
     return MaterialApp.router(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
+      debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
       routerConfig: _router,
+      builder: (context, child) {
+        return EnvironmentBanner(child: child!);
+      },
     );
   }
 }

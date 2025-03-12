@@ -14,7 +14,7 @@ class BalanceCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final balanceAsync = ref.watch(multiMintWalletStreamProvider);
+    final balanceAsync = ref.watch(multiMintWalletBalanceStreamProvider);
 
     return switch (balanceAsync) {
       AsyncData(:final value) => _buildWidget(
@@ -24,7 +24,7 @@ class BalanceCard extends ConsumerWidget {
       AsyncError(:final error) => ErrorCard(
           message: context.l10n.currentMintCardErrorLoadingMintData,
           details: error.toString(),
-          onRetry: () => ref.refresh(multiMintWalletStreamProvider),
+          onRetry: () => ref.refresh(multiMintWalletBalanceStreamProvider),
         ),
       _ => const LoadingCard(),
     };
@@ -61,7 +61,7 @@ class BalanceCard extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            context.l10n.homeScreenCurrentBalance,
+            context.l10n.walletScreenCurrentBalance,
             style: context.textTheme.bodyMedium?.copyWith(
               color: fadedTextColor,
             ),

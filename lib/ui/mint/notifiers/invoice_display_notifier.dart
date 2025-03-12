@@ -2,6 +2,8 @@ import 'package:cdk_flutter/cdk_flutter.dart' hide Error;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/types/result.dart';
+import '../../../data/data_providers.dart';
 import '../../core/notifiers/current_mint_notifier.dart';
 
 part 'invoice_display_notifier.freezed.dart';
@@ -19,9 +21,44 @@ class InvoiceDisplayNotifier extends _$InvoiceDisplayNotifier {
         if (currentMint == null) {
           throw Exception('A mint should be selected at this point');
         }
-        final mintQuoteAsync =
-            ref.watch(mintQuoteStreamProvider(currentMint.mint.url, amount));
-        break;
+        final mintQuoteAsync = ref.watch(mintQuoteStreamProvider(
+          currentMint.mint.url,
+          amount,
+        ));
+
+        switch (mintQuoteAsync) {
+          case AsyncData(value: final result):
+            switch (result) {
+              case Ok(:final value):
+                return InvoiceDisplayState(
+                  invoice: value.request,
+                  isIssued: value.state == MintQuoteState.issued,
+                  isLoading: false,
+                  error: null,
+                );
+              case Error(:final error):
+                return InvoiceDisplayState(
+                  invoice: null,
+                  isIssued: false,
+                  isLoading: false,
+                  error: InvoiceDisplayError.mintQuoteError(error),
+                );
+            }
+          case AsyncError(:final error):
+            return InvoiceDisplayState(
+              invoice: null,
+              isIssued: false,
+              isLoading: false,
+              error: InvoiceDisplayError.unexpectedError(error),
+            );
+          case AsyncLoading():
+            return InvoiceDisplayState(
+              invoice: null,
+              isIssued: false,
+              isLoading: true,
+              error: null,
+            );
+        }
       case AsyncError(:final error):
         return InvoiceDisplayState(
           invoice: null,
@@ -37,39 +74,14 @@ class InvoiceDisplayNotifier extends _$InvoiceDisplayNotifier {
           error: null,
         );
     }
-    switch (mintQuoteAsync) {
-      case AsyncData(value: final result):
-        switch (result) {
-          case Ok(:final value):
-            return InvoiceDisplayState(
-              invoice: value.request,
-              isIssued: value.state == MintQuoteState.issued,
-              isLoading: false,
-              error: null,
-            );
-          case Error(:final error):
-            return InvoiceDisplayState(
-              invoice: null,
-              isIssued: false,
-              isLoading: false,
-              error: InvoiceDisplayError.mintQuoteError(error),
-            );
-        }
-      case AsyncError(:final error):
-        return InvoiceDisplayState(
-          invoice: null,
-          isIssued: false,
-          isLoading: false,
-          error: InvoiceDisplayError.mintQuoteError(error),
-        );
-      default:
-        return InvoiceDisplayState(
-          invoice: null,
-          isIssued: false,
-          isLoading: true,
-          error: null,
-        );
-    }
+
+    // Default fallback return to satisfy the analyzer
+    return InvoiceDisplayState(
+      invoice: null,
+      isIssued: false,
+      isLoading: true,
+      error: null,
+    );
   }
 }
 

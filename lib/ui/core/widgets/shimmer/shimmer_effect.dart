@@ -85,10 +85,6 @@ class _ShimmerEffectState extends State<ShimmerEffect>
         return ShaderMask(
           blendMode: BlendMode.srcATop,
           shaderCallback: (bounds) {
-            final shimmerSize = widget.direction == ShimmerDirection.leftToRight
-                ? bounds.width
-                : bounds.height;
-
             return LinearGradient(
               begin: widget.direction == ShimmerDirection.leftToRight
                   ? Alignment.centerLeft

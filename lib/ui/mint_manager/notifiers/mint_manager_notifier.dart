@@ -55,7 +55,8 @@ class MintManagerNotifier extends _$MintManagerNotifier {
   Future<void> updateMintNickname(String mintUrl, String? nickname) async {
     state = AsyncLoading();
 
-    ref.read(mintRepositoryProvider).updateMintNickname(mintUrl, nickname);
+    final mintRepo = await ref.watch(mintRepositoryProvider.future);
+    await mintRepo.updateMint(mintUrl, nickname);
 
     ref.invalidateSelf();
   }

@@ -62,10 +62,11 @@ class AddMintNotifier extends _$AddMintNotifier {
     );
 
     // Add the mint
-    final result = await ref.read(mintRepositoryProvider).addMint(
-          state.url,
-          nickName: state.nickname.isNotEmpty ? state.nickname : null,
-        );
+    final mintRepo = await ref.watch(mintRepositoryProvider.future);
+    final result = await mintRepo.addMint(
+      state.url,
+      nickName: state.nickname.isNotEmpty ? state.nickname : null,
+    );
 
     // Handle the result
     switch (result) {

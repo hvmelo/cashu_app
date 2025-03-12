@@ -95,113 +95,11 @@ abstract class AppLocalizations {
     Locale('es')
   ];
 
-  /// No description provided for @homeScreenTitle.
+  /// No description provided for @navBarWallet.
   ///
   /// In en, this message translates to:
-  /// **'Cashu'**
-  String get homeScreenTitle;
-
-  /// No description provided for @homeScreenCurrentBalance.
-  ///
-  /// In en, this message translates to:
-  /// **'Current Balance'**
-  String get homeScreenCurrentBalance;
-
-  /// No description provided for @homeScreenRecentTransactions.
-  ///
-  /// In en, this message translates to:
-  /// **'Recent Transactions'**
-  String get homeScreenRecentTransactions;
-
-  /// No description provided for @homeScreenCurrentMint.
-  ///
-  /// In en, this message translates to:
-  /// **'Current Mint'**
-  String get homeScreenCurrentMint;
-
-  /// No description provided for @homeScreenMintNotConnected.
-  ///
-  /// In en, this message translates to:
-  /// **'Not connected'**
-  String get homeScreenMintNotConnected;
-
-  /// No description provided for @homeScreenSend.
-  ///
-  /// In en, this message translates to:
-  /// **'Send'**
-  String get homeScreenSend;
-
-  /// No description provided for @homeScreenReceive.
-  ///
-  /// In en, this message translates to:
-  /// **'Receive'**
-  String get homeScreenReceive;
-
-  /// No description provided for @homeScreenScan.
-  ///
-  /// In en, this message translates to:
-  /// **'Scan'**
-  String get homeScreenScan;
-
-  /// No description provided for @homeScreenEcash.
-  ///
-  /// In en, this message translates to:
-  /// **'Ecash'**
-  String get homeScreenEcash;
-
-  /// No description provided for @homeScreenEcashSend.
-  ///
-  /// In en, this message translates to:
-  /// **'Send'**
-  String get homeScreenEcashSend;
-
-  /// No description provided for @homeScreenEcashSendSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Send eCash to someone'**
-  String get homeScreenEcashSendSubtitle;
-
-  /// No description provided for @homeScreenEcashMelt.
-  ///
-  /// In en, this message translates to:
-  /// **'Melt'**
-  String get homeScreenEcashMelt;
-
-  /// No description provided for @homeScreenEcashMeltSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Exchange eCash for BTC'**
-  String get homeScreenEcashMeltSubtitle;
-
-  /// No description provided for @homeScreenEcashReceive.
-  ///
-  /// In en, this message translates to:
-  /// **'Receive'**
-  String get homeScreenEcashReceive;
-
-  /// No description provided for @homeScreenEcashReceiveSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Receive eCash from someone'**
-  String get homeScreenEcashReceiveSubtitle;
-
-  /// No description provided for @homeScreenMintEcash.
-  ///
-  /// In en, this message translates to:
-  /// **'Mint'**
-  String get homeScreenMintEcash;
-
-  /// No description provided for @homeScreenMintEcashSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Exchange BTC for eCash'**
-  String get homeScreenMintEcashSubtitle;
-
-  /// No description provided for @navBarHome.
-  ///
-  /// In en, this message translates to:
-  /// **'Home'**
-  String get navBarHome;
+  /// **'Wallet'**
+  String get navBarWallet;
 
   /// No description provided for @navBarMints.
   ///
@@ -220,6 +118,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Settings'**
   String get navBarSettings;
+
+  /// No description provided for @walletScreenCurrentBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Balance'**
+  String get walletScreenCurrentBalance;
+
+  /// No description provided for @walletScreenRecentTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Transactions'**
+  String get walletScreenRecentTransactions;
+
+  /// No description provided for @walletScreenCurrentMint.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Mint'**
+  String get walletScreenCurrentMint;
+
+  /// No description provided for @walletScreenMintNotConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Not connected'**
+  String get walletScreenMintNotConnected;
+
+  /// No description provided for @walletScreenSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get walletScreenSend;
+
+  /// No description provided for @walletScreenSendSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send eCash to someone'**
+  String get walletScreenSendSubtitle;
+
+  /// No description provided for @walletScreenReceive.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive'**
+  String get walletScreenReceive;
+
+  /// No description provided for @walletScreenReceiveSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive eCash from someone'**
+  String get walletScreenReceiveSubtitle;
+
+  /// No description provided for @walletScreenMint.
+  ///
+  /// In en, this message translates to:
+  /// **'Mint'**
+  String get walletScreenMint;
+
+  /// No description provided for @walletScreenMintSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Exchange BTC for eCash'**
+  String get walletScreenMintSubtitle;
+
+  /// No description provided for @walletScreenMelt.
+  ///
+  /// In en, this message translates to:
+  /// **'Melt'**
+  String get walletScreenMelt;
+
+  /// No description provided for @walletScreenMeltSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Exchange eCash for BTC'**
+  String get walletScreenMeltSubtitle;
 
   /// No description provided for @currentMintCardTitle.
   ///

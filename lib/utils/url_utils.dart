@@ -1,5 +1,3 @@
-import 'package:cashu_app/utils/result.dart';
-
 /// Utility class for URL operations
 class UrlUtils {
   /// Validates if a string is a valid URL

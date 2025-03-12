@@ -8,11 +8,14 @@ part 'current_mint_notifier.g.dart';
 @riverpod
 class CurrentMintNotifier extends _$CurrentMintNotifier {
   @override
-  Future<MintWrapper?> build() async =>
-      await ref.read(mintRepositoryProvider).getCurrentMint();
+  Future<MintWrapper?> build() async {
+    final mintRepo = await ref.watch(mintRepositoryProvider.future);
+    return await mintRepo.getCurrentMint();
+  }
 
   Future<void> setCurrentMint(String mintUrl) async {
-    await ref.read(mintRepositoryProvider).setCurrentMint(mintUrl);
-    state = AsyncData(await ref.read(mintRepositoryProvider).getCurrentMint());
+    final mintRepo = await ref.watch(mintRepositoryProvider.future);
+    await mintRepo.setCurrentMint(mintUrl);
+    state = AsyncData(await mintRepo.getCurrentMint());
   }
 }

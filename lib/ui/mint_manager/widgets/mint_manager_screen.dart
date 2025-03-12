@@ -103,7 +103,7 @@ class MintManagerScreen extends ConsumerWidget {
           Text(
             context.l10n.mintManagerScreenAddMintPrompt,
             style: context.textTheme.bodyMedium?.copyWith(
-              color: context.colorScheme.onSurface.withOpacity(0.7),
+              color: context.colorScheme.onSurface.withAlpha(179),
             ),
             textAlign: TextAlign.center,
           ),

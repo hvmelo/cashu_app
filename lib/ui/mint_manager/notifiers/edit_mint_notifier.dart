@@ -42,9 +42,11 @@ class EditMintNotifier extends _$EditMintNotifier {
     try {
       // Update the mint's nickname
       final newNickname = state.nickname.isEmpty ? null : state.nickname;
-      await ref
-          .read(mintRepositoryProvider)
-          .updateMintNickname(state.originalMint.mint.url, newNickname);
+      final mintRepo = await ref.watch(mintRepositoryProvider.future);
+      await mintRepo.updateMint(
+        state.originalMint.mint.url,
+        newNickname,
+      );
 
       // Update the current mint if this is the current mint
       final currentMint = await ref.read(currentMintNotifierProvider.future);

@@ -30,7 +30,7 @@ class TransactionHistoryScreen extends ConsumerWidget {
               Text(
                 context.l10n.transactionHistoryScreenDescription,
                 style: context.textTheme.bodyMedium?.copyWith(
-                  color: context.colorScheme.onSurface.withOpacity(0.7),
+                  color: context.colorScheme.onSurface.withAlpha(179),
                 ),
               ),
               const SizedBox(height: 24),
@@ -42,7 +42,7 @@ class TransactionHistoryScreen extends ConsumerWidget {
                       Icon(
                         Icons.history,
                         size: 64,
-                        color: context.colorScheme.primary.withOpacity(0.5),
+                        color: context.colorScheme.primary.withAlpha(128),
                       ),
                       const SizedBox(height: 16),
                       Text(

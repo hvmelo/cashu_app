@@ -1,7 +1,7 @@
 import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
 import 'package:flutter/material.dart';
 
-import '../../core/widgets/default_card.dart';
+import '../../core/widgets/cards/default_card.dart';
 
 /// A card widget for displaying action items in the home screen
 class ActionCard extends StatelessWidget {

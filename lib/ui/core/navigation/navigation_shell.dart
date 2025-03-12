@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 /// Provides the shell for the app with bottom navigation
-class AppNavigationShell extends StatelessWidget {
+class NavigationShell extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
 
-  const AppNavigationShell({
+  const NavigationShell({
     super.key,
     required this.navigationShell,
   });
@@ -31,14 +31,14 @@ class AppNavigationShell extends StatelessWidget {
         onDestinationSelected: _goBranch,
         backgroundColor: context.colorScheme.surface,
         indicatorColor: context.colorScheme.primary.withAlpha(30),
-        elevation: 0,
+        elevation: 1,
         shadowColor: context.colorScheme.shadow,
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         destinations: [
           NavigationDestination(
             icon: const Icon(Icons.home_outlined),
             selectedIcon: const Icon(Icons.home),
-            label: context.l10n.navBarHome,
+            label: context.l10n.navBarWallet,
           ),
           NavigationDestination(
             icon: const Icon(Icons.account_balance_outlined),

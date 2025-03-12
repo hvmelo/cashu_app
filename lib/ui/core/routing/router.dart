@@ -1,5 +1,5 @@
-import 'package:cashu_app/ui/core/widgets/app_navigation_shell.dart';
-import 'package:cashu_app/ui/home/widgets/home_screen.dart';
+import 'package:cashu_app/ui/core/navigation/navigation_shell.dart';
+import 'package:cashu_app/ui/wallet/widgets/wallet_screen.dart';
 import 'package:cashu_app/ui/mint/widgets/mint_screen.dart';
 import 'package:cashu_app/ui/mint_manager/widgets/mint_manager_screen.dart';
 import 'package:cashu_app/ui/settings/settings_screen.dart';
@@ -10,7 +10,10 @@ import 'package:go_router/go_router.dart';
 import 'routes.dart';
 
 final rootNavigatorKey = GlobalKey<NavigatorState>();
-final shellNavigatorKey = GlobalKey<NavigatorState>();
+final walletNavigatorKey = GlobalKey<NavigatorState>();
+final mintManagerNavigatorKey = GlobalKey<NavigatorState>();
+final transactionHistoryNavigatorKey = GlobalKey<NavigatorState>();
+final settingsNavigatorKey = GlobalKey<NavigatorState>();
 
 /// Top go_router entry point.
 GoRouter router() => GoRouter(
@@ -21,18 +24,18 @@ GoRouter router() => GoRouter(
         StatefulShellRoute.indexedStack(
           pageBuilder: (context, state, shell) => CustomTransitionPage(
             key: state.pageKey,
-            child: AppNavigationShell(navigationShell: shell),
+            child: NavigationShell(navigationShell: shell),
             transitionsBuilder: (_, animation, __, child) =>
                 FadeTransition(opacity: animation, child: child),
           ),
           branches: [
             StatefulShellBranch(
-              navigatorKey: shellNavigatorKey,
+              navigatorKey: walletNavigatorKey,
               routes: [
                 GoRoute(
                   path: Routes.home,
                   pageBuilder: (context, state) => CustomTransitionPage(
-                    child: const HomeScreen(),
+                    child: const WalletScreen(),
                     transitionsBuilder:
                         (context, animation, secondaryAnimation, child) =>
                             _buildFadeInTransition(animation, child),
@@ -52,7 +55,7 @@ GoRouter router() => GoRouter(
               ],
             ),
             StatefulShellBranch(
-              navigatorKey: shellNavigatorKey,
+              navigatorKey: mintManagerNavigatorKey,
               routes: [
                 GoRoute(
                   path: Routes.manageMints,
@@ -66,7 +69,7 @@ GoRouter router() => GoRouter(
               ],
             ),
             StatefulShellBranch(
-              navigatorKey: shellNavigatorKey,
+              navigatorKey: transactionHistoryNavigatorKey,
               routes: [
                 GoRoute(
                   path: Routes.transactionHistory,
@@ -80,7 +83,7 @@ GoRouter router() => GoRouter(
               ],
             ),
             StatefulShellBranch(
-              navigatorKey: shellNavigatorKey,
+              navigatorKey: settingsNavigatorKey,
               routes: [
                 GoRoute(
                   path: Routes.settings,
@@ -103,17 +106,6 @@ SlideTransition _buildSlideLeftTransition(
   return SlideTransition(
     position: Tween<Offset>(
       begin: const Offset(1, 0),
-      end: Offset.zero,
-    ).animate(animation),
-    child: child,
-  );
-}
-
-SlideTransition _buildSlideBottomTransition(
-    Animation<double> animation, Widget child) {
-  return SlideTransition(
-    position: Tween<Offset>(
-      begin: const Offset(0.0, 1.0),
       end: Offset.zero,
     ).animate(animation),
     child: child,

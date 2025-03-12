@@ -4,9 +4,18 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
 
 class ProviderLogger extends ProviderObserver {
-  final bool logAll = true;
+  final bool logAdded;
+  final bool logDisposed;
+  final bool logUpdated;
+  final bool logFailed;
   final log = Logger('ProviderLogger');
-  ProviderLogger();
+
+  ProviderLogger({
+    this.logAdded = true,
+    this.logDisposed = true,
+    this.logUpdated = false,
+    this.logFailed = true,
+  });
 
   @override
   void didAddProvider(
@@ -14,7 +23,7 @@ class ProviderLogger extends ProviderObserver {
     Object? value,
     ProviderContainer container,
   ) {
-    if (logAll) {
+    if (logAdded) {
       log.info('[🚀] Initialized: ${provider.name}');
     }
   }
@@ -24,7 +33,7 @@ class ProviderLogger extends ProviderObserver {
     ProviderBase<Object?> provider,
     ProviderContainer container,
   ) {
-    if (logAll) {
+    if (logDisposed) {
       log.info('[🗑️] Disposed: ${provider.name}');
     }
   }
@@ -36,7 +45,7 @@ class ProviderLogger extends ProviderObserver {
     Object? newValue,
     ProviderContainer container,
   ) {
-    if (logAll) {
+    if (logUpdated) {
       log.info(
           '[🔄] Updated: ${provider.name}: Old: ${previousValue?.toString()} New: ${newValue?.toString()}');
     }
@@ -49,6 +58,8 @@ class ProviderLogger extends ProviderObserver {
     StackTrace stackTrace,
     ProviderContainer container,
   ) {
-    log.severe('[❌] Provider ${provider.name} threw $error at $stackTrace');
+    if (logFailed) {
+      log.severe('[❌] Provider ${provider.name} threw $error at $stackTrace');
+    }
   }
 }
