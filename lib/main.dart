@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'config/app_config.dart';
 import 'core/core_providers.dart';
 import 'main_development.dart' as development;
-import 'ui/core/routing/router.dart';
 import 'ui/core/l10n/gen_l10n/app_localizations.dart';
+import 'ui/core/routing/router.dart';
 import 'ui/core/themes/theme.dart';
 import 'ui/core/widgets/environment_banner.dart';
 

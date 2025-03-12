@@ -8,7 +8,6 @@ import 'core/core_providers.dart';
 import 'data/data_providers.dart';
 import 'data/test/fake_mint_repository_impl.dart';
 import 'data/test/fake_mint_transactions_repository_impl.dart';
-import 'data/test/fake_data_providers.dart';
 import 'data/test/fake_multi_mint_wallet_repository.dart';
 import 'main.dart';
 
