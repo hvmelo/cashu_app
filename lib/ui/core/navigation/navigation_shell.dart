@@ -1,9 +1,9 @@
-import 'package:cashu_app/core/core_providers.dart';
-import 'package:cashu_app/ui/core/themes/colors.dart';
 import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../../../core/core_providers.dart';
 
 /// Provides the shell for the app with bottom navigation
 class NavigationShell extends ConsumerWidget {

@@ -3,7 +3,7 @@ import 'package:cashu_app/ui/wallet/widgets/wallet_screen.dart';
 import 'package:cashu_app/ui/mint/widgets/mint_screen.dart';
 import 'package:cashu_app/ui/mint_manager/widgets/mint_manager_screen.dart';
 import 'package:cashu_app/ui/settings/settings_screen.dart';
-import 'package:cashu_app/ui/transaction/transaction_history_screen.dart';
+import 'package:cashu_app/ui/history/transaction_history_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

@@ -14,17 +14,6 @@ class WalletScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined),
-            onPressed: () {
-              // TODO: Implement notifications
-            },
-          ),
-        ],
-      ),
       backgroundColor: context.colorScheme.surface,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -44,7 +33,7 @@ class WalletScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                const SizedBox(height: 16),
+                const SizedBox(height: 28),
                 BalanceCard(),
                 const SizedBox(height: 16),
                 _buildActionGrid(context),
