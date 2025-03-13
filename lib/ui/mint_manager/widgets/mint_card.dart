@@ -53,22 +53,45 @@ class MintCard extends StatelessWidget {
   }
 
   Widget _buildMintIcon(BuildContext context) {
-    return Container(
-      width: 44,
-      height: 44,
-      decoration: BoxDecoration(
-        color: isCurrentMint
-            ? AppColors.actionColors['mint']!.withAlpha(30)
-            : context.colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Icon(
-        Icons.account_balance_rounded,
-        color: isCurrentMint
-            ? AppColors.actionColors['mint']
-            : context.colorScheme.onSurfaceVariant,
-        size: 22,
-      ),
+    return Column(
+      children: [
+        Container(
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            color: isCurrentMint
+                ? AppColors.actionColors['mint']!.withAlpha(30)
+                : context.colorScheme.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(
+            Icons.account_balance_rounded,
+            color: isCurrentMint
+                ? AppColors.actionColors['mint']
+                : context.colorScheme.onSurfaceVariant,
+            size: 22,
+          ),
+        ),
+        if (isCurrentMint)
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              decoration: BoxDecoration(
+                color: AppColors.actionColors['mint']!.withAlpha(25),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Text(
+                context.l10n.mintManagerScreenMintMintCardCurrentLabel,
+                style: context.textTheme.labelSmall?.copyWith(
+                  fontSize: 8,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.actionColors['mint'],
+                ),
+              ),
+            ),
+          ),
+      ],
     );
   }
 
@@ -81,37 +104,16 @@ class MintCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                mintName,
-                style: context.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: isCurrentMint
-                      ? AppColors.actionColors['mint']
-                      : context.colorScheme.onSurface,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            if (isCurrentMint)
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.actionColors['mint']!.withAlpha(25),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  context.l10n.mintManagerScreenMintMintCardCurrentLabel,
-                  style: context.textTheme.labelSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.actionColors['mint'],
-                  ),
-                ),
-              ),
-          ],
+        Text(
+          mintName,
+          style: context.textTheme.bodyMedium?.copyWith(
+            fontWeight: FontWeight.w600,
+            color: isCurrentMint
+                ? AppColors.actionColors['mint']
+                : context.colorScheme.onSurface,
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
         const SizedBox(height: 4),
         // Full URL

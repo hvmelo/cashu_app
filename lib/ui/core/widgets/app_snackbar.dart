@@ -6,7 +6,7 @@ class AppSnackBar {
   static void showError(
     BuildContext context, {
     required String message,
-    Duration duration = const Duration(seconds: 4),
+    Duration duration = const Duration(seconds: 3),
     String? actionLabel,
     VoidCallback? onAction,
     bool dismissible = true,
@@ -46,7 +46,7 @@ class AppSnackBar {
   static void showInfo(
     BuildContext context, {
     required String message,
-    Duration duration = const Duration(seconds: 2),
+    Duration duration = const Duration(seconds: 3),
     String? actionLabel,
     VoidCallback? onAction,
     bool dismissible = true,
@@ -66,7 +66,7 @@ class AppSnackBar {
   static void showSuccess(
     BuildContext context, {
     required String message,
-    Duration duration = const Duration(seconds: 2),
+    Duration duration = const Duration(seconds: 3),
     String? actionLabel,
     VoidCallback? onAction,
     bool dismissible = true,

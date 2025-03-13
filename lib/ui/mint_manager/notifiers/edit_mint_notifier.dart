@@ -71,12 +71,6 @@ class EditMintNotifier extends _$EditMintNotifier {
       nickname: mintNickname,
     );
 
-    // Note: Commented out code for updating current mint if needed
-    // final currentMint = await ref.read(currentMintNotifierProvider.future);
-    // if (currentMint?.url == mint.url) {
-    //   ref.invalidate(currentMintNotifierProvider);
-    // }
-
     // Update state with success
     state = AsyncData(currentState.copyWith(isSuccess: true));
   }

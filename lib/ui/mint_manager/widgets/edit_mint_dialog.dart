@@ -180,6 +180,7 @@ class EditMintDialog extends ConsumerWidget {
                 ),
                 isDense: true,
               ),
+              initialValue: stateAsync.value?.nickname ?? '',
               onChanged: ref
                   .read(editMintNotifierProvider(mint).notifier)
                   .nicknameChanged,
