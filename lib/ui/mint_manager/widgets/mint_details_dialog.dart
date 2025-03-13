@@ -23,7 +23,7 @@ class MintDetailsDialog extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final balanceAsync = ref.watch(mintBalanceStreamProvider(mint.url));
-    final mintName = mint.nickName?.value ?? mint.url.extractAuthority();
+    final mintName = mint.nickname?.value ?? mint.url.extractAuthority();
 
     final balance = switch (balanceAsync) {
       AsyncData(:final value) => switch (value) {
@@ -155,7 +155,7 @@ class MintDetailsDialog extends ConsumerWidget {
             ),
 
             // Nickname section (if available)
-            if (mint.nickName != null) ...[
+            if (mint.nickname != null) ...[
               const SizedBox(height: 16),
               Container(
                 padding:
@@ -179,7 +179,7 @@ class MintDetailsDialog extends ConsumerWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      mint.nickName!.value,
+                      mint.nickname!.value,
                       style: context.textTheme.bodyMedium?.copyWith(
                         color: context.colorScheme.onSurface,
                       ),

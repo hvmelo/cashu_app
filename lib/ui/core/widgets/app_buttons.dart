@@ -181,16 +181,26 @@ class DialogActionButton extends StatelessWidget {
         backgroundColor: backgroundColor ?? AppColors.actionColors['mint'],
         foregroundColor: foregroundColor ?? Colors.white,
       ),
-      child: isSubmitting
-          ? SizedBox(
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // Text is always present to maintain the width, but hidden when loading
+          Opacity(
+            opacity: isSubmitting ? 0.0 : 1.0,
+            child: Text(text),
+          ),
+          // Loading indicator only visible when loading
+          if (isSubmitting)
+            const SizedBox(
               width: 20,
               height: 20,
               child: CircularProgressIndicator(
                 strokeWidth: 2,
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
               ),
-            )
-          : Text(text),
+            ),
+        ],
+      ),
     );
   }
 }

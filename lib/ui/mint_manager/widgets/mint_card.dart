@@ -76,7 +76,7 @@ class MintCard extends StatelessWidget {
     BuildContext context, {
     required Mint mint,
   }) {
-    final mintName = mint.nickName?.value ?? mint.url.extractAuthority();
+    final mintName = mint.nickname?.value ?? mint.url.extractAuthority();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

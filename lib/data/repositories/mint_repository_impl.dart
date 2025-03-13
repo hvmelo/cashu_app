@@ -19,20 +19,20 @@ class MintRepositoryImpl extends MintRepository {
   Future<List<Mint>> listMints() async {
     final mints = await multiMintWalletDataSource.listMints();
     return mints.map((mint) {
-      final nickName = mintLocalStorage.getMintNickname(mint.url);
-      return Mint.fromData(nickName: nickName, url: mint.url);
+      final nickname = mintLocalStorage.getMintNickname(mint.url);
+      return Mint.fromData(nickname: nickname, url: mint.url);
     }).toList();
   }
 
   @override
   Future<Result<Unit, Failure>> addMint(
     MintUrl mintUrl, {
-    MintNickName? nickName,
+    MintNickname? nickname,
   }) async {
     try {
       await multiMintWalletDataSource.addMint(mintUrl.value);
-      if (nickName != null) {
-        await mintLocalStorage.saveMintNickname(mintUrl.value, nickName.value);
+      if (nickname != null) {
+        await mintLocalStorage.saveMintNickname(mintUrl.value, nickname.value);
       }
       return Result.ok(unit);
     } catch (e) {
@@ -44,9 +44,9 @@ class MintRepositoryImpl extends MintRepository {
   Future<Mint?> getMint(MintUrl mintUrl) async {
     final mints = await multiMintWalletDataSource.listMints();
     final mint = mints.where((mint) => mint.url == mintUrl.value).firstOrNull;
-    final nickName = mintLocalStorage.getMintNickname(mintUrl.value);
+    final nickname = mintLocalStorage.getMintNickname(mintUrl.value);
     return mint != null
-        ? Mint.fromData(url: mintUrl.value, nickName: nickName)
+        ? Mint.fromData(url: mintUrl.value, nickname: nickname)
         : null;
   }
 
@@ -88,7 +88,7 @@ class MintRepositoryImpl extends MintRepository {
   @override
   Future<Result<Unit, Failure>> updateMint(
     MintUrl mintUrl, {
-    MintNickName? nickName,
+    MintNickname? nickname,
   }) async {
     final mint = await getMint(mintUrl);
     if (mint == null) {
@@ -96,10 +96,10 @@ class MintRepositoryImpl extends MintRepository {
     }
 
     try {
-      if (nickName != null) {
+      if (nickname != null) {
         await mintLocalStorage.removeCurrentMintUrl();
       } else {
-        await mintLocalStorage.saveMintNickname(mintUrl.value, nickName!.value);
+        await mintLocalStorage.saveMintNickname(mintUrl.value, nickname!.value);
       }
       return Result.ok(unit);
     } catch (e) {

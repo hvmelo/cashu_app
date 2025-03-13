@@ -32,11 +32,11 @@ Future<void> main() async {
   final mintRepository = await container.read(mintRepositoryProvider.future);
   await mintRepository.addMint(
     MintUrl.fromData('https://mint.refugio.com.br'),
-    nickName: MintNickName.fromData('Refugio'),
+    nickname: MintNickname.fromData('Refugio'),
   );
   await mintRepository.addMint(
     MintUrl.fromData('https://testnut.cashu.space'),
-    nickName: MintNickName.fromData('Testnut'),
+    nickname: MintNickname.fromData('Testnut'),
   );
 
   runApp(

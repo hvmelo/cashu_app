@@ -8,7 +8,7 @@ import '../../core/themes/colors.dart';
 import '../../core/widgets/widgets.dart';
 import '../notifiers/mint_screen_notifier.dart';
 
-class AmountInputForm extends StatelessWidget {
+class AmountInputForm extends HookWidget {
   final MintScreenNotifier mintScreenNotifier;
   final MintScreenEditingState state;
 

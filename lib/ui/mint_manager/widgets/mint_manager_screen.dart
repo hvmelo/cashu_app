@@ -274,7 +274,7 @@ class MintManagerScreen extends ConsumerWidget {
         title: Text(context.l10n.mintManagerScreenDeleteMintTitle),
         content: Text(
           context.l10n.mintManagerScreenDeleteMintConfirmation(
-            mint.nickName?.value ?? mint.url.extractAuthority(),
+            mint.nickname?.value ?? mint.url.extractAuthority(),
           ),
         ),
         actions: [

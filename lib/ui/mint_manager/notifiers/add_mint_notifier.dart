@@ -4,7 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/types/result.dart';
 import '../../../core/types/unit.dart';
-import '../../../domain/value_objects/mint_nick_name.dart';
+import '../../../domain/value_objects/mint_nickname.dart';
 import '../../../domain/value_objects/mint_url.dart';
 import '../../core/notifiers/current_mint_notifier.dart';
 import '../../providers/mint_providers.dart';
@@ -55,18 +55,18 @@ class AddMintNotifier extends _$AddMintNotifier {
     // Handle result with pattern matching
     switch (mintUrlResult) {
       case Ok(value: final mintUrl):
-        // Create MintNickName if provided
-        MintNickName? mintNickName;
+        // Create MintNickname if provided
+        MintNickname? mintNickname;
         if (currentState.nickname != null) {
-          final nickNameResult = MintNickName.create(currentState.nickname!);
-          if (nickNameResult.isError) {
+          final nicknameResult = MintNickname.create(currentState.nickname!);
+          if (nicknameResult.isError) {
             state = AsyncError(
-              AddMintScreenError.unknown(nickNameResult.error.toString()),
+              AddMintScreenError.unknown(nicknameResult.error.toString()),
               StackTrace.current,
             );
             return;
           }
-          mintNickName = nickNameResult.value;
+          mintNickname = nicknameResult.value;
         }
 
         // Set submitting state
@@ -76,7 +76,7 @@ class AddMintNotifier extends _$AddMintNotifier {
         final mintRepo = await ref.read(mintRepositoryProvider.future);
         final result = await mintRepo.addMint(
           mintUrl,
-          nickName: mintNickName,
+          nickname: mintNickname,
         );
 
         // Handle the result

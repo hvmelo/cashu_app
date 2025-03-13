@@ -5,7 +5,7 @@ import '../../../core/types/result.dart';
 import '../../../core/types/unit.dart';
 import '../../../data/data_providers.dart';
 import '../../../domain/models/mint.dart';
-import '../../../domain/value_objects/mint_nick_name.dart';
+import '../../../domain/value_objects/mint_nickname.dart';
 
 part 'edit_mint_notifier.freezed.dart';
 part 'edit_mint_notifier.g.dart';
@@ -18,7 +18,7 @@ class EditMintNotifier extends _$EditMintNotifier {
     // Initialize with the original nickname
     return EditMintState(
       originalMint: mint,
-      nickname: mint.nickName?.value ?? '',
+      nickname: mint.nickname?.value ?? '',
       showErrorMessages: false,
     );
   }
@@ -29,33 +29,37 @@ class EditMintNotifier extends _$EditMintNotifier {
 
   /// Saves the changes to the mint
   Future<void> updateMintData() async {
-    // Check if we have a valid state value before proceeding
-    if (state.hasValue) return;
+    final currentState = state.unwrapPrevious().valueOrNull;
 
-    // Get the current state value, which we know exists at this point
-    final currentState = state.value!;
+    // Check if we have a valid state value before proceeding
+    if (currentState == null) return;
 
     // Validate the current nickname value
     final validationResult = currentState.validate();
 
     // If validation failed, update state with the error
     if (validationResult.isError) {
-      state = AsyncError(validationResult.error!, StackTrace.current);
+      update((state) => state.copyWith(showErrorMessages: true));
       return;
     }
 
-    // Create a MintNickName value object from the current nickname
-    final mintNickNameResult = MintNickName.create(currentState.nickname);
+    // Nickname is optional
+    MintNickname? mintNickname;
 
-    // If nickname creation failed, update state with the error
-    if (mintNickNameResult.isError) {
-      state = AsyncError(mintNickNameResult.error!, StackTrace.current);
-      return;
+    if (currentState.nickname.isNotEmpty) {
+      // Create a MintNickname value object from the current nickname
+      final mintNicknameResult = MintNickname.create(currentState.nickname);
+
+      // If nickname creation failed, update state with the error
+      if (mintNicknameResult.isError) {
+        state = AsyncError(mintNicknameResult.error!, StackTrace.current);
+        return;
+      }
+      mintNickname = mintNicknameResult.value;
     }
 
-    // Get the original mint and created nickname
+    // Get the original mint
     final mint = currentState.originalMint;
-    final mintNickName = mintNickNameResult.value;
 
     // Set state to loading while we update the mint
     state = AsyncValue.loading();
@@ -64,7 +68,7 @@ class EditMintNotifier extends _$EditMintNotifier {
     final mintRepo = await ref.watch(mintRepositoryProvider.future);
     await mintRepo.updateMint(
       mint.url,
-      nickName: mintNickName,
+      nickname: mintNickname,
     );
 
     // Note: Commented out code for updating current mint if needed
@@ -92,14 +96,20 @@ class EditMintState with _$EditMintState {
 
   /// Validates the nickname
   Result<Unit, EditMintError> validate() {
-    final nicknameValidationResult = MintNickName.validate(nickname);
+    if (nickname.isEmpty) {
+      // Nickname is optional, so we can return ok if it's empty
+      return Result.ok(unit);
+    }
+
+    final nicknameValidationResult = MintNickname.validate(nickname);
 
     return switch (nicknameValidationResult) {
       Ok() => Result.ok(unit),
       Error(:final error) => switch (error) {
-          NicknameEmpty() => Result.error(NicknameEmptyError()),
-          NicknameTooLong() => Result.error(NicknameTooLongError()),
-          NicknameInvalidCharacters() => Result.error(NicknameInvalidError()),
+          NicknameEmpty() => Result.error(EditMintNicknameEmptyError()),
+          NicknameTooLong() => Result.error(EditMintNicknameTooLongError()),
+          NicknameInvalidCharacters() =>
+            Result.error(EditMintNicknameInvalidError()),
           _ => throw Exception('Unexpected error: $error'),
         },
     };
@@ -110,8 +120,8 @@ class EditMintState with _$EditMintState {
 sealed class EditMintError with _$EditMintError {
   const EditMintError._();
 
-  factory EditMintError.nicknameEmpty() = NicknameEmptyError;
-  factory EditMintError.nicknameTooLong() = NicknameTooLongError;
-  factory EditMintError.nicknameInvalid() = NicknameInvalidError;
-  factory EditMintError.unknown(String message) = UnknownError;
+  factory EditMintError.nicknameEmpty() = EditMintNicknameEmptyError;
+  factory EditMintError.nicknameTooLong() = EditMintNicknameTooLongError;
+  factory EditMintError.nicknameInvalid() = EditMintNicknameInvalidError;
+  factory EditMintError.unknown(String message) = EditMintUnknownError;
 }

@@ -68,7 +68,7 @@ class EditMintDialog extends ConsumerWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,10 +80,9 @@ class EditMintDialog extends ConsumerWidget {
             _buildMintUrl(context, mintUrl: mint.url),
             const SizedBox(height: 30),
             // Nickname section (editable)
-            _buildNickNameEdit(
+            _buildNicknameEdit(
               context,
-              notifier: notifier,
-              stateAsync: editMintState,
+              ref,
             ),
             const SizedBox(height: 24),
             // Bottom buttons
@@ -142,11 +141,11 @@ class EditMintDialog extends ConsumerWidget {
     );
   }
 
-  Widget _buildNickNameEdit(
-    BuildContext context, {
-    required EditMintNotifier notifier,
-    required AsyncValue<EditMintState> stateAsync,
-  }) {
+  Widget _buildNicknameEdit(
+    BuildContext context,
+    WidgetRef ref,
+  ) {
+    final stateAsync = ref.watch(editMintNotifierProvider(mint));
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Column(
@@ -161,19 +160,18 @@ class EditMintDialog extends ConsumerWidget {
           ),
           const SizedBox(height: 8),
           Form(
-            autovalidateMode: switch (stateAsync) {
-              AsyncData(value: final state) => state.showErrorMessages
-                  ? AutovalidateMode.always
-                  : AutovalidateMode.disabled,
-              _ => AutovalidateMode.disabled,
-            },
+            autovalidateMode: stateAsync.value?.showErrorMessages ?? false
+                ? AutovalidateMode.always
+                : AutovalidateMode.disabled,
             child: TextFormField(
               decoration: InputDecoration(
                 hintText: context.l10n.editMintDialogNicknameHint,
+                hintStyle: context.textTheme.bodySmall?.copyWith(),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide.none,
                 ),
+                errorMaxLines: 2,
                 filled: true,
                 fillColor: context.colorScheme.surfaceContainerHighest,
                 contentPadding: const EdgeInsets.symmetric(
@@ -182,9 +180,14 @@ class EditMintDialog extends ConsumerWidget {
                 ),
                 isDense: true,
               ),
-              onChanged: notifier.nicknameChanged,
+              onChanged: ref
+                  .read(editMintNotifierProvider(mint).notifier)
+                  .nicknameChanged,
               validator: (_) {
-                final state = stateAsync.unwrapPrevious().valueOrNull;
+                // Here we should get the most updated state
+                final currentStateAsync =
+                    ref.read(editMintNotifierProvider(mint));
+                final state = currentStateAsync.unwrapPrevious().valueOrNull;
                 if (state == null) {
                   return null;
                 }
@@ -192,16 +195,7 @@ class EditMintDialog extends ConsumerWidget {
 
                 return switch (validationResult) {
                   Ok() => null,
-                  Error(:final error) => switch (error) {
-                      NicknameEmpty() => context.l10n.generalNicknameEmpty,
-                      NicknameTooLong() =>
-                        context.l10n.generalNicknameTooLong(20),
-                      NicknameInvalidCharacters(:final validCharacters) =>
-                        context.l10n.generalNicknameInvalidCharacters(
-                          validCharacters,
-                        ),
-                      _ => context.l10n.generalUnknownError,
-                    },
+                  Error(:final error) => _getL10nErrorMessage(context, error),
                 };
               },
               style: context.textTheme.bodyMedium,
@@ -221,7 +215,7 @@ class EditMintDialog extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         DialogCancelButton(
-          onPressed: () => context.pop(),
+          onPressed: editMintState is AsyncLoading ? null : () => context.pop(),
           text: context.l10n.generalCancelButtonLabel,
           textColor: context.colorScheme.onSurfaceVariant,
         ),
@@ -237,5 +231,15 @@ class EditMintDialog extends ConsumerWidget {
         ),
       ],
     );
+  }
+
+  String _getL10nErrorMessage(BuildContext context, EditMintError error) {
+    return switch (error) {
+      EditMintNicknameEmptyError() => context.l10n.generalNicknameEmpty,
+      EditMintNicknameTooLongError() => context.l10n.generalNicknameTooLong(20),
+      EditMintNicknameInvalidError() =>
+        context.l10n.generalNicknameInvalidCharacters,
+      EditMintUnknownError() => context.l10n.generalUnknownError,
+    };
   }
 }

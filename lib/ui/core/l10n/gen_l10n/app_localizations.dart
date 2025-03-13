@@ -524,7 +524,7 @@ abstract class AppLocalizations {
   /// No description provided for @editMintDialogNicknameHint.
   ///
   /// In en, this message translates to:
-  /// **'Enter a friendly name for this mint'**
+  /// **'Enter a friendly name'**
   String get editMintDialogNicknameHint;
 
   /// No description provided for @editMintDialogSetAsCurrentButton.
@@ -632,8 +632,8 @@ abstract class AppLocalizations {
   /// No description provided for @generalNicknameInvalidCharacters.
   ///
   /// In en, this message translates to:
-  /// **'Nickname contains invalid characters. Valid: {validCharacters}.'**
-  String generalNicknameInvalidCharacters(Object validCharacters);
+  /// **'Use only letters, numbers, or - _ . < > + # &'**
+  String get generalNicknameInvalidCharacters;
 
   /// No description provided for @errorCardTitle.
   ///

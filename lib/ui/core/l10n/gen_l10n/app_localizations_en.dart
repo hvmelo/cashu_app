@@ -226,7 +226,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get editMintDialogNicknameLabel => 'Nickname (Optional)';
 
   @override
-  String get editMintDialogNicknameHint => 'Enter a friendly name for this mint';
+  String get editMintDialogNicknameHint => 'Enter a friendly name';
 
   @override
   String get editMintDialogSetAsCurrentButton => 'Set as current';
@@ -284,9 +284,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String generalNicknameInvalidCharacters(Object validCharacters) {
-    return 'Nickname contains invalid characters. Valid: $validCharacters.';
-  }
+  String get generalNicknameInvalidCharacters => 'Use only letters, numbers, or - _ . < > + # &';
 
   @override
   String get errorCardTitle => 'Error';

@@ -103,7 +103,7 @@ class CurrentMintCard extends ConsumerWidget {
                 const SizedBox(height: 4),
                 Text(
                   currentMint != null
-                      ? currentMint.nickName?.value ??
+                      ? currentMint.nickname?.value ??
                           currentMint.url.extractAuthority()
                       : context.l10n.currentMintCardNoMintSelected,
                   style: context.textTheme.bodySmall,
@@ -180,7 +180,7 @@ class CurrentMintCard extends ConsumerWidget {
                         vertical: 2,
                       ),
                       title: Text(
-                        mint.nickName?.value ?? mint.url.extractAuthority(),
+                        mint.nickname?.value ?? mint.url.extractAuthority(),
                         style: context.textTheme.titleMedium?.copyWith(
                           fontWeight:
                               isSelected ? FontWeight.bold : FontWeight.w500,

@@ -7,16 +7,16 @@ part 'mint.freezed.dart';
 @freezed
 class Mint with _$Mint {
   const factory Mint({
-    MintNickName? nickName,
+    MintNickname? nickname,
     required MintUrl url,
   }) = _Mint;
 
   factory Mint.fromData({
-    String? nickName,
+    String? nickname,
     required String url,
   }) {
     return Mint(
-      nickName: nickName != null ? MintNickName.fromData(nickName) : null,
+      nickname: nickname != null ? MintNickname.fromData(nickname) : null,
       url: MintUrl.fromData(url),
     );
   }

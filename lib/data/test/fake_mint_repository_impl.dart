@@ -8,11 +8,11 @@ class FakeMintRepositoryImpl implements MintRepository {
   final List<Mint> _mints = [
     Mint(
       url: MintUrl.fromData('https://testmint1.cashu.space'),
-      nickName: MintNickName.fromData('Test Mint 1'),
+      nickname: MintNickname.fromData('Test Mint 1'),
     ),
     Mint(
       url: MintUrl.fromData('https://testmint2.cashu.space'),
-      nickName: MintNickName.fromData('Test Mint 2'),
+      nickname: MintNickname.fromData('Test Mint 2'),
     ),
   ];
 
@@ -21,11 +21,11 @@ class FakeMintRepositoryImpl implements MintRepository {
   @override
   Future<Result<Unit, Failure>> addMint(
     MintUrl mintUrl, {
-    MintNickName? nickName,
+    MintNickname? nickname,
   }) async {
     _mints.add(Mint(
       url: mintUrl,
-      nickName: nickName,
+      nickname: nickname,
     ));
     return Result.ok(unit);
   }
@@ -43,13 +43,13 @@ class FakeMintRepositoryImpl implements MintRepository {
   @override
   Future<Result<Unit, Failure>> updateMint(
     MintUrl mintUrl, {
-    MintNickName? nickName,
+    MintNickname? nickname,
   }) async {
     final index = _mints.indexWhere((mint) => mint.url == mintUrl);
     if (index >= 0) {
       _mints[index] = Mint(
         url: _mints[index].url,
-        nickName: nickName,
+        nickname: nickname,
       );
     }
     return Result.ok(unit);

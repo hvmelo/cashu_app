@@ -58,7 +58,7 @@ class AddMintDialog extends ConsumerWidget {
             const SizedBox(height: 24),
             _buildUrlTextField(state, context, notifier),
             const SizedBox(height: 16),
-            _buildNickNameTextField(state, context, notifier),
+            _buildNicknameTextField(state, context, notifier),
           ],
         ),
       ),
@@ -125,7 +125,7 @@ class AddMintDialog extends ConsumerWidget {
     );
   }
 
-  TextFormField _buildNickNameTextField(AsyncValue<AddMintState> state,
+  TextFormField _buildNicknameTextField(AsyncValue<AddMintState> state,
       BuildContext context, AddMintNotifier notifier) {
     return TextFormField(
       initialValue: state.value?.nickname,

@@ -113,6 +113,7 @@ class AppSnackBar {
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: config.textColor,
                   fontWeight: FontWeight.w500,
+                  fontSize: (theme.textTheme.bodyMedium?.fontSize ?? 14) - 1,
                 ),
               ),
             ),
@@ -144,37 +145,45 @@ class AppSnackBar {
   /// Gets the snackbar configuration based on type
   static _SnackBarConfig _getSnackBarConfig(
       SnackBarType type, ThemeData theme) {
+    // Determine if we're in dark mode
+    final isDarkMode = theme.brightness == Brightness.dark;
+    // Common background and text colors based on theme
+    final backgroundColor =
+        isDarkMode ? Colors.grey.shade200 : Colors.grey.shade800;
+    final textColor = isDarkMode ? Colors.black : Colors.white;
+    final actionTextColor = isDarkMode ? Colors.black : Colors.white;
+
     switch (type) {
       case SnackBarType.error:
         return _SnackBarConfig(
-          backgroundColor: Colors.red.shade800,
-          textColor: Colors.white,
-          iconColor: Colors.white,
-          actionTextColor: Colors.white,
+          backgroundColor: backgroundColor,
+          textColor: textColor,
+          iconColor: Colors.red.shade600,
+          actionTextColor: actionTextColor,
           icon: Icons.error_outline,
         );
       case SnackBarType.warning:
         return _SnackBarConfig(
-          backgroundColor: Colors.amber.shade800,
-          textColor: Colors.white,
-          iconColor: Colors.white,
-          actionTextColor: Colors.white,
+          backgroundColor: backgroundColor,
+          textColor: textColor,
+          iconColor: Colors.amber.shade600,
+          actionTextColor: actionTextColor,
           icon: Icons.warning_amber_outlined,
         );
       case SnackBarType.info:
         return _SnackBarConfig(
-          backgroundColor: Colors.blue.shade700,
-          textColor: Colors.white,
-          iconColor: Colors.white,
-          actionTextColor: Colors.white,
+          backgroundColor: backgroundColor,
+          textColor: textColor,
+          iconColor: Colors.blue.shade600,
+          actionTextColor: actionTextColor,
           icon: Icons.info_outline,
         );
       case SnackBarType.success:
         return _SnackBarConfig(
-          backgroundColor: Colors.green.shade700,
-          textColor: Colors.white,
-          iconColor: Colors.white,
-          actionTextColor: Colors.white,
+          backgroundColor: backgroundColor,
+          textColor: textColor,
+          iconColor: Colors.green.shade600,
+          actionTextColor: actionTextColor,
           icon: Icons.check_circle_outline,
         );
     }

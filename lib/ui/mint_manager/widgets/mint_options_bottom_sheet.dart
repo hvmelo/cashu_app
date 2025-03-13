@@ -22,7 +22,7 @@ class MintOptionsBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mintName = mint.nickName?.value ?? mint.url.extractAuthority();
+    final mintName = mint.nickname?.value ?? mint.url.extractAuthority();
 
     return Container(
       padding: const EdgeInsets.only(top: 16, bottom: 8),
