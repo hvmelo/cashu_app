@@ -4,12 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../data/data_providers.dart';
-import '../../../domain/models/mint_wrapper.dart';
-import '../../../utils/url_utils.dart';
-import '../../core/ui_metrics.dart';
+import '../../../domain/models/mint.dart';
 import '../../core/themes/colors.dart';
-import '../../core/widgets/cards/default_card.dart';
+import '../../core/ui_metrics.dart';
 import '../../core/widgets/cards/error_card.dart';
 import '../../core/widgets/page_app_bar.dart';
 import '../../core/widgets/shimmer/loading_indicator.dart';
@@ -154,7 +151,7 @@ class MintManagerScreen extends ConsumerWidget {
         ),
         itemBuilder: (context, index) {
           final mint = state.availableMints[index];
-          final isCurrentMint = mint.mint.url == state.currentMint?.mint.url;
+          final isCurrentMint = mint.url.value == state.currentMint?.url.value;
 
           return MintCard(
             mint: mint,
@@ -190,7 +187,7 @@ class MintManagerScreen extends ConsumerWidget {
 
   void _showMintDetailsDialog(
     BuildContext context, {
-    required MintWrapper mint,
+    required Mint mint,
     required bool isCurrentMint,
     required MintManagerNotifier notifier,
   }) {
@@ -205,7 +202,7 @@ class MintManagerScreen extends ConsumerWidget {
 
   void _showMintOptionsBottomSheet(
     BuildContext context, {
-    required MintWrapper mint,
+    required Mint mint,
     required bool isCurrentMint,
     required MintManagerNotifier notifier,
     required MintManagerState state,
@@ -223,7 +220,7 @@ class MintManagerScreen extends ConsumerWidget {
             ? null
             : () {
                 context.pop();
-                notifier.setCurrentMint(mint.mint.url);
+                notifier.setCurrentMint(mint.url.value);
               },
         onEdit: () {
           context.pop();
@@ -250,7 +247,7 @@ class MintManagerScreen extends ConsumerWidget {
 
   void _showEditMintDialog(
     BuildContext context, {
-    required MintWrapper mint,
+    required Mint mint,
     required MintManagerNotifier notifier,
     required MintManagerState state,
   }) {
@@ -258,7 +255,7 @@ class MintManagerScreen extends ConsumerWidget {
       context: context,
       builder: (context) => EditMintDialog(
         mint: mint,
-        isCurrentMint: mint.mint.url == state.currentMint?.mint.url,
+        isCurrentMint: mint.url.value == state.currentMint?.url.value,
       ),
     ).then((_) {
       // Refresh the list after editing a mint
@@ -268,7 +265,7 @@ class MintManagerScreen extends ConsumerWidget {
 
   void _showDeleteMintConfirmation(
     BuildContext context, {
-    required MintWrapper mint,
+    required Mint mint,
     required MintManagerNotifier notifier,
   }) {
     showDialog(
@@ -277,7 +274,7 @@ class MintManagerScreen extends ConsumerWidget {
         title: Text(context.l10n.mintManagerScreenDeleteMintTitle),
         content: Text(
           context.l10n.mintManagerScreenDeleteMintConfirmation(
-            mint.nickName ?? UrlUtils.extractHost(mint.mint.url),
+            mint.nickName?.value ?? mint.url.extractAuthority(),
           ),
         ),
         actions: [

@@ -1,106 +1,34 @@
-import 'package:cdk_flutter/cdk_flutter.dart' hide Error;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/types/result.dart';
-import '../../../data/data_providers.dart';
+import '../../../domain/models/mint_quote.dart';
+import '../../../domain/value_objects/value_objects.dart';
 import '../../core/notifiers/current_mint_notifier.dart';
+import '../../providers/mint_providers.dart';
 
-part 'invoice_display_notifier.freezed.dart';
 part 'invoice_display_notifier.g.dart';
 
 /// Notifier for the invoice display
 @riverpod
 class InvoiceDisplayNotifier extends _$InvoiceDisplayNotifier {
   @override
-  InvoiceDisplayState build(BigInt amount) {
-    final currentMintAsync = ref.watch(currentMintNotifierProvider);
-
-    switch (currentMintAsync) {
-      case AsyncData(value: final currentMint):
-        if (currentMint == null) {
-          throw Exception('A mint should be selected at this point');
-        }
-        final mintQuoteAsync = ref.watch(mintQuoteStreamProvider(
-          currentMint.mint.url,
-          amount,
-        ));
-
-        switch (mintQuoteAsync) {
-          case AsyncData(value: final result):
-            switch (result) {
-              case Ok(:final value):
-                return InvoiceDisplayState(
-                  invoice: value.request,
-                  isIssued: value.state == MintQuoteState.issued,
-                  isLoading: false,
-                  error: null,
-                );
-              case Error(:final error):
-                return InvoiceDisplayState(
-                  invoice: null,
-                  isIssued: false,
-                  isLoading: false,
-                  error: InvoiceDisplayError.mintQuoteError(error),
-                );
-            }
-          case AsyncError(:final error):
-            return InvoiceDisplayState(
-              invoice: null,
-              isIssued: false,
-              isLoading: false,
-              error: InvoiceDisplayError.unexpectedError(error),
-            );
-          case AsyncLoading():
-            return InvoiceDisplayState(
-              invoice: null,
-              isIssued: false,
-              isLoading: true,
-              error: null,
-            );
-        }
-      case AsyncError(:final error):
-        return InvoiceDisplayState(
-          invoice: null,
-          isIssued: false,
-          isLoading: false,
-          error: InvoiceDisplayError.unexpectedError(error),
-        );
-      default:
-        return InvoiceDisplayState(
-          invoice: null,
-          isIssued: false,
-          isLoading: true,
-          error: null,
-        );
+  Future<MintQuote> build(MintAmount amount) async {
+    final currentMint = await ref.watch(currentMintNotifierProvider.future);
+    if (currentMint == null) {
+      throw Exception('A mint should be selected at this point');
     }
 
-    // Default fallback return to satisfy the analyzer
-    return InvoiceDisplayState(
-      invoice: null,
-      isIssued: false,
-      isLoading: true,
-      error: null,
-    );
+    final mintQuoteResult = await ref.watch(mintQuoteStreamProvider(
+      currentMint.url,
+      amount,
+    ).future);
+
+    switch (mintQuoteResult) {
+      case Ok(value: final mintQuote):
+        return mintQuote;
+      case Error(:final error):
+        throw Exception('Failed to get mint quote: $error');
+    }
   }
-}
-
-/// State for the invoice display
-@freezed
-class InvoiceDisplayState with _$InvoiceDisplayState {
-  const InvoiceDisplayState._();
-
-  factory InvoiceDisplayState({
-    required String? invoice,
-    required bool isLoading,
-    required bool isIssued,
-    required InvoiceDisplayError? error,
-  }) = _InvoiceDisplayState;
-}
-
-@freezed
-sealed class InvoiceDisplayError with _$InvoiceDisplayError {
-  const InvoiceDisplayError._();
-  factory InvoiceDisplayError.mintQuoteError(Object error) = MintQuoteError;
-  factory InvoiceDisplayError.unexpectedError(Object error) = UnexpectedError;
 }

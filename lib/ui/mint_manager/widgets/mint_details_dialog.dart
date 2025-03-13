@@ -4,15 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../data/data_providers.dart';
 import '../../../core/types/result.dart';
-import '../../../domain/models/mint_wrapper.dart';
-import '../../../utils/url_utils.dart';
+import '../../../domain/models/mint.dart';
 import '../../core/widgets/balance_chip.dart';
+import '../../providers/mint_providers.dart';
 
 /// Dialog for displaying mint details
 class MintDetailsDialog extends ConsumerWidget {
-  final MintWrapper mint;
+  final Mint mint;
   final bool isCurrentMint;
 
   const MintDetailsDialog({
@@ -23,8 +22,8 @@ class MintDetailsDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final balanceAsync = ref.watch(mintBalanceStreamProvider(mint.mint.url));
-    final mintName = mint.nickName ?? UrlUtils.extractHost(mint.mint.url);
+    final balanceAsync = ref.watch(mintBalanceStreamProvider(mint.url));
+    final mintName = mint.nickName?.value ?? mint.url.extractAuthority();
 
     final balance = switch (balanceAsync) {
       AsyncData(:final value) => switch (value) {
@@ -84,7 +83,7 @@ class MintDetailsDialog extends ConsumerWidget {
                       const SizedBox(height: 4),
                       if (balance != null)
                         BalanceChip(
-                          mintUrl: mint.mint.url,
+                          mintUrl: mint.url,
                           isCurrentMint: isCurrentMint,
                         ),
                     ],
@@ -120,7 +119,7 @@ class MintDetailsDialog extends ConsumerWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          mint.mint.url,
+                          mint.url.value,
                           style: context.textTheme.bodyMedium?.copyWith(
                             fontFamily: 'monospace',
                             color: context.colorScheme.onSurface,
@@ -134,7 +133,8 @@ class MintDetailsDialog extends ConsumerWidget {
                           color: context.colorScheme.onSurfaceVariant,
                         ),
                         onPressed: () {
-                          Clipboard.setData(ClipboardData(text: mint.mint.url));
+                          Clipboard.setData(
+                              ClipboardData(text: mint.url.value));
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text('URL copied to clipboard'),
@@ -179,7 +179,7 @@ class MintDetailsDialog extends ConsumerWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      mint.nickName!,
+                      mint.nickName!.value,
                       style: context.textTheme.bodyMedium?.copyWith(
                         color: context.colorScheme.onSurface,
                       ),

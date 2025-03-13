@@ -3,7 +3,10 @@ import 'package:cashu_app/ui/mint_manager/notifiers/add_mint_notifier.dart';
 import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../../core/widgets/widgets.dart';
 
 /// Dialog for adding a new mint
 class AddMintDialog extends ConsumerWidget {
@@ -15,9 +18,17 @@ class AddMintDialog extends ConsumerWidget {
     final notifier = ref.read(addMintNotifierProvider.notifier);
 
     // Reset the state when the dialog is shown
-    ref.listen(addMintNotifierProvider, (previous, current) {
-      if (!previous!.isSuccess && current.isSuccess) {
-        Navigator.pop(context);
+    ref.listen(addMintNotifierProvider.selectAsync((state) => state.isSuccess),
+        (previous, current) async {
+      final isSuccess = await current;
+      if (isSuccess) {
+        if (context.mounted) {
+          context.pop();
+          AppSnackBar.showSuccess(
+            context,
+            message: context.l10n.addMintScreenSuccess,
+          );
+        }
       }
     });
 
@@ -45,71 +56,9 @@ class AddMintDialog extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 24),
-            TextFormField(
-              initialValue: state.url,
-              decoration: InputDecoration(
-                labelText: context.l10n.addMintScreenUrlLabel,
-                hintText: 'https://mint.example.com',
-                prefixIcon: const Icon(Icons.link),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                errorText: state.error != null
-                    ? _getErrorMessage(context, state.error!)
-                    : null,
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.content_paste),
-                  onPressed: () async {
-                    final data = await Clipboard.getData(Clipboard.kTextPlain);
-                    if (data != null && data.text != null) {
-                      notifier.urlChanged(data.text!);
-                    }
-                  },
-                  tooltip: context.l10n.addMintScreenPasteFromClipboard,
-                ),
-              ),
-              keyboardType: TextInputType.url,
-              textInputAction: TextInputAction.next,
-              onChanged: notifier.urlChanged,
-            ),
+            _buildUrlTextField(state, context, notifier),
             const SizedBox(height: 16),
-            TextFormField(
-              initialValue: state.nickname,
-              decoration: InputDecoration(
-                labelText: context.l10n.addMintScreenNicknameLabel,
-                hintText: context.l10n.addMintScreenNicknameHint,
-                prefixIcon: const Icon(Icons.label_outline),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              textInputAction: TextInputAction.done,
-              onChanged: notifier.nicknameChanged,
-            ),
-            if (state.error != null) ...[
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: AppColors.red.withAlpha(23),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.error_outline, color: AppColors.red),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        _getErrorMessage(context, state.error!),
-                        style: context.textTheme.bodySmall?.copyWith(
-                          color: AppColors.red,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+            _buildNickNameTextField(state, context, notifier),
           ],
         ),
       ),
@@ -119,7 +68,7 @@ class AddMintDialog extends ConsumerWidget {
           child: Text(context.l10n.generalCancelButtonLabel),
         ),
         ElevatedButton(
-          onPressed: state.isSubmitting ? null : () => notifier.addMint(),
+          onPressed: state.isLoading ? null : () => notifier.addMint(),
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.actionColors['mint'],
             foregroundColor: Colors.white,
@@ -127,7 +76,7 @@ class AddMintDialog extends ConsumerWidget {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          child: state.isSubmitting
+          child: state.isLoading
               ? const SizedBox(
                   width: 20,
                   height: 20,
@@ -142,7 +91,58 @@ class AddMintDialog extends ConsumerWidget {
     );
   }
 
-  String _getErrorMessage(BuildContext context, AddMintError error) {
+  TextFormField _buildUrlTextField(AsyncValue<AddMintState> state,
+      BuildContext context, AddMintNotifier notifier) {
+    return TextFormField(
+      initialValue: state.value?.url,
+      decoration: InputDecoration(
+        labelText: context.l10n.addMintScreenUrlLabel,
+        hintText: 'https://mint.example.com',
+        prefixIcon: const Icon(Icons.link),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        suffixIcon: IconButton(
+          icon: const Icon(Icons.content_paste),
+          onPressed: () async {
+            final data = await Clipboard.getData(Clipboard.kTextPlain);
+            if (data != null && data.text != null) {
+              notifier.urlChanged(data.text!);
+            }
+          },
+          tooltip: context.l10n.addMintScreenPasteFromClipboard,
+        ),
+      ),
+      keyboardType: TextInputType.url,
+      textInputAction: TextInputAction.next,
+      onChanged: notifier.urlChanged,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return context.l10n.addMintScreenErrorEmptyUrl;
+        }
+        return null;
+      },
+    );
+  }
+
+  TextFormField _buildNickNameTextField(AsyncValue<AddMintState> state,
+      BuildContext context, AddMintNotifier notifier) {
+    return TextFormField(
+      initialValue: state.value?.nickname,
+      decoration: InputDecoration(
+        labelText: context.l10n.addMintScreenNicknameLabel,
+        hintText: context.l10n.addMintScreenNicknameHint,
+        prefixIcon: const Icon(Icons.label_outline),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+      textInputAction: TextInputAction.done,
+      onChanged: notifier.nicknameChanged,
+    );
+  }
+
+  String _getErrorMessage(BuildContext context, AddMintScreenError error) {
     return switch (error) {
       EmptyUrlError() => context.l10n.addMintScreenErrorEmptyUrl,
       InvalidUrlError() => context.l10n.addMintScreenErrorInvalidUrl,

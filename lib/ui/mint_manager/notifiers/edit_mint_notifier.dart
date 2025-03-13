@@ -1,9 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/types/result.dart';
+import '../../../core/types/unit.dart';
 import '../../../data/data_providers.dart';
-import '../../../domain/models/mint_wrapper.dart';
-import '../../core/notifiers/current_mint_notifier.dart';
+import '../../../domain/models/mint.dart';
+import '../../../domain/value_objects/mint_nick_name.dart';
 
 part 'edit_mint_notifier.freezed.dart';
 part 'edit_mint_notifier.g.dart';
@@ -12,180 +14,104 @@ part 'edit_mint_notifier.g.dart';
 @riverpod
 class EditMintNotifier extends _$EditMintNotifier {
   @override
-  EditMintState build(MintWrapper mint) {
-    // Initialize the state with the provided mint
+  FutureOr<EditMintState> build(Mint mint) {
+    // Initialize with the original nickname
     return EditMintState(
       originalMint: mint,
-      nickname: mint.nickName ?? '',
-      isSubmitting: false,
-      isSuccess: false,
-      error: null,
+      nickname: mint.nickName?.value ?? '',
+      showErrorMessages: false,
     );
   }
 
   /// Updates the nickname field
-  void nicknameChanged(String nickname) {
-    state = state.copyWith(
-      nickname: nickname.trim(),
-      error: null,
-    );
-  }
+  void nicknameChanged(String nickname) =>
+      update((state) => state.copyWith(nickname: nickname.trim()));
 
   /// Saves the changes to the mint
-  Future<void> saveMint() async {
-    // Set submitting state
-    state = state.copyWith(
-      isSubmitting: true,
-      error: null,
-    );
+  Future<void> updateMintData() async {
+    // Check if we have a valid state value before proceeding
+    if (state.hasValue) return;
 
-    try {
-      // Update the mint's nickname
-      final newNickname = state.nickname.isEmpty ? null : state.nickname;
-      final mintRepo = await ref.watch(mintRepositoryProvider.future);
-      await mintRepo.updateMint(
-        state.originalMint.mint.url,
-        newNickname,
-      );
+    // Get the current state value, which we know exists at this point
+    final currentState = state.value!;
 
-      // Update the current mint if this is the current mint
-      final currentMint = await ref.read(currentMintNotifierProvider.future);
-      if (currentMint?.mint.url == state.originalMint.mint.url) {
-        ref.invalidate(currentMintNotifierProvider);
-      }
+    // Validate the current nickname value
+    final validationResult = currentState.validate();
 
-      // Set success state
-      state = state.copyWith(
-        isSubmitting: false,
-        isSuccess: true,
-      );
-    } catch (e) {
-      // Set error state
-      state = state.copyWith(
-        isSubmitting: false,
-        error: EditMintError.unknown(e.toString()),
-      );
+    // If validation failed, update state with the error
+    if (validationResult.isError) {
+      state = AsyncError(validationResult.error!, StackTrace.current);
+      return;
     }
-  }
 
-  /// Deletes the mint
-  ///
-  /// Note: This is a placeholder implementation since the MintRepository
-  /// doesn't have a deleteUserMint method. In a real implementation,
-  /// you would need to add this method to the MintRepository interface
-  /// and implement it in the MintRepositoryImpl class.
-  Future<void> deleteMint() async {
-    // Set submitting state
-    state = state.copyWith(
-      isSubmitting: true,
-      error: null,
-    );
+    // Create a MintNickName value object from the current nickname
+    final mintNickNameResult = MintNickName.create(currentState.nickname);
 
-    try {
-      // TODO: Implement mint deletion in the MintRepository
-      // For now, we'll just simulate a successful deletion
-
-      // If this is the current mint, we need to select a different one
-      final currentMint = await ref.read(currentMintNotifierProvider.future);
-      if (currentMint?.mint.url == state.originalMint.mint.url) {
-        // Get the first available mint that's not this one
-        final mints = await ref.read(listMintsProvider.future);
-        final otherMints = mints
-            .where((m) => m.mint.url != state.originalMint.mint.url)
-            .toList();
-
-        if (otherMints.isNotEmpty) {
-          // Set another mint as the current mint
-          await ref
-              .read(currentMintNotifierProvider.notifier)
-              .setCurrentMint(otherMints.first.mint.url);
-        } else {
-          // No other mints available, so we need to clear the current mint
-          // Since there's no clearCurrentMint method, we'll set the current mint to null
-          // by invalidating the provider
-          ref.invalidate(currentMintNotifierProvider);
-        }
-      }
-
-      // Set success state
-      state = state.copyWith(
-        isSubmitting: false,
-        isSuccess: true,
-      );
-    } catch (e) {
-      // Set error state
-      state = state.copyWith(
-        isSubmitting: false,
-        error: EditMintError.unknown(e.toString()),
-      );
+    // If nickname creation failed, update state with the error
+    if (mintNickNameResult.isError) {
+      state = AsyncError(mintNickNameResult.error!, StackTrace.current);
+      return;
     }
-  }
 
-  /// Sets this mint as the current mint
-  Future<void> setAsCurrentMint() async {
-    // Set submitting state
-    state = state.copyWith(
-      isSubmitting: true,
-      error: null,
+    // Get the original mint and created nickname
+    final mint = currentState.originalMint;
+    final mintNickName = mintNickNameResult.value;
+
+    // Set state to loading while we update the mint
+    state = AsyncValue.loading();
+
+    // Get the mint repository and update the mint with new nickname
+    final mintRepo = await ref.watch(mintRepositoryProvider.future);
+    await mintRepo.updateMint(
+      mint.url,
+      nickName: mintNickName,
     );
 
-    try {
-      // Set as current mint
-      await ref
-          .read(currentMintNotifierProvider.notifier)
-          .setCurrentMint(state.originalMint.mint.url);
+    // Note: Commented out code for updating current mint if needed
+    // final currentMint = await ref.read(currentMintNotifierProvider.future);
+    // if (currentMint?.url == mint.url) {
+    //   ref.invalidate(currentMintNotifierProvider);
+    // }
 
-      // Set success state
-      state = state.copyWith(
-        isSubmitting: false,
-        isSuccess: true,
-      );
-    } catch (e) {
-      // Set error state
-      state = state.copyWith(
-        isSubmitting: false,
-        error: EditMintError.unknown(e.toString()),
-      );
-    }
-  }
-
-  /// Clears any errors
-  void clearErrors() {
-    state = state.copyWith(
-      error: null,
-    );
-  }
-
-  /// Resets the success state
-  void resetSuccess() {
-    state = state.copyWith(
-      isSuccess: false,
-    );
+    // Update state with success
+    state = AsyncData(currentState.copyWith(isSuccess: true));
   }
 }
 
-/// State for the edit mint screen
+/// Simple model to hold the current nickname
 @freezed
 class EditMintState with _$EditMintState {
-  const factory EditMintState({
-    required MintWrapper originalMint,
+  const EditMintState._();
+
+  factory EditMintState({
+    required Mint originalMint,
     required String nickname,
-    required bool isSubmitting,
-    required bool isSuccess,
-    required EditMintError? error,
+    required bool showErrorMessages,
+    @Default(false) bool isSuccess,
   }) = _EditMintState;
+
+  /// Validates the nickname
+  Result<Unit, EditMintError> validate() {
+    final nicknameValidationResult = MintNickName.validate(nickname);
+
+    return switch (nicknameValidationResult) {
+      Ok() => Result.ok(unit),
+      Error(:final error) => switch (error) {
+          NicknameEmpty() => Result.error(NicknameEmptyError()),
+          NicknameTooLong() => Result.error(NicknameTooLongError()),
+          NicknameInvalidCharacters() => Result.error(NicknameInvalidError()),
+          _ => throw Exception('Unexpected error: $error'),
+        },
+    };
+  }
 }
 
 @freezed
 sealed class EditMintError with _$EditMintError {
   const EditMintError._();
 
+  factory EditMintError.nicknameEmpty() = NicknameEmptyError;
+  factory EditMintError.nicknameTooLong() = NicknameTooLongError;
+  factory EditMintError.nicknameInvalid() = NicknameInvalidError;
   factory EditMintError.unknown(String message) = UnknownError;
-
-  @override
-  String get message {
-    return switch (this) {
-      UnknownError(:final message) => message,
-    };
-  }
 }

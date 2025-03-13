@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'domain/value_objects/value_objects.dart';
 import 'main.dart';
 
 /// Staging config entry point.
@@ -30,12 +31,12 @@ Future<void> main() async {
   // Add initial mints to the user mints repository
   final mintRepository = await container.read(mintRepositoryProvider.future);
   await mintRepository.addMint(
-    'https://mint.refugio.com.br',
-    nickName: 'Refugio',
+    MintUrl.fromData('https://mint.refugio.com.br'),
+    nickName: MintNickName.fromData('Refugio'),
   );
   await mintRepository.addMint(
-    'https://testnut.cashu.space',
-    nickName: 'Testnut',
+    MintUrl.fromData('https://testnut.cashu.space'),
+    nickName: MintNickName.fromData('Testnut'),
   );
 
   runApp(

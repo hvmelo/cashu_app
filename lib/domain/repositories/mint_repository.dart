@@ -1,13 +1,17 @@
-import '../../core/types/result.dart';
-import '../../core/types/unit.dart';
-import '../models/mint_wrapper.dart';
+import '../../core/types/types.dart';
+import '../models/mint.dart';
+import '../value_objects/value_objects.dart';
 
 abstract class MintRepository {
-  Future<Result<Unit>> addMint(String mintUrl, {String? nickName});
-  Future<List<MintWrapper>> listMints();
-  Future<MintWrapper?> getMint(String mintUrl);
-  Future<Result<Unit>> updateMint(String mintUrl, String? nickName);
-  Future<Result<Unit>> setCurrentMint(String mintUrl);
-  Future<MintWrapper?> getCurrentMint();
-  Stream<Result<BigInt>> mintBalanceStream(String mintUrl);
+  Future<Result<Unit, Failure>> addMint(MintUrl mintUrl,
+      {MintNickName? nickName});
+  Future<List<Mint>> listMints();
+  Future<Mint?> getMint(MintUrl mintUrl);
+  Future<Result<Unit, Failure>> updateMint(MintUrl mintUrl,
+      {MintNickName? nickName});
+  Future<Result<Unit, Failure>> removeMint(MintUrl mintUrl);
+  Future<Result<Unit, Failure>> saveCurrentMint(MintUrl mintUrl);
+  Future<Result<Unit, Failure>> removeCurrentMint();
+  Future<Mint?> getCurrentMint();
+  Stream<Result<BigInt, Failure>> mintBalanceStream(MintUrl mintUrl);
 }

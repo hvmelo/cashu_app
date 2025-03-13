@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../domain/models/mint_wrapper.dart';
+import '../../../core/types/types.dart';
+import '../../../domain/models/mint.dart';
+import '../../../domain/value_objects/value_objects.dart';
 import '../../core/themes/colors.dart';
 import '../../core/widgets/widgets.dart';
 import '../../utils/extensions/build_context_x.dart';
@@ -18,11 +20,10 @@ class EditMintDialog extends ConsumerWidget {
     required this.mint,
     required this.isCurrentMint,
     this.onSaved,
-    this.onDeleted,
   });
 
   /// The mint to edit
-  final MintWrapper mint;
+  final Mint mint;
 
   /// Whether this mint is the current mint
   final bool isCurrentMint;
@@ -30,32 +31,32 @@ class EditMintDialog extends ConsumerWidget {
   /// Callback called when the mint is saved
   final VoidCallback? onSaved;
 
-  /// Callback called when the mint is deleted
-  final VoidCallback? onDeleted;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final editMintState = ref.watch(editMintNotifierProvider(mint));
     final notifier = ref.watch(editMintNotifierProvider(mint).notifier);
 
     // Handle success state
-    ref.listen<EditMintState>(
-      editMintNotifierProvider(mint),
-      (previous, current) {
-        if (!previous!.isSuccess && current.isSuccess) {
+    ref.listen(
+      editMintNotifierProvider(mint).selectAsync((state) => state.isSuccess),
+      (previous, current) async {
+        final isSuccess = await current;
+        if (isSuccess) {
           // Show success message
-          AppSnackBar.showSuccess(
-            context,
-            message: context.l10n.editMintDialogMintUpdated,
-          );
-
-          // Call the appropriate callback
-          if (onSaved != null) {
-            onSaved!();
-          }
-
           // Close the dialog
-          context.pop();
+          if (context.mounted) {
+            context.pop();
+
+            AppSnackBar.showSuccess(
+              context,
+              message: context.l10n.editMintDialogMintUpdated,
+            );
+
+            // Call the appropriate callback
+            // if (onSaved != null) {
+            //   onSaved!();
+            // }
+          }
         }
       },
     );
@@ -76,42 +77,20 @@ class EditMintDialog extends ConsumerWidget {
             _buildHeader(context),
             const SizedBox(height: 24),
             // URL section (read-only)
-            _buildMintUrl(context),
+            _buildMintUrl(context, mintUrl: mint.url),
             const SizedBox(height: 30),
             // Nickname section (editable)
-            _buildNickNameEdit(context, editMintState, notifier),
-            if (editMintState.error != null) ...[
-              const SizedBox(height: 12),
-              Text(
-                editMintState.error!.message,
-                style: context.textTheme.bodySmall?.copyWith(
-                  color: context.colorScheme.error,
-                ),
-              ),
-            ],
-
+            _buildNickNameEdit(
+              context,
+              notifier: notifier,
+              stateAsync: editMintState,
+            ),
             const SizedBox(height: 24),
-
             // Bottom buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                DialogCancelButton(
-                  onPressed: () => context.pop(),
-                  text: context.l10n.generalCancelButtonLabel,
-                  textColor: context.colorScheme.onSurfaceVariant,
-                ),
-                const SizedBox(width: 12),
-                DialogActionButton(
-                  onPressed: editMintState.isSubmitting
-                      ? null
-                      : () => notifier.saveMint(),
-                  text: context.l10n.generalSaveButtonLabel,
-                  isSubmitting: editMintState.isSubmitting,
-                  backgroundColor: AppColors.actionColors['mint'],
-                  foregroundColor: Colors.white,
-                ),
-              ],
+            _buildButtons(
+              context,
+              notifier: notifier,
+              editMintState: editMintState,
             ),
           ],
         ),
@@ -137,7 +116,7 @@ class EditMintDialog extends ConsumerWidget {
     );
   }
 
-  Widget _buildMintUrl(BuildContext context) {
+  Widget _buildMintUrl(BuildContext context, {required MintUrl mintUrl}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Column(
@@ -152,7 +131,7 @@ class EditMintDialog extends ConsumerWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            mint.mint.url,
+            mintUrl.value,
             style: context.textTheme.bodyMedium?.copyWith(
               fontFamily: 'monospace',
               color: context.colorScheme.onSurface,
@@ -164,10 +143,10 @@ class EditMintDialog extends ConsumerWidget {
   }
 
   Widget _buildNickNameEdit(
-    BuildContext context,
-    EditMintState editMintState,
-    EditMintNotifier notifier,
-  ) {
+    BuildContext context, {
+    required EditMintNotifier notifier,
+    required AsyncValue<EditMintState> stateAsync,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Column(
@@ -181,27 +160,82 @@ class EditMintDialog extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 8),
-          TextField(
-            decoration: InputDecoration(
-              hintText: context.l10n.editMintDialogNicknameHint,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide.none,
+          Form(
+            autovalidateMode: switch (stateAsync) {
+              AsyncData(value: final state) => state.showErrorMessages
+                  ? AutovalidateMode.always
+                  : AutovalidateMode.disabled,
+              _ => AutovalidateMode.disabled,
+            },
+            child: TextFormField(
+              decoration: InputDecoration(
+                hintText: context.l10n.editMintDialogNicknameHint,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor: context.colorScheme.surfaceContainerHighest,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 12,
+                ),
+                isDense: true,
               ),
-              filled: true,
-              fillColor: context.colorScheme.surfaceContainerHighest,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 12,
-              ),
-              isDense: true,
+              onChanged: notifier.nicknameChanged,
+              validator: (_) {
+                final state = stateAsync.unwrapPrevious().valueOrNull;
+                if (state == null) {
+                  return null;
+                }
+                final validationResult = state.validate();
+
+                return switch (validationResult) {
+                  Ok() => null,
+                  Error(:final error) => switch (error) {
+                      NicknameEmpty() => context.l10n.generalNicknameEmpty,
+                      NicknameTooLong() =>
+                        context.l10n.generalNicknameTooLong(20),
+                      NicknameInvalidCharacters(:final validCharacters) =>
+                        context.l10n.generalNicknameInvalidCharacters(
+                          validCharacters,
+                        ),
+                      _ => context.l10n.generalUnknownError,
+                    },
+                };
+              },
+              style: context.textTheme.bodyMedium,
             ),
-            controller: TextEditingController(text: editMintState.nickname),
-            onChanged: notifier.nicknameChanged,
-            style: context.textTheme.bodyMedium,
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildButtons(
+    BuildContext context, {
+    required EditMintNotifier notifier,
+    required AsyncValue<EditMintState> editMintState,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        DialogCancelButton(
+          onPressed: () => context.pop(),
+          text: context.l10n.generalCancelButtonLabel,
+          textColor: context.colorScheme.onSurfaceVariant,
+        ),
+        const SizedBox(width: 12),
+        DialogActionButton(
+          onPressed: editMintState is AsyncLoading
+              ? null
+              : () => notifier.updateMintData(),
+          text: context.l10n.generalSaveButtonLabel,
+          isSubmitting: editMintState is AsyncLoading,
+          backgroundColor: AppColors.actionColors['mint'],
+          foregroundColor: Colors.white,
+        ),
+      ],
     );
   }
 }

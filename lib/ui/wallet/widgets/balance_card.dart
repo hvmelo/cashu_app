@@ -2,10 +2,10 @@ import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../data/data_providers.dart';
 import '../../core/themes/colors.dart';
 import '../../core/widgets/cards/error_card.dart';
 import '../../core/widgets/cards/loading_card.dart';
+import '../../providers/mint_providers.dart';
 
 class BalanceCard extends ConsumerWidget {
   const BalanceCard({

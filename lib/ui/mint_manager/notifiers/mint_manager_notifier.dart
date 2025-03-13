@@ -1,9 +1,9 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../data/data_providers.dart';
-import '../../../domain/models/mint_wrapper.dart';
+import '../../../domain/models/mint.dart';
 import '../../core/notifiers/current_mint_notifier.dart';
+import '../../providers/mint_providers.dart';
 
 part 'mint_manager_notifier.freezed.dart';
 part 'mint_manager_notifier.g.dart';
@@ -32,7 +32,7 @@ class MintManagerNotifier extends _$MintManagerNotifier {
   }
 
   /// Selects a mint for editing or viewing details
-  void selectMint(MintWrapper mint) {
+  void selectMint(Mint mint) {
     update((state) => state.copyWith(selectedMint: mint));
   }
 
@@ -44,21 +44,7 @@ class MintManagerNotifier extends _$MintManagerNotifier {
   /// Sets a mint as the current mint
   Future<void> setCurrentMint(String mintUrl) async {
     state = AsyncLoading();
-
     ref.read(currentMintNotifierProvider.notifier).setCurrentMint(mintUrl);
-
-    // Refresh the state to reflect the change
-    ref.invalidateSelf();
-  }
-
-  /// Updates a mint's nickname
-  Future<void> updateMintNickname(String mintUrl, String? nickname) async {
-    state = AsyncLoading();
-
-    final mintRepo = await ref.watch(mintRepositoryProvider.future);
-    await mintRepo.updateMint(mintUrl, nickname);
-
-    ref.invalidateSelf();
   }
 }
 
@@ -66,22 +52,8 @@ class MintManagerNotifier extends _$MintManagerNotifier {
 @freezed
 class MintManagerState with _$MintManagerState {
   const factory MintManagerState({
-    required List<MintWrapper> availableMints,
-    required MintWrapper? currentMint,
-    required MintWrapper? selectedMint,
+    required List<Mint> availableMints,
+    required Mint? currentMint,
+    required Mint? selectedMint,
   }) = _MintManagerState;
-}
-
-@freezed
-sealed class MintManagerError with _$MintManagerError {
-  const MintManagerError._();
-
-  factory MintManagerError.unknown(String message) = UnknownError;
-
-  @override
-  String get message {
-    return switch (this) {
-      UnknownError(:final message) => message,
-    };
-  }
 }

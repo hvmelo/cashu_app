@@ -1,24 +1,25 @@
-import 'package:cashu_app/ui/core/themes/colors.dart';
-import 'package:cashu_app/ui/core/widgets/cards/default_card.dart';
-import 'package:cashu_app/ui/mint/notifiers/mint_screen_notifier.dart';
 import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../core/widgets/app_buttons.dart';
+import '../../../core/types/types.dart';
+import '../../core/themes/colors.dart';
+import '../../core/widgets/widgets.dart';
+import '../notifiers/mint_screen_notifier.dart';
 
-class AmountInputForm extends HookConsumerWidget {
+class AmountInputForm extends StatelessWidget {
+  final MintScreenNotifier mintScreenNotifier;
+  final MintScreenEditingState state;
+
   const AmountInputForm({
     super.key,
+    required this.mintScreenNotifier,
+    required this.state,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(mintScreenNotifierProvider);
-    final notifier = ref.read(mintScreenNotifierProvider.notifier);
-
+  Widget build(BuildContext context) {
     final amountFocusNode = useFocusNode();
 
     useEffect(() {
@@ -69,22 +70,23 @@ class AmountInputForm extends HookConsumerWidget {
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       focusNode: amountFocusNode,
                       onChanged: (value) {
-                        notifier.amountChanged(value);
+                        mintScreenNotifier.amountChanged(value);
                       },
                       validator: (_) {
-                        final error = ref
-                            .read(mintScreenNotifierProvider.notifier)
-                            .validate();
-                        if (error != null) {
-                          return switch (error) {
-                            EmptyAmountError() =>
-                              context.l10n.mintScreenAmountEmpty,
-                            InvalidAmountError() =>
-                              context.l10n.mintScreenAmountError,
-                            UnknownError() => context.l10n.generalUnknownError,
-                          };
-                        }
-                        return null;
+                        final validationResult = state.validate();
+                        return switch (validationResult) {
+                          Ok() => null,
+                          Error(:final error) => switch (error) {
+                              AmountTooLarge(:final maxAmount) => context.l10n
+                                  .mintScreenAmountTooLarge(maxAmount),
+                              AmountNegativeOrZero() =>
+                                context.l10n.mintScreenAmountNegativeOrZero,
+                              AmountInvalidFormat() =>
+                                context.l10n.mintScreenAmountInvalidFormat,
+                              UnknownError() =>
+                                context.l10n.generalUnknownError,
+                            },
+                        };
                       },
                       style: context.textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
@@ -114,9 +116,7 @@ class AmountInputForm extends HookConsumerWidget {
               height: 56,
               child: PrimaryActionButton(
                 onPressed: () {
-                  ref
-                      .read(mintScreenNotifierProvider.notifier)
-                      .generateInvoice();
+                  mintScreenNotifier.generateInvoice();
                 },
                 text: context.l10n.mintScreenCreateInvoice,
                 backgroundColor: AppColors.actionColors['receive'],

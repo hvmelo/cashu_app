@@ -105,10 +105,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mintScreenLoading => 'Creando factura...';
 
   @override
-  String get mintScreenAmountError => 'Por favor, ingrese una cantidad válida';
+  String mintScreenAmountTooLarge(Object maxAmount) {
+    return 'The amount is too large. The maximum amount is $maxAmount sats.';
+  }
 
   @override
-  String get mintScreenAmountEmpty => 'Por favor, ingrese una cantidad';
+  String get mintScreenAmountNegativeOrZero => 'The amount cannot be negative or zero.';
+
+  @override
+  String get mintScreenAmountInvalidFormat => 'The amount is not a valid number.';
 
   @override
   String get addMintScreenTitle => 'Add Mint';
@@ -200,6 +205,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mintManagerScreenCloseButton => 'Close';
 
   @override
+  String get mintManagerScreenMintMintCardCurrentLabel => 'Current';
+
+  @override
   String get mintManagerScreenCopyToClipboard => 'Copy to clipboard';
 
   @override
@@ -266,6 +274,19 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get generalUnknownError => 'Ha ocurrido un error desconocido';
+
+  @override
+  String get generalNicknameEmpty => 'Nickname cannot be empty';
+
+  @override
+  String generalNicknameTooLong(Object maxLength) {
+    return 'Nickname cannot be longer than $maxLength characters';
+  }
+
+  @override
+  String generalNicknameInvalidCharacters(Object validCharacters) {
+    return 'Nickname contains invalid characters. Valid: $validCharacters.';
+  }
 
   @override
   String get errorCardTitle => 'Error';

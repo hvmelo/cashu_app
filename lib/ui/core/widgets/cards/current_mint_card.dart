@@ -1,23 +1,21 @@
-import 'package:cashu_app/ui/core/widgets/shimmer/shimmer_placeholder.dart';
 import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../../data/data_providers.dart';
-import '../../../../domain/models/mint_wrapper.dart';
-import '../../../../utils/url_utils.dart';
+import '../../../../domain/models/mint.dart';
+import '../../../providers/mint_providers.dart';
 import '../../notifiers/current_mint_notifier.dart';
 import '../../themes/colors.dart';
+import '../shimmer/shimmer.dart';
 import 'default_card.dart';
 import 'error_card.dart';
-import '../shimmer/shimmer.dart';
 
 part 'current_mint_card.g.dart';
 
 @riverpod
-Future<(List<MintWrapper>, MintWrapper?)> combinedMintData(Ref ref) async {
+Future<(List<Mint>, Mint?)> combinedMintData(Ref ref) async {
   final allMints = await ref.watch(listMintsProvider.future);
   final currentMint = await ref.watch(currentMintNotifierProvider.future);
   return (allMints, currentMint);
@@ -38,7 +36,7 @@ class CurrentMintCard extends ConsumerWidget {
   });
 
   /// Callback called when the user selects a new mint.
-  final void Function(MintWrapper mint)? onMintSelected;
+  final void Function(Mint mint)? onMintSelected;
 
   /// Whether to show the switch mint button.
   final bool showSwitchButton;
@@ -67,8 +65,8 @@ class CurrentMintCard extends ConsumerWidget {
   Widget _buildWidget(
     BuildContext context,
     WidgetRef ref, {
-    required List<MintWrapper> availableMints,
-    required MintWrapper? currentMint,
+    required List<Mint> availableMints,
+    required Mint? currentMint,
   }) {
     return DefaultCard(
       onTap: availableMints.isNotEmpty
@@ -104,10 +102,10 @@ class CurrentMintCard extends ConsumerWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  currentMint?.nickName ??
-                      currentMint?.mint.info?.name ??
-                      currentMint?.mint.url ??
-                      context.l10n.currentMintCardNoMintSelected,
+                  currentMint != null
+                      ? currentMint.nickName?.value ??
+                          currentMint.url.extractAuthority()
+                      : context.l10n.currentMintCardNoMintSelected,
                   style: context.textTheme.bodySmall,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -129,8 +127,8 @@ class CurrentMintCard extends ConsumerWidget {
   void _showMintSelector(
     BuildContext context,
     WidgetRef ref,
-    MintWrapper? currentMint,
-    List<MintWrapper> availableMints,
+    Mint? currentMint,
+    List<Mint> availableMints,
   ) {
     showDialog(
       context: context,
@@ -168,7 +166,7 @@ class CurrentMintCard extends ConsumerWidget {
                       const Divider(height: 1),
                   itemBuilder: (context, index) {
                     final mint = availableMints[index];
-                    final isSelected = mint.mint.url == currentMint?.mint.url;
+                    final isSelected = mint.url == currentMint?.url;
 
                     return ListTile(
                       shape: RoundedRectangleBorder(
@@ -182,9 +180,7 @@ class CurrentMintCard extends ConsumerWidget {
                         vertical: 2,
                       ),
                       title: Text(
-                        mint.nickName ??
-                            mint.mint.info?.name ??
-                            UrlUtils.extractHost(mint.mint.url),
+                        mint.nickName?.value ?? mint.url.extractAuthority(),
                         style: context.textTheme.titleMedium?.copyWith(
                           fontWeight:
                               isSelected ? FontWeight.bold : FontWeight.w500,
@@ -193,7 +189,7 @@ class CurrentMintCard extends ConsumerWidget {
                         ),
                       ),
                       subtitle: Text(
-                        mint.mint.url,
+                        mint.url.value,
                         style: context.textTheme.bodySmall,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -210,7 +206,7 @@ class CurrentMintCard extends ConsumerWidget {
                           // Update the current mint provider
                           ref
                               .read(currentMintNotifierProvider.notifier)
-                              .setCurrentMint(mint.mint.url);
+                              .setCurrentMint(mint.url.value);
                         }
                         context.pop();
                       },

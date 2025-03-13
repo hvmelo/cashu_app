@@ -1,6 +1,10 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/types/result.dart';
+import '../../../core/types/unit.dart';
+import '../../../domain/value_objects/mint_amount.dart';
+
 part 'mint_screen_notifier.freezed.dart';
 part 'mint_screen_notifier.g.dart';
 
@@ -8,49 +12,72 @@ part 'mint_screen_notifier.g.dart';
 @riverpod
 class MintScreenNotifier extends _$MintScreenNotifier {
   @override
-  MintScreenState build() {
-    return MintScreenState.initial();
+  FutureOr<MintScreenState> build() async {
+    return MintScreenState.editing(
+      amount: '0',
+      showErrorMessages: false,
+    );
   }
 
   void amountChanged(String amountStr) {
-    state = state.copyWith(
-      amount: int.tryParse(amountStr.trim()) ?? 0,
-    );
+    update((state) =>
+        (state as MintScreenEditingState).copyWith(amount: amountStr));
   }
 
   /// Generates a Lightning invoice for the specified amount
   Future<void> generateInvoice() async {
-    // Validate the amount
-    final error = validate();
-    if (error != null) {
-      state = state.copyWith(showErrorMessages: true, error: error);
+    final currentState = state.unwrapPrevious().valueOrNull;
+
+    if (currentState == null) {
+      throw Exception('Current state is null');
+    }
+
+    if (currentState is! MintScreenEditingState) {
+      throw Exception('Current state is not an MintScreenEditingState');
+    }
+
+    final validationResult = currentState.validate();
+
+    if (validationResult.isError) {
+      state = AsyncError(validationResult.error!, StackTrace.current);
       return;
     }
 
-    state = state.copyWith(isSubmitted: true);
-    return;
-  }
+    final amount = BigInt.tryParse(currentState.amount.trim());
 
-  MintScreenError? validate() {
-    // Check if the value is empty
-    if (state.amount == 0) {
-      return MintScreenError.emptyAmount();
+    if (amount == null) {
+      state =
+          AsyncError(MintScreenError.invalidAmountFormat(), StackTrace.current);
+      return;
     }
 
-    // Check if the value is a valid number
-    if (state.amount <= 0) {
-      return MintScreenError.invalidAmount();
+    // Create the mint amount
+    final mintAmountResult = MintAmount.create(amount);
+
+    switch (mintAmountResult) {
+      case Ok(value: final mintAmount):
+        update((state) => MintScreenState.invoice(
+              mintAmount: mintAmount,
+            ));
+        return;
+      case Error(:final error):
+        state = AsyncError(error, StackTrace.current);
+        return;
     }
-    return null;
   }
 
-  void clearError() {
-    state = state.copyWith(error: null);
+  void clearErrors() {
+    update((state) => (state as MintScreenEditingState).copyWith(
+          showErrorMessages: false,
+        ));
   }
 
   /// Resets the state to the initial state
   void reset() {
-    state = MintScreenState.initial();
+    update((state) => MintScreenState.editing(
+          amount: '0',
+          showErrorMessages: false,
+        ));
   }
 }
 
@@ -59,26 +86,47 @@ class MintScreenNotifier extends _$MintScreenNotifier {
 class MintScreenState with _$MintScreenState {
   const MintScreenState._();
 
-  factory MintScreenState({
-    required int amount,
-    required bool isSubmitted,
+  factory MintScreenState.editing({
+    required String amount,
     required bool showErrorMessages,
-    required MintScreenError? error,
-  }) = _MintScreenState;
+  }) = MintScreenEditingState;
 
-  factory MintScreenState.initial() => MintScreenState(
-        amount: 0,
-        isSubmitted: false,
-        showErrorMessages: false,
-        error: null,
-      );
+  factory MintScreenState.invoice({
+    required MintAmount mintAmount,
+  }) = MintScreenInvoiceState;
+
+  Result<Unit, MintScreenError> validate() {
+    if (this is MintScreenInvoiceState) {
+      return Result.ok(unit);
+    }
+
+    final currentState = this as MintScreenEditingState;
+    final amount = BigInt.tryParse(currentState.amount.trim());
+
+    if (amount == null) {
+      return Result.error(MintScreenError.invalidAmountFormat());
+    }
+
+    final mintAmountValidationResult = MintAmount.validate(amount);
+
+    return switch (mintAmountValidationResult) {
+      Ok() => Result.ok(unit),
+      Error(:final error) => switch (error) {
+          MintAmountNegativeOrZero() =>
+            Result.error(MintScreenError.mintAmountNegativeOrZero()),
+          MintAmountTooLarge(:final maxAmount) =>
+            Result.error(MintScreenError.mintAmountTooLarge(maxAmount)),
+          _ => throw Exception('Unexpected error: $error'),
+        },
+    };
+  }
 }
 
 @freezed
 sealed class MintScreenError with _$MintScreenError {
   const MintScreenError._();
-
-  factory MintScreenError.emptyAmount() = EmptyAmountError;
-  factory MintScreenError.invalidAmount() = InvalidAmountError;
+  factory MintScreenError.mintAmountTooLarge(BigInt maxAmount) = AmountTooLarge;
+  factory MintScreenError.mintAmountNegativeOrZero() = AmountNegativeOrZero;
+  factory MintScreenError.invalidAmountFormat() = AmountInvalidFormat;
   factory MintScreenError.unknown() = UnknownError;
 }

@@ -27,15 +27,15 @@ class UrlUtils {
   /// Extracts the host from a URL string
   ///
   /// Returns the host or an empty string if the URL is invalid
-  static String extractHost(String url) {
+  static String extractAuthority(String url) {
     try {
       final uri = Uri.parse(url);
 
-      if (uri.host.isEmpty) {
+      if (uri.authority.isEmpty) {
         return '';
       }
 
-      return uri.host;
+      return uri.authority;
     } catch (e) {
       return '';
     }

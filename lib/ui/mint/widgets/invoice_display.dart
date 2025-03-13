@@ -1,16 +1,16 @@
-import 'package:cashu_app/ui/core/themes/colors.dart';
-import 'package:cashu_app/ui/core/widgets/app_buttons.dart';
-import 'package:cashu_app/ui/core/widgets/cards/qr_code_card.dart';
-import 'package:cashu_app/ui/mint/notifiers/invoice_display_notifier.dart';
 import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../core/widgets/app_snackbar.dart';
+import '../../../domain/models/mint_quote.dart';
+import '../../../domain/value_objects/value_objects.dart';
+import '../../core/themes/colors.dart';
+import '../../core/widgets/widgets.dart';
+import '../notifiers/invoice_display_notifier.dart';
 
 class InvoiceDisplay extends ConsumerWidget {
-  final BigInt amount;
+  final MintAmount amount;
   final VoidCallback onClose;
 
   const InvoiceDisplay({
@@ -21,16 +21,30 @@ class InvoiceDisplay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(invoiceDisplayNotifierProvider(amount));
+    final mintQuoteAsync = ref.watch(invoiceDisplayNotifierProvider(amount));
 
-    ref.listen(invoiceDisplayNotifierProvider(amount), (previous, next) {
-      if (next.isIssued) {
+    ref.listen(
+        invoiceDisplayNotifierProvider(amount)
+            .selectAsync((value) => value.isIssued), (_, isIssued) async {
+      if (await isIssued) {
         Future.delayed(const Duration(seconds: 1), () {
           onClose();
         });
       }
     });
 
+    return switch (mintQuoteAsync) {
+      AsyncData(:final value) => _buildWidget(context, mintQuote: value),
+      AsyncError(:final error) => ErrorWidget(error),
+      AsyncLoading() => const Center(child: LoadingIndicator()),
+      _ => const SizedBox(),
+    };
+  }
+
+  Widget _buildWidget(
+    BuildContext context, {
+    required MintQuote mintQuote,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -59,20 +73,14 @@ class InvoiceDisplay extends ConsumerWidget {
         // QR Code card
         Column(
           children: [
-            if (state.isLoading)
-              const Center(child: CircularProgressIndicator())
-            else if (state.error != null)
-              Center(child: Text(state.error.toString()))
-            else
-              // QR Code
-              QrCodeCard(
-                data: state.invoice!,
-                size: MediaQuery.of(context).size.width - 82,
-                backgroundColor: Colors.white,
-                padding: const EdgeInsets.all(16),
-                borderRadius: BorderRadius.circular(24),
-                boxShadow: null,
-              ),
+            QrCodeCard(
+              data: mintQuote.request,
+              size: MediaQuery.of(context).size.width - 82,
+              backgroundColor: Colors.white,
+              padding: const EdgeInsets.all(16),
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: null,
+            ),
 
             const SizedBox(height: 24),
 
@@ -85,7 +93,7 @@ class InvoiceDisplay extends ConsumerWidget {
                     child: PrimaryActionButton(
                       onPressed: () => _copyInvoiceToClipboard(
                         context,
-                        state.invoice!,
+                        mintQuote.request,
                       ),
                       text: context.l10n.mintScreenCopyInvoice,
                       icon: Icon(

@@ -1,13 +1,11 @@
 import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
 import 'package:flutter/material.dart';
 
-import '../../../domain/models/mint_wrapper.dart';
-import '../../../utils/url_utils.dart';
-import '../../core/themes/colors.dart';
+import '../../../domain/models/mint.dart';
 
 /// Bottom sheet for mint options
 class MintOptionsBottomSheet extends StatelessWidget {
-  final MintWrapper mint;
+  final Mint mint;
   final bool isCurrentMint;
   final VoidCallback? onSetAsCurrent;
   final VoidCallback onEdit;
@@ -24,100 +22,104 @@ class MintOptionsBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mintName = mint.nickName ?? UrlUtils.extractHost(mint.mint.url);
+    final mintName = mint.nickName?.value ?? mint.url.extractAuthority();
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 24),
+      padding: const EdgeInsets.only(top: 16, bottom: 8),
       decoration: BoxDecoration(
-        color: context.colorScheme.surfaceContainerHighest,
+        color: context.colorScheme.surface,
         borderRadius: const BorderRadius.vertical(
           top: Radius.circular(16),
         ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Compact header
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: [
-                Container(
-                  width: 44,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    color: isCurrentMint
-                        ? AppColors.actionColors['mint']!.withAlpha(30)
-                        : context.colorScheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Icon(
-                    Icons.account_balance_rounded,
-                    color: isCurrentMint
-                        ? AppColors.actionColors['mint']
-                        : context.colorScheme.onSurfaceVariant,
-                    size: 22,
-                  ),
-                ),
-                const SizedBox(width: 16),
                 Expanded(
                   child: Text(
                     mintName,
-                    style: context.textTheme.titleMedium?.copyWith(
+                    style: context.textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: isCurrentMint
-                          ? AppColors.actionColors['mint']
-                          : context.colorScheme.onSurface,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 16),
+
+          const SizedBox(height: 12),
           const Divider(height: 1),
-          if (!isCurrentMint) ...[
-            ListTile(
+
+          // Options as compact list items
+          if (!isCurrentMint)
+            _buildOptionItem(
+              context,
+              icon: Icons.check_circle_outline,
+              label: 'Set as Current',
               onTap: onSetAsCurrent,
-              leading: Icon(
-                Icons.check_circle_outline,
-                color: AppColors.actionColors['mint'],
-              ),
-              title: Text(
-                'Set as Current',
-                style: context.textTheme.bodyMedium?.copyWith(
-                  color: AppColors.actionColors['mint'],
-                ),
-              ),
             ),
-          ],
-          ListTile(
+
+          _buildOptionItem(
+            context,
+            icon: Icons.drive_file_rename_outline,
+            label: 'Edit',
             onTap: onEdit,
-            leading: Icon(
-              Icons.edit_outlined,
-              color: context.colorScheme.onSurface,
-            ),
-            title: Text(
-              'Edit',
-              style: context.textTheme.bodyMedium,
-            ),
           ),
-          if (!isCurrentMint) ...[
-            ListTile(
+
+          if (!isCurrentMint)
+            _buildOptionItem(
+              context,
+              icon: Icons.delete_outline,
+              label: 'Delete',
               onTap: onDelete,
-              leading: Icon(
-                Icons.delete_outline,
-                color: context.colorScheme.error,
-              ),
-              title: Text(
-                'Delete',
-                style: context.textTheme.bodyMedium?.copyWith(
-                  color: context.colorScheme.error,
-                ),
+              isDestructive: true,
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOptionItem(
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    VoidCallback? onTap,
+    bool isDestructive = false,
+  }) {
+    final color = isDestructive
+        ? context.colorScheme.error
+        : context.colorScheme.onSurface;
+
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 12,
+        ),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              size: 20,
+              color: color,
+            ),
+            const SizedBox(width: 16),
+            Text(
+              label,
+              style: context.textTheme.bodyMedium?.copyWith(
+                color: color,
               ),
             ),
           ],
-        ],
+        ),
       ),
     );
   }

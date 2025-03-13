@@ -3,8 +3,11 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/types/result.dart';
-import '../../../utils/url_utils.dart';
+import '../../../core/types/unit.dart';
+import '../../../domain/value_objects/mint_nick_name.dart';
+import '../../../domain/value_objects/mint_url.dart';
 import '../../core/notifiers/current_mint_notifier.dart';
+import '../../providers/mint_providers.dart';
 
 part 'add_mint_notifier.freezed.dart';
 part 'add_mint_notifier.g.dart';
@@ -13,96 +16,98 @@ part 'add_mint_notifier.g.dart';
 @riverpod
 class AddMintNotifier extends _$AddMintNotifier {
   @override
-  AddMintState build() {
+  FutureOr<AddMintState> build() async {
     return AddMintState.initial();
   }
 
   void urlChanged(String url) {
-    state = state.copyWith(
-      url: url.trim(),
-    );
+    update((state) => state.copyWith(
+          url: url.trim(),
+        ));
   }
 
   void nicknameChanged(String nickname) {
-    state = state.copyWith(
-      nickname: nickname.trim(),
-    );
-  }
-
-  /// Validates the form inputs
-  AddMintError? validate() {
-    // Check if the URL is empty
-    if (state.url.isEmpty) {
-      return AddMintError.emptyUrl();
-    }
-
-    // Check if the URL is valid
-    if (!UrlUtils.validateUrl(state.url)) {
-      return AddMintError.invalidUrl();
-    }
-
-    return null;
+    update((state) => state.copyWith(
+          nickname: nickname.trim(),
+        ));
   }
 
   /// Adds a new mint to the wallet
   Future<void> addMint() async {
-    // Validate the form
-    final error = validate();
-    if (error != null) {
-      state = state.copyWith(
-        isSubmitting: false,
-      );
+    // Check if we have a valid state value before proceeding
+    if (state.hasValue) return;
+
+    // Get the current state value, which we know exists at this point
+    final currentState = state.value!;
+
+    // Validate the current nickname value
+    final validationResult = currentState.validate();
+
+    // If validation failed, update state with the error
+    if (validationResult.isError) {
+      state = AsyncError(validationResult.error!, StackTrace.current);
       return;
     }
 
-    // Set submitting state
-    state = state.copyWith(
-      isSubmitting: true,
-      error: null,
-    );
+    // Create a MintUrl value object from the current url
+    final mintUrlResult = MintUrl.create(currentState.url);
 
-    // Add the mint
-    final mintRepo = await ref.watch(mintRepositoryProvider.future);
-    final result = await mintRepo.addMint(
-      state.url,
-      nickName: state.nickname.isNotEmpty ? state.nickname : null,
-    );
-
-    // Handle the result
-    switch (result) {
-      case Ok():
-
-        // Set as current mint if it's the first one
-        final allMints = await ref.read(listMintsProvider.future);
-        if (allMints.length == 1) {
-          ref
-              .read(currentMintNotifierProvider.notifier)
-              .setCurrentMint(state.url);
+    // Handle result with pattern matching
+    switch (mintUrlResult) {
+      case Ok(value: final mintUrl):
+        // Create MintNickName if provided
+        MintNickName? mintNickName;
+        if (currentState.nickname != null) {
+          final nickNameResult = MintNickName.create(currentState.nickname!);
+          if (nickNameResult.isError) {
+            state = AsyncError(
+              AddMintScreenError.unknown(nickNameResult.error.toString()),
+              StackTrace.current,
+            );
+            return;
+          }
+          mintNickName = nickNameResult.value;
         }
 
-        // Reset the form
-        state = state.copyWith(
-          isSuccess: true,
+        // Set submitting state
+        state = AsyncValue.loading();
+
+        // Add the mint
+        final mintRepo = await ref.read(mintRepositoryProvider.future);
+        final result = await mintRepo.addMint(
+          mintUrl,
+          nickName: mintNickName,
         );
 
-        return;
-      case Error():
-        state = state.copyWith(
-          isSubmitting: false,
-          error: AddMintError.unknown(result.error.toString()),
+        // Handle the result
+        switch (result) {
+          case Ok():
+            // Set as current mint if it's the first one
+            final allMints = await ref.read(listMintsProvider.future);
+            if (allMints.isNotEmpty && allMints.length == 1) {
+              // The setCurrentMint method expects a String, not a MintUrl
+              ref
+                  .read(currentMintNotifierProvider.notifier)
+                  .setCurrentMint(mintUrl.value);
+            }
+
+            // Set state to success
+            state = AsyncData(currentState.copyWith(isSuccess: true));
+            break;
+          case Error():
+            state = AsyncError(
+              AddMintScreenError.unknown(result.error.toString()),
+              StackTrace.current,
+            );
+            break;
+        }
+
+      case Error(:final error):
+        state = AsyncError(
+          AddMintScreenError.unknown(error.toString()),
+          StackTrace.current,
         );
-        return;
     }
-  }
-
-  void clearErrors() {
-    state = state.copyWith(
-      error: null,
-    );
-  }
-
-  void reset() {
-    state = AddMintState.initial();
   }
 }
 
@@ -113,26 +118,40 @@ class AddMintState with _$AddMintState {
 
   factory AddMintState({
     required String url,
-    required String nickname,
-    required bool isSubmitting,
+    String? nickname,
+    required bool showErrorMessages,
     required bool isSuccess,
-    required AddMintError? error,
   }) = _AddMintState;
 
   factory AddMintState.initial() => AddMintState(
         url: '',
-        nickname: '',
-        isSubmitting: false,
+        nickname: null,
+        showErrorMessages: false,
         isSuccess: false,
-        error: null,
       );
+
+  Result<Unit, AddMintScreenError> validate() {
+    // URL validation
+    final urlValidationResult = MintUrl.validate(url);
+
+    if (urlValidationResult.isError) {
+      return switch (urlValidationResult.error) {
+        MintUrlEmpty() => Result.error(AddMintScreenError.emptyUrl()),
+        MintUrlInvalid() => Result.error(AddMintScreenError.invalidUrl()),
+        _ => Result.error(
+            AddMintScreenError.unknown(urlValidationResult.error.toString())),
+      };
+    }
+
+    return Result.ok(unit);
+  }
 }
 
 @freezed
-sealed class AddMintError with _$AddMintError {
-  const AddMintError._();
+sealed class AddMintScreenError with _$AddMintScreenError {
+  const AddMintScreenError._();
 
-  factory AddMintError.emptyUrl() = EmptyUrlError;
-  factory AddMintError.invalidUrl() = InvalidUrlError;
-  factory AddMintError.unknown(String message) = UnknownError;
+  factory AddMintScreenError.emptyUrl() = EmptyUrlError;
+  factory AddMintScreenError.invalidUrl() = InvalidUrlError;
+  factory AddMintScreenError.unknown(String message) = UnknownError;
 }

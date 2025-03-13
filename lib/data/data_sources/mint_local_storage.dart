@@ -14,8 +14,16 @@ class MintLocalStorage {
     return localPropertiesService.getProperty<String>('mint_nickname_$mintUrl');
   }
 
+  Future<void> deleteMintNickname(String mintUrl) async {
+    await localPropertiesService.removeProperty('mint_nickname_$mintUrl');
+  }
+
   Future<void> saveCurrentMintUrl(String mintUrl) async {
     await localPropertiesService.saveProperty('current_mint_url', mintUrl);
+  }
+
+  Future<void> removeCurrentMintUrl() async {
+    await localPropertiesService.removeProperty('current_mint_url');
   }
 
   String? getCurrentMintUrl() {

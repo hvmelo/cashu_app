@@ -287,17 +287,23 @@ abstract class AppLocalizations {
   /// **'Creating invoice...'**
   String get mintScreenLoading;
 
-  /// No description provided for @mintScreenAmountError.
+  /// No description provided for @mintScreenAmountTooLarge.
   ///
   /// In en, this message translates to:
-  /// **'Please enter a valid amount'**
-  String get mintScreenAmountError;
+  /// **'The amount is too large. The maximum amount is {maxAmount} sats.'**
+  String mintScreenAmountTooLarge(Object maxAmount);
 
-  /// No description provided for @mintScreenAmountEmpty.
+  /// No description provided for @mintScreenAmountNegativeOrZero.
   ///
   /// In en, this message translates to:
-  /// **'Please enter an amount'**
-  String get mintScreenAmountEmpty;
+  /// **'The amount cannot be negative or zero.'**
+  String get mintScreenAmountNegativeOrZero;
+
+  /// No description provided for @mintScreenAmountInvalidFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'The amount is not a valid number.'**
+  String get mintScreenAmountInvalidFormat;
 
   /// No description provided for @addMintScreenTitle.
   ///
@@ -473,6 +479,12 @@ abstract class AppLocalizations {
   /// **'Close'**
   String get mintManagerScreenCloseButton;
 
+  /// No description provided for @mintManagerScreenMintMintCardCurrentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Current'**
+  String get mintManagerScreenMintMintCardCurrentLabel;
+
   /// No description provided for @mintManagerScreenCopyToClipboard.
   ///
   /// In en, this message translates to:
@@ -604,6 +616,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An unknown error occurred'**
   String get generalUnknownError;
+
+  /// No description provided for @generalNicknameEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nickname cannot be empty'**
+  String get generalNicknameEmpty;
+
+  /// No description provided for @generalNicknameTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Nickname cannot be longer than {maxLength} characters'**
+  String generalNicknameTooLong(Object maxLength);
+
+  /// No description provided for @generalNicknameInvalidCharacters.
+  ///
+  /// In en, this message translates to:
+  /// **'Nickname contains invalid characters. Valid: {validCharacters}.'**
+  String generalNicknameInvalidCharacters(Object validCharacters);
 
   /// No description provided for @errorCardTitle.
   ///
