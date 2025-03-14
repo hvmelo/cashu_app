@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -6,35 +7,37 @@ import '../../../core/types/types.dart';
 import '../../../domain/models/mint.dart';
 import '../../../domain/value_objects/value_objects.dart';
 import '../../core/themes/colors.dart';
+import '../../core/widgets/buttons/buttons.dart';
 import '../../core/widgets/widgets.dart';
 import '../../utils/extensions/build_context_x.dart';
 import '../notifiers/edit_mint_notifier.dart';
 
 /// A dialog for editing a mint's details
-class EditMintDialog extends ConsumerWidget {
+class EditMintDialog extends HookConsumerWidget {
   /// Creates an [EditMintDialog].
   ///
   /// The [mint] parameter is required and specifies the mint to edit.
   const EditMintDialog({
     super.key,
     required this.mint,
-    required this.isCurrentMint,
-    this.onSaved,
   });
 
   /// The mint to edit
   final Mint mint;
 
-  /// Whether this mint is the current mint
-  final bool isCurrentMint;
-
-  /// Callback called when the mint is saved
-  final VoidCallback? onSaved;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final editMintState = ref.watch(editMintNotifierProvider(mint));
-    final notifier = ref.watch(editMintNotifierProvider(mint).notifier);
+    final notifier = ref.read(editMintNotifierProvider(mint).notifier);
+
+    final focusNode = useFocusNode();
+
+    useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        focusNode.requestFocus();
+      });
+      return null;
+    }, []);
 
     // Handle success state
     ref.listen(
@@ -51,66 +54,25 @@ class EditMintDialog extends ConsumerWidget {
               context,
               message: context.l10n.editMintDialogMintUpdated,
             );
-
-            // Call the appropriate callback
-            // if (onSaved != null) {
-            //   onSaved!();
-            // }
           }
         }
       },
     );
 
-    return Dialog(
-      backgroundColor: context.colorScheme.surface,
-      surfaceTintColor: Colors.transparent,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+    return DefaultDialog(
+      title: context.l10n.editMintDialogTitle,
+      icon: Icons.edit_outlined,
+      actions: _buildButtons(
+        context,
+        notifier: notifier,
+        editMintState: editMintState,
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header with title
-            _buildHeader(context),
-            const SizedBox(height: 24),
-            // URL section (read-only)
-            _buildMintUrl(context, mintUrl: mint.url),
-            const SizedBox(height: 30),
-            // Nickname section (editable)
-            _buildNicknameEdit(
-              context,
-              ref,
-            ),
-            const SizedBox(height: 24),
-            // Bottom buttons
-            _buildButtons(
-              context,
-              notifier: notifier,
-              editMintState: editMintState,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHeader(BuildContext context) {
-    return Row(
       children: [
-        Icon(
-          Icons.edit_outlined,
-          color: context.colorScheme.onSurfaceVariant,
-        ),
-        const SizedBox(width: 8),
-        Text(
-          context.l10n.editMintDialogTitle,
-          style: context.textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        // URL section (read-only)
+        _buildMintUrl(context, mintUrl: mint.url),
+        const SizedBox(height: 30),
+        // Nickname section (editable)
+        _buildNicknameEdit(context, ref, focusNode),
       ],
     );
   }
@@ -144,6 +106,7 @@ class EditMintDialog extends ConsumerWidget {
   Widget _buildNicknameEdit(
     BuildContext context,
     WidgetRef ref,
+    FocusNode focusNode,
   ) {
     final stateAsync = ref.watch(editMintNotifierProvider(mint));
     return Padding(
@@ -160,46 +123,33 @@ class EditMintDialog extends ConsumerWidget {
           ),
           const SizedBox(height: 8),
           Form(
-            autovalidateMode: stateAsync.value?.showErrorMessages ?? false
+            autovalidateMode: stateAsync.value?.showErrorMessages == true
                 ? AutovalidateMode.always
                 : AutovalidateMode.disabled,
-            child: TextFormField(
-              decoration: InputDecoration(
-                hintText: context.l10n.editMintDialogNicknameHint,
-                hintStyle: context.textTheme.bodySmall?.copyWith(),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide.none,
-                ),
-                errorMaxLines: 2,
-                filled: true,
-                fillColor: context.colorScheme.surfaceContainerHighest,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 12,
-                ),
-                isDense: true,
-              ),
+            child: DefaultTextFormField(
+              hintText: context.l10n.editMintDialogNicknameHint,
               initialValue: stateAsync.value?.nickname ?? '',
+              showErrorMessages: stateAsync.value?.showErrorMessages ?? false,
+              focusNode: focusNode,
               onChanged: ref
                   .read(editMintNotifierProvider(mint).notifier)
                   .nicknameChanged,
               validator: (_) {
-                // Here we should get the most updated state
-                final currentStateAsync =
-                    ref.read(editMintNotifierProvider(mint));
-                final state = currentStateAsync.unwrapPrevious().valueOrNull;
-                if (state == null) {
-                  return null;
-                }
-                final validationResult = state.validate();
+                final notifier =
+                    ref.read(editMintNotifierProvider(mint).notifier);
 
+                final validationResult = notifier.validateNickname();
                 return switch (validationResult) {
                   Ok() => null,
-                  Error(:final error) => _getL10nErrorMessage(context, error),
+                  Error(:final error) => switch (error) {
+                      MintNicknameEmpty() => context.l10n.generalNicknameEmpty,
+                      MintNicknameTooLong(:final maxLength) =>
+                        context.l10n.generalNicknameTooLong(maxLength),
+                      MintNicknameInvalidCharacters() =>
+                        context.l10n.generalNicknameInvalidCharacters,
+                    },
                 };
               },
-              style: context.textTheme.bodyMedium,
             ),
           ),
         ],
@@ -232,15 +182,5 @@ class EditMintDialog extends ConsumerWidget {
         ),
       ],
     );
-  }
-
-  String _getL10nErrorMessage(BuildContext context, EditMintError error) {
-    return switch (error) {
-      EditMintNicknameEmptyError() => context.l10n.generalNicknameEmpty,
-      EditMintNicknameTooLongError() => context.l10n.generalNicknameTooLong(20),
-      EditMintNicknameInvalidError() =>
-        context.l10n.generalNicknameInvalidCharacters,
-      EditMintUnknownError() => context.l10n.generalUnknownError,
-    };
   }
 }

@@ -3,9 +3,9 @@ import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../domain/value_objects/value_objects.dart';
-import '../../providers/mint_providers.dart';
-import '../themes/colors.dart';
+import '../../../../domain/value_objects/value_objects.dart';
+import '../../../providers/mint_providers.dart';
+import '../../themes/colors.dart';
 
 class BalanceChip extends ConsumerWidget {
   const BalanceChip({

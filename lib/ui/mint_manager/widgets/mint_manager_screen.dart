@@ -1,4 +1,3 @@
-import 'package:cashu_app/ui/mint_manager/widgets/mint_card.dart';
 import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -11,6 +10,7 @@ import '../../core/widgets/cards/error_card.dart';
 import '../../core/widgets/page_app_bar.dart';
 import '../../core/widgets/shimmer/loading_indicator.dart';
 import '../notifiers/mint_manager_notifier.dart';
+import 'mint_card.dart';
 import 'widgets.dart';
 
 class MintManagerScreen extends ConsumerWidget {
@@ -253,10 +253,7 @@ class MintManagerScreen extends ConsumerWidget {
   }) {
     showDialog(
       context: context,
-      builder: (context) => EditMintDialog(
-        mint: mint,
-        isCurrentMint: mint.url.value == state.currentMint?.url.value,
-      ),
+      builder: (context) => EditMintDialog(mint: mint),
     ).then((_) {
       // Refresh the list after editing a mint
       notifier.refreshMints();

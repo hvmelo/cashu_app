@@ -3,6 +3,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../core/types/types.dart';
 import '../../data/data_providers.dart';
+import '../../domain/failures/mint_failures.dart';
+import '../../domain/failures/mint_transactions_failures.dart';
 import '../../domain/models/models.dart';
 import '../../domain/value_objects/value_objects.dart';
 
@@ -22,14 +24,14 @@ Future<List<Mint>> listMints(Ref ref) async {
 }
 
 @riverpod
-Stream<Result<BigInt, Failure>> mintBalanceStream(
+Stream<Result<BigInt, MintBalanceStreamFailure>> mintBalanceStream(
     Ref ref, MintUrl mintUrl) async* {
   final mintRepo = await ref.watch(mintRepositoryProvider.future);
   yield* mintRepo.mintBalanceStream(mintUrl);
 }
 
 @riverpod
-Stream<Result<MintQuote, Failure>> mintQuoteStream(
+Stream<Result<MintQuote, MintQuoteStreamFailure>> mintQuoteStream(
   Ref ref,
   MintUrl mintUrl,
   MintAmount mintAmount,

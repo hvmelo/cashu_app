@@ -1,4 +1,5 @@
 import '../../core/types/types.dart';
+import '../../domain/failures/mint_failures.dart';
 import '../../domain/models/mint.dart';
 import '../../domain/repositories/repositories.dart';
 
@@ -25,7 +26,7 @@ class MintRepositoryImpl extends MintRepository {
   }
 
   @override
-  Future<Result<Unit, Failure>> addMint(
+  Future<Result<Unit, AddMintFailure>> addMint(
     MintUrl mintUrl, {
     MintNickname? nickname,
   }) async {
@@ -36,7 +37,7 @@ class MintRepositoryImpl extends MintRepository {
       }
       return Result.ok(unit);
     } catch (e) {
-      return Result.error(Failure(e));
+      return Result.error(AddMintFailure.unknown(e));
     }
   }
 
@@ -51,48 +52,51 @@ class MintRepositoryImpl extends MintRepository {
   }
 
   @override
-  Future<Result<Unit, Failure>> removeMint(MintUrl mintUrl) async {
+  Future<Result<Unit, RemoveMintFailure>> removeMint(MintUrl mintUrl) async {
     try {
       await multiMintWalletDataSource.removeMint(mintUrl.value);
       await mintLocalStorage.deleteMintNickname(mintUrl.value);
       return Result.ok(unit);
     } catch (e) {
-      return Result.error(Failure(e));
+      return Result.error(RemoveMintFailure.unknown(e));
     }
   }
 
   @override
-  Future<Result<Unit, Failure>> saveCurrentMint(MintUrl mintUrl) async {
+  Future<Result<Unit, SaveCurrentMintFailure>> saveCurrentMint(
+      MintUrl mintUrl) async {
     try {
       final mint = await getMint(mintUrl);
       if (mint == null) {
-        return Result.error(Failure('Mint not found'));
+        return Result.error(
+            SaveCurrentMintFailure.unknown(Exception('Mint not found')));
       }
       await mintLocalStorage.saveCurrentMintUrl(mintUrl.value);
       return Result.ok(unit);
     } catch (e) {
-      return Result.error(Failure(e));
+      return Result.error(SaveCurrentMintFailure.unknown(e));
     }
   }
 
   @override
-  Future<Result<Unit, Failure>> removeCurrentMint() async {
+  Future<Result<Unit, RemoveCurrentMintFailure>> removeCurrentMint() async {
     try {
       await mintLocalStorage.removeCurrentMintUrl();
       return Result.ok(unit);
     } catch (e) {
-      return Result.error(Failure(e));
+      return Result.error(RemoveCurrentMintFailure.unknown(e));
     }
   }
 
   @override
-  Future<Result<Unit, Failure>> updateMint(
+  Future<Result<Unit, UpdateMintFailure>> updateMint(
     MintUrl mintUrl, {
     MintNickname? nickname,
   }) async {
     final mint = await getMint(mintUrl);
     if (mint == null) {
-      return Result.error(Failure('Mint not found'));
+      return Result.error(
+          UpdateMintFailure.unknown(Exception('Mint not found')));
     }
 
     try {
@@ -103,7 +107,7 @@ class MintRepositoryImpl extends MintRepository {
       }
       return Result.ok(unit);
     } catch (e) {
-      return Result.error(Failure(e));
+      return Result.error(UpdateMintFailure.unknown(e));
     }
   }
 
@@ -117,17 +121,19 @@ class MintRepositoryImpl extends MintRepository {
   }
 
   @override
-  Stream<Result<BigInt, Failure>> mintBalanceStream(MintUrl mintUrl) async* {
+  Stream<Result<BigInt, MintBalanceStreamFailure>> mintBalanceStream(
+      MintUrl mintUrl) async* {
     try {
       final mintWallet =
           await multiMintWalletDataSource.getMintWallet(mintUrl.value);
       if (mintWallet == null) {
-        yield Result.error(Failure(Exception('Wallet not found')));
+        yield Result.error(
+            MintBalanceStreamFailure.unknown(Exception('Wallet not found')));
       } else {
         yield* mintWallet.streamBalance().map((balance) => Result.ok(balance));
       }
     } catch (e) {
-      yield Result.error(Failure(e));
+      yield Result.error(MintBalanceStreamFailure.unknown(e));
     }
   }
 }

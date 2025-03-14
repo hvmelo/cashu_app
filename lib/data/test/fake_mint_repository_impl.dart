@@ -1,4 +1,5 @@
 import '../../core/types/types.dart';
+import '../../domain/failures/mint_failures.dart';
 import '../../domain/models/models.dart';
 import '../../domain/repositories/repositories.dart';
 import '../../domain/value_objects/value_objects.dart';
@@ -19,7 +20,7 @@ class FakeMintRepositoryImpl implements MintRepository {
   String? _currentMintUrl = 'https://testmint1.cashu.space';
 
   @override
-  Future<Result<Unit, Failure>> addMint(
+  Future<Result<Unit, AddMintFailure>> addMint(
     MintUrl mintUrl, {
     MintNickname? nickname,
   }) async {
@@ -41,7 +42,7 @@ class FakeMintRepositoryImpl implements MintRepository {
   }
 
   @override
-  Future<Result<Unit, Failure>> updateMint(
+  Future<Result<Unit, UpdateMintFailure>> updateMint(
     MintUrl mintUrl, {
     MintNickname? nickname,
   }) async {
@@ -56,7 +57,7 @@ class FakeMintRepositoryImpl implements MintRepository {
   }
 
   @override
-  Future<Result<Unit, Failure>> removeMint(MintUrl mintUrl) async {
+  Future<Result<Unit, RemoveMintFailure>> removeMint(MintUrl mintUrl) async {
     _mints.removeWhere((mint) => mint.url == mintUrl);
 
     // If the current mint is the one being removed, clear it
@@ -68,13 +69,14 @@ class FakeMintRepositoryImpl implements MintRepository {
   }
 
   @override
-  Future<Result<Unit, Failure>> saveCurrentMint(MintUrl mintUrl) async {
+  Future<Result<Unit, SaveCurrentMintFailure>> saveCurrentMint(
+      MintUrl mintUrl) async {
     _currentMintUrl = mintUrl.value;
     return Result.ok(unit);
   }
 
   @override
-  Future<Result<Unit, Failure>> removeCurrentMint() async {
+  Future<Result<Unit, RemoveCurrentMintFailure>> removeCurrentMint() async {
     _currentMintUrl = null;
     return Result.ok(unit);
   }
@@ -88,10 +90,12 @@ class FakeMintRepositoryImpl implements MintRepository {
   }
 
   @override
-  Stream<Result<BigInt, Failure>> mintBalanceStream(MintUrl mintUrl) async* {
+  Stream<Result<BigInt, MintBalanceStreamFailure>> mintBalanceStream(
+      MintUrl mintUrl) async* {
     final mint = await getMint(mintUrl);
     if (mint == null) {
-      yield Result.error(Failure(Exception('Mint not found')));
+      yield Result.error(
+          MintBalanceStreamFailure.unknown(Exception('Mint not found')));
     } else {
       // In a real implementation, this would be a stream of balance updates
       // For the fake implementation, we'll just yield a single value

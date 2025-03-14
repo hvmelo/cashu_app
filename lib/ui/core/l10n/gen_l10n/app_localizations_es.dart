@@ -125,12 +125,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get addMintScreenUrlLabel => 'Mint URL';
 
   @override
-  String get addMintScreenUrlRequired => 'Mint URL is required';
-
-  @override
-  String get addMintScreenUrlInvalid => 'Please enter a valid URL';
-
-  @override
   String get addMintScreenNicknameLabel => 'Nickname (Optional)';
 
   @override
@@ -143,22 +137,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get addMintScreenSuccess => 'Mint added successfully';
 
   @override
-  String get addMintScreenErrorEmptyUrl => 'Mint URL is required';
-
-  @override
-  String get addMintScreenErrorInvalidUrl => 'Please enter a valid URL';
-
-  @override
-  String get addMintScreenErrorUnknown => 'An unknown error occurred';
-
-  @override
   String get addMintScreenPasteFromClipboard => 'Paste from clipboard';
 
   @override
   String get mintManagerScreenTitle => 'Manage Mints';
-
-  @override
-  String get mintManagerScreenRefresh => 'Refresh mints';
 
   @override
   String get mintManagerScreenNoMints => 'No mints added yet';
@@ -274,6 +256,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get generalUnknownError => 'Ha ocurrido un error desconocido';
+
+  @override
+  String get generalMintUrlEmpty => 'Mint URL cannot be empty';
+
+  @override
+  String get generalMintUrlInvalid => 'Please enter a valid URL';
 
   @override
   String get generalNicknameEmpty => 'Nickname cannot be empty';

@@ -1,6 +1,7 @@
 import 'package:cdk_flutter/cdk_flutter.dart' as cdk;
 
 import '../../core/types/types.dart';
+import '../../domain/failures/mint_transactions_failures.dart';
 import '../../domain/models/models.dart';
 import '../../domain/repositories/repositories.dart';
 import '../../domain/value_objects/value_objects.dart';
@@ -14,7 +15,7 @@ class MintTransactionsRepositoryImpl extends MintTransactionsRepository {
   });
 
   @override
-  Stream<Result<MintQuote, Failure>> mintQuoteStream(
+  Stream<Result<MintQuote, MintQuoteStreamFailure>> mintQuoteStream(
       String mintUrl, MintAmount amount) async* {
     try {
       final mintWallet =
@@ -28,12 +29,12 @@ class MintTransactionsRepositoryImpl extends MintTransactionsRepository {
             ),
           ));
     } catch (e) {
-      yield Result.error(Failure(e));
+      yield Result.error(MintQuoteStreamFailure.unknown(e));
     }
   }
 
   @override
-  Future<Result<MeltQuote, Failure>> meltQuote(
+  Future<Result<MeltQuote, MeltQuoteFailure>> meltQuote(
       String mintUrl, String request) async {
     try {
       final mintWallet =
@@ -49,16 +50,17 @@ class MintTransactionsRepositoryImpl extends MintTransactionsRepository {
         ),
       );
     } catch (e) {
-      return Result.error(Failure(e));
+      return Result.error(MeltQuoteFailure.unknown(e));
     }
   }
 
   @override
-  Future<Result<BigInt, Failure>> melt(String mintUrl, MeltQuote quote) async {
+  Future<Result<BigInt, MeltFailure>> melt(
+      String mintUrl, MeltQuote quote) async {
     try {
       final mintWallet = await multiMintWalletDataSource.getMintWallet(mintUrl);
       if (mintWallet == null) {
-        return Result.error(Failure(Exception('Wallet not found')));
+        return Result.error(MeltFailure.unknown(Exception('Wallet not found')));
       }
 
       final cdkQuote = cdk.MeltQuote(
@@ -71,17 +73,18 @@ class MintTransactionsRepositoryImpl extends MintTransactionsRepository {
       final result = await mintWallet.melt(quote: cdkQuote);
       return Result.ok(result);
     } catch (e) {
-      return Result.error(Failure(e));
+      return Result.error(MeltFailure.unknown(e));
     }
   }
 
   @override
-  Future<Result<Unit, Failure>> send(String mintUrl, String amount) async {
+  Future<Result<Unit, SendFailure>> send(String mintUrl, String amount) async {
     return Result.ok(unit);
   }
 
   @override
-  Future<Result<Unit, Failure>> receive(String mintUrl, String amount) async {
+  Future<Result<Unit, ReceiveFailure>> receive(
+      String mintUrl, String amount) async {
     return Result.ok(unit);
   }
 }

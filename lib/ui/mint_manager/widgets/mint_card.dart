@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../domain/models/mint.dart';
 import '../../core/themes/colors.dart';
-import '../../core/widgets/balance_chip.dart';
+import '../../core/widgets/chips/balance_chip.dart';
 
 class MintCard extends StatelessWidget {
   final Mint mint;
@@ -26,7 +26,7 @@ class MintCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          vertical: 24,
+          vertical: 20,
           horizontal: 4,
         ),
         child: Row(

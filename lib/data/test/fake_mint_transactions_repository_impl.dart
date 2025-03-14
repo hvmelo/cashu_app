@@ -1,12 +1,13 @@
 // A fake implementation of the MintTransactionsRepository for development and testing
 import '../../core/types/types.dart';
+import '../../domain/failures/mint_transactions_failures.dart';
 import '../../domain/models/models.dart';
 import '../../domain/repositories/repositories.dart';
 import '../../domain/value_objects/value_objects.dart';
 
 class FakeMintTransactionsRepositoryImpl implements MintTransactionsRepository {
   @override
-  Stream<Result<MintQuote, Failure>> mintQuoteStream(
+  Stream<Result<MintQuote, MintQuoteStreamFailure>> mintQuoteStream(
       String mintUrl, MintAmount amount) async* {
     // Simulate a mint quote stream with a successful quote
     yield Result.ok(MintQuote(
@@ -31,7 +32,7 @@ class FakeMintTransactionsRepositoryImpl implements MintTransactionsRepository {
   }
 
   @override
-  Future<Result<MeltQuote, Failure>> meltQuote(
+  Future<Result<MeltQuote, MeltQuoteFailure>> meltQuote(
       String mintUrl, String request) async {
     // Return a mock melt quote
     return Result.ok(MeltQuote(
@@ -44,19 +45,21 @@ class FakeMintTransactionsRepositoryImpl implements MintTransactionsRepository {
   }
 
   @override
-  Future<Result<BigInt, Failure>> melt(String mintUrl, MeltQuote quote) async {
+  Future<Result<BigInt, MeltFailure>> melt(
+      String mintUrl, MeltQuote quote) async {
     // Simulate a successful melt
     return Result.ok(quote.amount);
   }
 
   @override
-  Future<Result<Unit, Failure>> send(String mintUrl, String amount) async {
+  Future<Result<Unit, SendFailure>> send(String mintUrl, String amount) async {
     // Simulate a successful send
     return Result.ok(unit);
   }
 
   @override
-  Future<Result<Unit, Failure>> receive(String mintUrl, String amount) async {
+  Future<Result<Unit, ReceiveFailure>> receive(
+      String mintUrl, String amount) async {
     // Simulate a successful receive
     return Result.ok(unit);
   }

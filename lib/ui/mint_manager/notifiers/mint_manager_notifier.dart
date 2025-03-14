@@ -20,7 +20,6 @@ class MintManagerNotifier extends _$MintManagerNotifier {
     return MintManagerState(
       availableMints: availableMints,
       currentMint: currentMint,
-      selectedMint: null,
     );
   }
 
@@ -29,16 +28,6 @@ class MintManagerNotifier extends _$MintManagerNotifier {
     state = AsyncLoading();
 
     ref.invalidateSelf();
-  }
-
-  /// Selects a mint for editing or viewing details
-  void selectMint(Mint mint) {
-    update((state) => state.copyWith(selectedMint: mint));
-  }
-
-  /// Clears the selected mint
-  void clearSelectedMint() {
-    update((state) => state.copyWith(selectedMint: null));
   }
 
   /// Sets a mint as the current mint
@@ -54,6 +43,5 @@ class MintManagerState with _$MintManagerState {
   const factory MintManagerState({
     required List<Mint> availableMints,
     required Mint? currentMint,
-    required Mint? selectedMint,
   }) = _MintManagerState;
 }

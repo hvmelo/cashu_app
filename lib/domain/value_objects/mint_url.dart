@@ -49,7 +49,7 @@ class MintUrl with _$MintUrl {
 
 /// Represents possible validation failures for a [MintUrl].
 @freezed
-class MintUrlValidationFailure with _$MintUrlValidationFailure {
+sealed class MintUrlValidationFailure with _$MintUrlValidationFailure {
   const factory MintUrlValidationFailure.empty() = MintUrlEmpty;
   const factory MintUrlValidationFailure.invalid() = MintUrlInvalid;
 }

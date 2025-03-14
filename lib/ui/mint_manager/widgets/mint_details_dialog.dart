@@ -6,7 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/types/result.dart';
 import '../../../domain/models/mint.dart';
-import '../../core/widgets/balance_chip.dart';
+import '../../core/widgets/chips/balance_chip.dart';
 import '../../providers/mint_providers.dart';
 
 /// Dialog for displaying mint details

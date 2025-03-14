@@ -4,6 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../core/types/result.dart';
 import '../../../core/types/unit.dart';
 import '../../../data/data_providers.dart';
+import '../../../domain/failures/mint_failures.dart';
 import '../../../domain/models/mint.dart';
 import '../../../domain/value_objects/mint_nickname.dart';
 
@@ -27,6 +28,15 @@ class EditMintNotifier extends _$EditMintNotifier {
   void nicknameChanged(String nickname) =>
       update((state) => state.copyWith(nickname: nickname.trim()));
 
+  /// Validates the nickname
+  Result<Unit, MintNicknameValidationFailure> validateNickname() {
+    final currentState = state.unwrapPrevious().valueOrNull;
+    if (currentState == null) {
+      return const Result.ok(unit);
+    }
+    return MintNickname.validate(currentState.nickname);
+  }
+
   /// Saves the changes to the mint
   Future<void> updateMintData() async {
     final currentState = state.unwrapPrevious().valueOrNull;
@@ -34,28 +44,19 @@ class EditMintNotifier extends _$EditMintNotifier {
     // Check if we have a valid state value before proceeding
     if (currentState == null) return;
 
-    // Validate the current nickname value
-    final validationResult = currentState.validate();
-
-    // If validation failed, update state with the error
-    if (validationResult.isError) {
-      update((state) => state.copyWith(showErrorMessages: true));
-      return;
-    }
-
-    // Nickname is optional
     MintNickname? mintNickname;
-
+    // If the nickname is not null, create a MintNickname value object from
+    // it
     if (currentState.nickname.isNotEmpty) {
-      // Create a MintNickname value object from the current nickname
-      final mintNicknameResult = MintNickname.create(currentState.nickname);
-
-      // If nickname creation failed, update state with the error
-      if (mintNicknameResult.isError) {
-        state = AsyncError(mintNicknameResult.error!, StackTrace.current);
-        return;
+      final nicknameResult = MintNickname.create(currentState.nickname);
+      switch (nicknameResult) {
+        case Ok(:final value):
+          mintNickname = value;
+          break;
+        case Error():
+          update((state) => state.copyWith(showErrorMessages: true));
+          return;
       }
-      mintNickname = mintNicknameResult.value;
     }
 
     // Get the original mint
@@ -65,14 +66,25 @@ class EditMintNotifier extends _$EditMintNotifier {
     state = AsyncValue.loading();
 
     // Get the mint repository and update the mint with new nickname
-    final mintRepo = await ref.watch(mintRepositoryProvider.future);
-    await mintRepo.updateMint(
+    final mintRepo = await ref.read(mintRepositoryProvider.future);
+    final result = await mintRepo.updateMint(
       mint.url,
       nickname: mintNickname,
     );
 
-    // Update state with success
-    state = AsyncData(currentState.copyWith(isSuccess: true));
+    // Handle the result
+    switch (result) {
+      case Ok():
+        // Set state to success
+        state = AsyncData(currentState.copyWith(isSuccess: true));
+        break;
+      case Error(error: final failure):
+        state = AsyncError(
+          EditMintDialogError.updateMintError(failure),
+          StackTrace.current,
+        );
+        break;
+    }
   }
 }
 
@@ -87,35 +99,12 @@ class EditMintState with _$EditMintState {
     required bool showErrorMessages,
     @Default(false) bool isSuccess,
   }) = _EditMintState;
-
-  /// Validates the nickname
-  Result<Unit, EditMintError> validate() {
-    if (nickname.isEmpty) {
-      // Nickname is optional, so we can return ok if it's empty
-      return Result.ok(unit);
-    }
-
-    final nicknameValidationResult = MintNickname.validate(nickname);
-
-    return switch (nicknameValidationResult) {
-      Ok() => Result.ok(unit),
-      Error(:final error) => switch (error) {
-          NicknameEmpty() => Result.error(EditMintNicknameEmptyError()),
-          NicknameTooLong() => Result.error(EditMintNicknameTooLongError()),
-          NicknameInvalidCharacters() =>
-            Result.error(EditMintNicknameInvalidError()),
-          _ => throw Exception('Unexpected error: $error'),
-        },
-    };
-  }
 }
 
 @freezed
-sealed class EditMintError with _$EditMintError {
-  const EditMintError._();
-
-  factory EditMintError.nicknameEmpty() = EditMintNicknameEmptyError;
-  factory EditMintError.nicknameTooLong() = EditMintNicknameTooLongError;
-  factory EditMintError.nicknameInvalid() = EditMintNicknameInvalidError;
-  factory EditMintError.unknown(String message) = EditMintUnknownError;
+sealed class EditMintDialogError with _$EditMintDialogError {
+  const factory EditMintDialogError.nicknameValidation(
+      MintNicknameValidationFailure failure) = EditMintNicknameValidationError;
+  const factory EditMintDialogError.updateMintError(UpdateMintFailure failure) =
+      EditMintUpdateMintError;
 }

@@ -323,18 +323,6 @@ abstract class AppLocalizations {
   /// **'Mint URL'**
   String get addMintScreenUrlLabel;
 
-  /// No description provided for @addMintScreenUrlRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'Mint URL is required'**
-  String get addMintScreenUrlRequired;
-
-  /// No description provided for @addMintScreenUrlInvalid.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter a valid URL'**
-  String get addMintScreenUrlInvalid;
-
   /// No description provided for @addMintScreenNicknameLabel.
   ///
   /// In en, this message translates to:
@@ -359,24 +347,6 @@ abstract class AppLocalizations {
   /// **'Mint added successfully'**
   String get addMintScreenSuccess;
 
-  /// No description provided for @addMintScreenErrorEmptyUrl.
-  ///
-  /// In en, this message translates to:
-  /// **'Mint URL is required'**
-  String get addMintScreenErrorEmptyUrl;
-
-  /// No description provided for @addMintScreenErrorInvalidUrl.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter a valid URL'**
-  String get addMintScreenErrorInvalidUrl;
-
-  /// No description provided for @addMintScreenErrorUnknown.
-  ///
-  /// In en, this message translates to:
-  /// **'An unknown error occurred'**
-  String get addMintScreenErrorUnknown;
-
   /// No description provided for @addMintScreenPasteFromClipboard.
   ///
   /// In en, this message translates to:
@@ -388,12 +358,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Manage Mints'**
   String get mintManagerScreenTitle;
-
-  /// No description provided for @mintManagerScreenRefresh.
-  ///
-  /// In en, this message translates to:
-  /// **'Refresh mints'**
-  String get mintManagerScreenRefresh;
 
   /// No description provided for @mintManagerScreenNoMints.
   ///
@@ -616,6 +580,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An unknown error occurred'**
   String get generalUnknownError;
+
+  /// No description provided for @generalMintUrlEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Mint URL cannot be empty'**
+  String get generalMintUrlEmpty;
+
+  /// No description provided for @generalMintUrlInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid URL'**
+  String get generalMintUrlInvalid;
 
   /// No description provided for @generalNicknameEmpty.
   ///

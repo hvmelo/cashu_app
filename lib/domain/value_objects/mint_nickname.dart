@@ -51,11 +51,12 @@ class MintNickname with _$MintNickname {
 
 /// Represents possible validation failures for a [MintNickname].
 @freezed
-class MintNicknameValidationFailure with _$MintNicknameValidationFailure {
-  const factory MintNicknameValidationFailure.empty() = NicknameEmpty;
+sealed class MintNicknameValidationFailure
+    with _$MintNicknameValidationFailure {
+  const factory MintNicknameValidationFailure.empty() = MintNicknameEmpty;
   const factory MintNicknameValidationFailure.tooLong({
     required int maxLength,
-  }) = NicknameTooLong;
+  }) = MintNicknameTooLong;
   const factory MintNicknameValidationFailure.invalidCharacters() =
-      NicknameInvalidCharacters;
+      MintNicknameInvalidCharacters;
 }
