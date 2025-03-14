@@ -39,7 +39,7 @@ class MintAmount with _$MintAmount {
 
 /// Represents possible validation failures for a [MintAmount].
 @freezed
-class MintAmountValidationFailure with _$MintAmountValidationFailure {
+sealed class MintAmountValidationFailure with _$MintAmountValidationFailure {
   factory MintAmountValidationFailure.negativeOrZero() =
       MintAmountNegativeOrZero;
   factory MintAmountValidationFailure.tooLarge({

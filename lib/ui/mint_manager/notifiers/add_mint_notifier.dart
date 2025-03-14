@@ -121,7 +121,7 @@ class AddMintNotifier extends _$AddMintNotifier {
         break;
       case Error(error: final failure):
         state = AsyncError(
-          AddMintScreenError.addMintError(failure),
+          failure,
           StackTrace.current,
         );
         break;
@@ -149,12 +149,12 @@ class AddMintState with _$AddMintState {
       );
 }
 
-@freezed
-sealed class AddMintScreenError with _$AddMintScreenError {
-  factory AddMintScreenError.mintUrlValidation(
-      MintUrlValidationFailure failure) = AddMintMintUrlValidationError;
-  factory AddMintScreenError.nicknameValidation(
-      MintNicknameValidationFailure failure) = AddMintNicknameValidationError;
-  factory AddMintScreenError.addMintError(AddMintFailure failure) =
-      AddMintError;
-}
+// @freezed
+// sealed class AddMintScreenError with _$AddMintScreenError {
+//   factory AddMintScreenError.mintUrlValidation(
+//       MintUrlValidationFailure failure) = AddMintMintUrlValidationError;
+//   factory AddMintScreenError.nicknameValidation(
+//       MintNicknameValidationFailure failure) = AddMintNicknameValidationError;
+//   factory AddMintScreenError.addMintError(AddMintFailure failure) =
+//       AddMintError;
+// }

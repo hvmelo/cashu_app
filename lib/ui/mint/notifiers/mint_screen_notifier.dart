@@ -1,3 +1,4 @@
+import 'package:cashu_app/ui/core/errors/unexpected_error.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -14,46 +15,37 @@ class MintScreenNotifier extends _$MintScreenNotifier {
   @override
   FutureOr<MintScreenState> build() async {
     return MintScreenState.editing(
-      amount: '0',
+      amount: BigInt.zero,
       showErrorMessages: false,
     );
   }
 
   void amountChanged(String amountStr) {
-    update((state) =>
-        (state as MintScreenEditingState).copyWith(amount: amountStr));
+    final amount = BigInt.tryParse(amountStr.trim());
+    if (amount == null) {
+      throw UnexpectedError(message: 'Invalid amount format.');
+    }
+    update(
+        (state) => (state as MintScreenEditingState).copyWith(amount: amount));
+  }
+
+  Result<Unit, MintAmountValidationFailure> validateAmount() {
+    final currentState = this as MintScreenEditingState;
+    return MintAmount.validate(currentState.amount);
   }
 
   /// Generates a Lightning invoice for the specified amount
   Future<void> generateInvoice() async {
     final currentState = state.unwrapPrevious().valueOrNull;
-
-    if (currentState == null) {
-      throw Exception('Current state is null');
-    }
+    if (currentState == null) return;
 
     if (currentState is! MintScreenEditingState) {
-      throw Exception('Current state is not an MintScreenEditingState');
+      throw UnexpectedError(
+          message: 'Current state is not an MintScreenEditingState');
     }
 
-    final validationResult = currentState.validate();
-
-    if (validationResult.isError) {
-      state = AsyncError(validationResult.error!, StackTrace.current);
-      return;
-    }
-
-    final amount = BigInt.tryParse(currentState.amount.trim());
-
-    if (amount == null) {
-      state =
-          AsyncError(MintScreenError.invalidAmountFormat(), StackTrace.current);
-      return;
-    }
-
-    // Create the mint amount
-    final mintAmountResult = MintAmount.create(amount);
-
+    // Create a MintAmount value object from the current amount
+    final mintAmountResult = MintAmount.create(currentState.amount);
     switch (mintAmountResult) {
       case Ok(value: final mintAmount):
         update((state) => MintScreenState.invoice(
@@ -75,7 +67,7 @@ class MintScreenNotifier extends _$MintScreenNotifier {
   /// Resets the state to the initial state
   void reset() {
     update((state) => MintScreenState.editing(
-          amount: '0',
+          amount: BigInt.zero,
           showErrorMessages: false,
         ));
   }
@@ -83,50 +75,13 @@ class MintScreenNotifier extends _$MintScreenNotifier {
 
 /// State for the mint screen
 @freezed
-class MintScreenState with _$MintScreenState {
-  const MintScreenState._();
-
+sealed class MintScreenState with _$MintScreenState {
   factory MintScreenState.editing({
-    required String amount,
+    required BigInt amount,
     required bool showErrorMessages,
   }) = MintScreenEditingState;
 
   factory MintScreenState.invoice({
     required MintAmount mintAmount,
   }) = MintScreenInvoiceState;
-
-  Result<Unit, MintScreenError> validate() {
-    if (this is MintScreenInvoiceState) {
-      return Result.ok(unit);
-    }
-
-    final currentState = this as MintScreenEditingState;
-    final amount = BigInt.tryParse(currentState.amount.trim());
-
-    if (amount == null) {
-      return Result.error(MintScreenError.invalidAmountFormat());
-    }
-
-    final mintAmountValidationResult = MintAmount.validate(amount);
-
-    return switch (mintAmountValidationResult) {
-      Ok() => Result.ok(unit),
-      Error(:final error) => switch (error) {
-          MintAmountNegativeOrZero() =>
-            Result.error(MintScreenError.mintAmountNegativeOrZero()),
-          MintAmountTooLarge(:final maxAmount) =>
-            Result.error(MintScreenError.mintAmountTooLarge(maxAmount)),
-          _ => throw Exception('Unexpected error: $error'),
-        },
-    };
-  }
-}
-
-@freezed
-sealed class MintScreenError with _$MintScreenError {
-  const MintScreenError._();
-  factory MintScreenError.mintAmountTooLarge(BigInt maxAmount) = AmountTooLarge;
-  factory MintScreenError.mintAmountNegativeOrZero() = AmountNegativeOrZero;
-  factory MintScreenError.invalidAmountFormat() = AmountInvalidFormat;
-  factory MintScreenError.unknown() = UnknownError;
 }

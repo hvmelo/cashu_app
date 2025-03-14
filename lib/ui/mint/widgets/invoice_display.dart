@@ -27,8 +27,9 @@ class InvoiceDisplay extends ConsumerWidget {
 
     ref.listen(
         invoiceDisplayNotifierProvider(amount)
-            .selectAsync((value) => value.isIssued), (_, isIssued) async {
-      if (await isIssued) {
+            .selectAsync((value) => value.isIssued), (_, isIssuedFuture) async {
+      final isIssued = await isIssuedFuture;
+      if (isIssued) {
         Future.delayed(const Duration(seconds: 1), () {
           onClose();
         });
@@ -62,7 +63,7 @@ class InvoiceDisplay extends ConsumerWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                '$amount sats',
+                '${amount.value} sats',
                 style: context.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppColors.actionColors['receive'],

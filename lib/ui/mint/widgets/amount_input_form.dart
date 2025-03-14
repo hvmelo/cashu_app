@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../../../core/types/types.dart';
+import '../../../domain/value_objects/value_objects.dart';
 import '../../core/themes/colors.dart';
 import '../../core/widgets/widgets.dart';
 import '../notifiers/mint_screen_notifier.dart';
@@ -74,18 +75,17 @@ class AmountInputForm extends HookWidget {
                         mintScreenNotifier.amountChanged(value);
                       },
                       validator: (_) {
-                        final validationResult = state.validate();
+                        final validationResult =
+                            mintScreenNotifier.validateAmount();
+
                         return switch (validationResult) {
                           Ok() => null,
                           Error(:final error) => switch (error) {
-                              AmountTooLarge(:final maxAmount) => context.l10n
+                              MintAmountTooLarge(:final maxAmount) => context
+                                  .l10n
                                   .mintScreenAmountTooLarge(maxAmount),
-                              AmountNegativeOrZero() =>
+                              MintAmountNegativeOrZero() =>
                                 context.l10n.mintScreenAmountNegativeOrZero,
-                              AmountInvalidFormat() =>
-                                context.l10n.mintScreenAmountInvalidFormat,
-                              UnknownError() =>
-                                context.l10n.generalUnknownError,
                             },
                         };
                       },

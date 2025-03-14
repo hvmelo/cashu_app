@@ -28,7 +28,7 @@ class InvoiceDisplayNotifier extends _$InvoiceDisplayNotifier {
       case Ok(value: final mintQuote):
         return mintQuote;
       case Error(:final error):
-        throw Exception('Failed to get mint quote: $error');
+        throw error;
     }
   }
 }
