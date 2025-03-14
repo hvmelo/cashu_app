@@ -1,3 +1,4 @@
+import 'package:cashu_app/ui/mint_manager/notifiers/remove_mint_notifier.dart';
 import 'package:cashu_app/ui/utils/extensions/build_context_x.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -71,6 +72,7 @@ class MintManagerScreen extends ConsumerWidget {
             ? _buildEmptyState(context, ref)
             : _buildMintsList(
                 context,
+                ref,
                 state: state,
                 notifier: notifier,
               ),
@@ -136,7 +138,8 @@ class MintManagerScreen extends ConsumerWidget {
   }
 
   Widget _buildMintsList(
-    BuildContext context, {
+    BuildContext context,
+    WidgetRef ref, {
     required MintManagerState state,
     required MintManagerNotifier notifier,
   }) {
@@ -164,6 +167,7 @@ class MintManagerScreen extends ConsumerWidget {
             ),
             onOptionsPressed: () => _showMintOptionsBottomSheet(
               context,
+              ref,
               mint: mint,
               isCurrentMint: isCurrentMint,
               notifier: notifier,
@@ -201,7 +205,8 @@ class MintManagerScreen extends ConsumerWidget {
   }
 
   void _showMintOptionsBottomSheet(
-    BuildContext context, {
+    BuildContext context,
+    WidgetRef ref, {
     required Mint mint,
     required bool isCurrentMint,
     required MintManagerNotifier notifier,
@@ -237,6 +242,7 @@ class MintManagerScreen extends ConsumerWidget {
                 context.pop();
                 _showDeleteMintConfirmation(
                   context,
+                  ref,
                   mint: mint,
                   notifier: notifier,
                 );
@@ -261,7 +267,8 @@ class MintManagerScreen extends ConsumerWidget {
   }
 
   void _showDeleteMintConfirmation(
-    BuildContext context, {
+    BuildContext context,
+    WidgetRef ref, {
     required Mint mint,
     required MintManagerNotifier notifier,
   }) {
@@ -276,12 +283,19 @@ class MintManagerScreen extends ConsumerWidget {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              context.pop();
+            },
             child: Text(context.l10n.generalCancelButtonLabel),
           ),
           TextButton(
-            onPressed: () {
-              // TODO: Implement delete mint
+            onPressed: () async {
+              final deleteNotifier =
+                  ref.read(removeMintNotifierProvider(mint).notifier);
+              await deleteNotifier.removeMint();
+              if (context.mounted) {
+                context.pop();
+              }
             },
             style: TextButton.styleFrom(
               foregroundColor: AppColors.red,

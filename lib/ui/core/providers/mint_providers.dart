@@ -24,6 +24,53 @@ Future<List<Mint>> listMints(Ref ref) async {
 }
 
 @riverpod
+Future<Result<Unit, AddMintFailure>> addMint(Ref ref, MintUrl mintUrl) async {
+  final mintRepo = await ref.watch(mintRepositoryProvider.future);
+  final result = await mintRepo.addMint(mintUrl);
+  switch (result) {
+    case Ok():
+      // Invalidate the list of mints
+      ref.invalidate(listMintsProvider);
+      return Result.ok(unit);
+    case Error(:final error):
+      return Result.error(error);
+  }
+}
+
+@riverpod
+Future<Result<Unit, UpdateMintFailure>> updateMint(
+  Ref ref,
+  MintUrl mintUrl, {
+  MintNickname? nickname,
+}) async {
+  final mintRepo = await ref.watch(mintRepositoryProvider.future);
+  final result = await mintRepo.updateMint(mintUrl, nickname: nickname);
+  switch (result) {
+    case Ok():
+      // Invalidate the list of mints
+      ref.invalidate(listMintsProvider);
+      return Result.ok(unit);
+    case Error(:final error):
+      return Result.error(error);
+  }
+}
+
+@riverpod
+Future<Result<Unit, RemoveMintFailure>> removeMint(
+    Ref ref, MintUrl mintUrl) async {
+  final mintRepo = await ref.watch(mintRepositoryProvider.future);
+  final result = await mintRepo.removeMint(mintUrl);
+  switch (result) {
+    case Ok():
+      // Invalidate the list of mints
+      ref.invalidate(listMintsProvider);
+      return Result.ok(unit);
+    case Error(:final error):
+      return Result.error(error);
+  }
+}
+
+@riverpod
 Stream<Result<BigInt, MintBalanceStreamFailure>> mintBalanceStream(
     Ref ref, MintUrl mintUrl) async* {
   final mintRepo = await ref.watch(mintRepositoryProvider.future);

@@ -47,12 +47,9 @@ class EditMintDialog extends HookConsumerWidget {
         switch (current) {
           case AsyncData(:final value):
             if (value.isSuccess) {
-              // Show success message
-              ref.invalidate(listMintsProvider);
               // Close the dialog
               if (context.mounted) {
                 context.pop();
-
                 AppSnackBar.showSuccess(
                   context,
                   message: context.l10n.editMintDialogMintUpdated,

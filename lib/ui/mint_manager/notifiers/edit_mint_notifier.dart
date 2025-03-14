@@ -7,6 +7,7 @@ import '../../../data/data_providers.dart';
 import '../../../domain/failures/mint_failures.dart';
 import '../../../domain/models/mint.dart';
 import '../../../domain/value_objects/mint_nickname.dart';
+import '../../core/providers/mint_providers.dart';
 
 part 'edit_mint_notifier.freezed.dart';
 part 'edit_mint_notifier.g.dart';
@@ -66,11 +67,8 @@ class EditMintNotifier extends _$EditMintNotifier {
     state = AsyncValue.loading();
 
     // Get the mint repository and update the mint with new nickname
-    final mintRepo = await ref.read(mintRepositoryProvider.future);
-    final result = await mintRepo.updateMint(
-      mint.url,
-      nickname: mintNickname,
-    );
+    final result = await ref
+        .read(updateMintProvider(mint.url, nickname: mintNickname).future);
 
     // Handle the result
     switch (result) {

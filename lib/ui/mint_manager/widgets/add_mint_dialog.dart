@@ -27,7 +27,6 @@ class AddMintDialog extends ConsumerWidget {
         case AsyncData(:final value):
           if (value.isSuccess) {
             if (context.mounted) {
-              ref.invalidate(listMintsProvider);
               context.pop();
               AppSnackBar.showSuccess(
                 context,

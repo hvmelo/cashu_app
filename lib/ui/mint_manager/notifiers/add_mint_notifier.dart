@@ -96,11 +96,7 @@ class AddMintNotifier extends _$AddMintNotifier {
     state = AsyncValue.loading();
 
     // Add the new mint
-    final mintRepo = await ref.read(mintRepositoryProvider.future);
-    final result = await mintRepo.addMint(
-      mintUrl,
-      nickname: mintNickname,
-    );
+    final result = await ref.read(addMintProvider(mintUrl).future);
 
     // Handle the result
     switch (result) {
