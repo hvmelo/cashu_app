@@ -1,15 +1,13 @@
-import 'package:cashu_app/data/data_providers.dart';
-import 'package:cashu_app/domain/failures/mint_failures.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/types/result.dart';
 import '../../../core/types/unit.dart';
+import '../../../data/data_providers.dart';
 import '../../../domain/value_objects/mint_nickname.dart';
 import '../../../domain/value_objects/mint_url.dart';
-import '../../core/errors/unexpected_error.dart';
 import '../../core/notifiers/current_mint_notifier.dart';
-import '../../providers/mint_providers.dart';
+import '../../core/providers/mint_providers.dart';
 
 part 'add_mint_notifier.freezed.dart';
 part 'add_mint_notifier.g.dart';
@@ -148,13 +146,3 @@ class AddMintState with _$AddMintState {
         isSuccess: false,
       );
 }
-
-// @freezed
-// sealed class AddMintScreenError with _$AddMintScreenError {
-//   factory AddMintScreenError.mintUrlValidation(
-//       MintUrlValidationFailure failure) = AddMintMintUrlValidationError;
-//   factory AddMintScreenError.nicknameValidation(
-//       MintNicknameValidationFailure failure) = AddMintNicknameValidationError;
-//   factory AddMintScreenError.addMintError(AddMintFailure failure) =
-//       AddMintError;
-// }

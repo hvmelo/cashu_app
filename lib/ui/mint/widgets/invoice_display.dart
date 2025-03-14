@@ -5,10 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../core/types/types.dart';
 import '../../../domain/models/mint_quote.dart';
 import '../../../domain/value_objects/value_objects.dart';
+import '../../core/errors/unexpected_error.dart';
+import '../../core/notifiers/current_mint_notifier.dart';
 import '../../core/themes/colors.dart';
 import '../../core/widgets/widgets.dart';
+import '../../core/providers/mint_providers.dart';
 import '../notifiers/invoice_display_notifier.dart';
 
 class InvoiceDisplay extends ConsumerWidget {
@@ -23,25 +27,56 @@ class InvoiceDisplay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final mintQuoteAsync = ref.watch(invoiceDisplayNotifierProvider(amount));
+    final currentMintAsync = ref.watch(currentMintNotifierProvider);
+    switch (currentMintAsync) {
+      case AsyncData(:final value):
+        if (value == null) {
+          return ErrorWidget(UnexpectedError(message: 'Mint not found'));
+        }
+        final mintQuoteAsync = ref.watch(mintQuoteStreamProvider(
+          value.url,
+          amount,
+        ));
 
-    ref.listen(
-        invoiceDisplayNotifierProvider(amount)
-            .selectAsync((value) => value.isIssued), (_, isIssuedFuture) async {
-      final isIssued = await isIssuedFuture;
-      if (isIssued) {
-        Future.delayed(const Duration(seconds: 1), () {
-          onClose();
+        ref.listen(
+            mintQuoteStreamProvider(
+              value.url,
+              amount,
+            ), (previous, current) {
+          switch (current) {
+            case AsyncData(:final value):
+              switch (value) {
+                case Ok(value: final mintQuote):
+                  if (mintQuote.isIssued) {
+                    Future.delayed(const Duration(seconds: 1), () {
+                      onClose();
+                    });
+                  }
+                case Error(:final error):
+                  throw error;
+              }
+            case AsyncError(:final error):
+              throw error;
+            default:
+              return;
+          }
         });
-      }
-    });
 
-    return switch (mintQuoteAsync) {
-      AsyncData(:final value) => _buildWidget(context, mintQuote: value),
-      AsyncError(:final error) => ErrorWidget(error),
-      AsyncLoading() => const Center(child: LoadingIndicator()),
-      _ => const SizedBox(),
-    };
+        return switch (mintQuoteAsync) {
+          AsyncData(value: final result) => switch (result) {
+              Ok(value: final mintQuote) =>
+                _buildWidget(context, mintQuote: mintQuote),
+              Error(:final error) => ErrorWidget(error),
+            },
+          AsyncError(:final error) => ErrorWidget(error),
+          AsyncLoading() => const Center(child: LoadingIndicator()),
+          _ => const SizedBox(),
+        };
+      case AsyncError(:final error):
+        return ErrorWidget(error);
+      case _:
+        return const Center(child: LoadingIndicator());
+    }
   }
 
   Widget _buildWidget(

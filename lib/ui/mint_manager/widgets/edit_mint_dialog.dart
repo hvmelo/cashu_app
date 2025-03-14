@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../core/types/types.dart';
 import '../../../domain/models/mint.dart';
 import '../../../domain/value_objects/value_objects.dart';
+import '../../core/providers/mint_providers.dart';
 import '../../core/themes/colors.dart';
 import '../../core/widgets/buttons/buttons.dart';
 import '../../core/widgets/widgets.dart';
@@ -41,20 +42,23 @@ class EditMintDialog extends HookConsumerWidget {
 
     // Handle success state
     ref.listen(
-      editMintNotifierProvider(mint).selectAsync((state) => state.isSuccess),
-      (previous, current) async {
-        final isSuccess = await current;
-        if (isSuccess) {
-          // Show success message
-          // Close the dialog
-          if (context.mounted) {
-            context.pop();
+      editMintNotifierProvider(mint),
+      (previous, current) {
+        switch (current) {
+          case AsyncData(:final value):
+            if (value.isSuccess) {
+              // Show success message
+              ref.invalidate(listMintsProvider);
+              // Close the dialog
+              if (context.mounted) {
+                context.pop();
 
-            AppSnackBar.showSuccess(
-              context,
-              message: context.l10n.editMintDialogMintUpdated,
-            );
-          }
+                AppSnackBar.showSuccess(
+                  context,
+                  message: context.l10n.editMintDialogMintUpdated,
+                );
+              }
+            }
         }
       },
     );

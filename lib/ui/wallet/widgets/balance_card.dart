@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../core/themes/colors.dart';
 import '../../core/widgets/cards/error_card.dart';
 import '../../core/widgets/cards/loading_card.dart';
-import '../../providers/mint_providers.dart';
+import '../../core/providers/mint_providers.dart';
 
 class BalanceCard extends ConsumerWidget {
   const BalanceCard({

@@ -5,8 +5,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../domain/models/mint.dart';
-import '../../../providers/mint_providers.dart';
 import '../../notifiers/current_mint_notifier.dart';
+import '../../providers/mint_providers.dart';
 import '../../themes/colors.dart';
 import '../shimmer/shimmer.dart';
 import 'default_card.dart';

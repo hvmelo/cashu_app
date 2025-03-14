@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/types/types.dart';
 import '../../../domain/value_objects/value_objects.dart';
+import '../../core/providers/mint_providers.dart';
 import '../../core/themes/colors.dart';
 import '../../core/widgets/buttons/buttons.dart';
 import '../../core/widgets/widgets.dart';
@@ -21,17 +22,19 @@ class AddMintDialog extends ConsumerWidget {
     final notifier = ref.read(addMintNotifierProvider.notifier);
 
     // Reset the state when the dialog is shown
-    ref.listen(addMintNotifierProvider.selectAsync((state) => state.isSuccess),
-        (previous, current) async {
-      final isSuccess = await current;
-      if (isSuccess) {
-        if (context.mounted) {
-          context.pop();
-          AppSnackBar.showSuccess(
-            context,
-            message: context.l10n.addMintScreenSuccess,
-          );
-        }
+    ref.listen(addMintNotifierProvider, (previous, current) async {
+      switch (current) {
+        case AsyncData(:final value):
+          if (value.isSuccess) {
+            if (context.mounted) {
+              ref.invalidate(listMintsProvider);
+              context.pop();
+              AppSnackBar.showSuccess(
+                context,
+                message: context.l10n.addMintScreenSuccess,
+              );
+            }
+          }
       }
     });
 

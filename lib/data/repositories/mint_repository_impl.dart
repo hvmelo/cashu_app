@@ -101,10 +101,10 @@ class MintRepositoryImpl extends MintRepository {
 
     try {
       if (nickname != null) {
-        await mintLocalStorage.removeCurrentMintUrl();
-      } else {
-        await mintLocalStorage.saveMintNickname(mintUrl.value, nickname!.value);
+        await mintLocalStorage.deleteMintNickname(mintUrl.value);
       }
+      await mintLocalStorage.saveMintNickname(mintUrl.value, nickname!.value);
+
       return Result.ok(unit);
     } catch (e) {
       return Result.error(UpdateMintFailure.unknown(e));

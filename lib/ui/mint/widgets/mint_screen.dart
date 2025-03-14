@@ -17,7 +17,12 @@ class MintScreen extends ConsumerWidget {
 
     void handleCloseInvoice() {
       ref.read(mintScreenNotifierProvider.notifier).reset();
-      context.go(Routes.home);
+
+      if (context.canPop()) {
+        context.pop();
+      } else {
+        context.go(Routes.home);
+      }
     }
 
     return Scaffold(

@@ -3,7 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../domain/models/mint.dart';
 import '../../core/notifiers/current_mint_notifier.dart';
-import '../../providers/mint_providers.dart';
+import '../../core/providers/mint_providers.dart';
 
 part 'mint_manager_notifier.freezed.dart';
 part 'mint_manager_notifier.g.dart';

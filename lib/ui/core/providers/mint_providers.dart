@@ -1,12 +1,12 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../core/types/types.dart';
-import '../../data/data_providers.dart';
-import '../../domain/failures/mint_failures.dart';
-import '../../domain/failures/mint_transactions_failures.dart';
-import '../../domain/models/models.dart';
-import '../../domain/value_objects/value_objects.dart';
+import '../../../core/types/types.dart';
+import '../../../data/data_providers.dart';
+import '../../../domain/failures/mint_failures.dart';
+import '../../../domain/failures/mint_transactions_failures.dart';
+import '../../../domain/models/models.dart';
+import '../../../domain/value_objects/value_objects.dart';
 
 part 'mint_providers.g.dart';
 

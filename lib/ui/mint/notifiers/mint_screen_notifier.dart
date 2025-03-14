@@ -21,6 +21,11 @@ class MintScreenNotifier extends _$MintScreenNotifier {
   }
 
   void amountChanged(String amountStr) {
+    if (amountStr.isEmpty) {
+      update((state) =>
+          (state as MintScreenEditingState).copyWith(amount: BigInt.zero));
+      return;
+    }
     final amount = BigInt.tryParse(amountStr.trim());
     if (amount == null) {
       throw UnexpectedError(message: 'Invalid amount format.');
