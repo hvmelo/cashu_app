@@ -3,7 +3,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/types/result.dart';
 import '../../../core/types/unit.dart';
-import '../../../data/data_providers.dart';
 import '../../../domain/failures/mint_failures.dart';
 import '../../../domain/models/mint.dart';
 import '../../../domain/value_objects/mint_nickname.dart';

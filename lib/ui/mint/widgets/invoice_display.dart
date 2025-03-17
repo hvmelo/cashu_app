@@ -10,10 +10,9 @@ import '../../../domain/models/mint_quote.dart';
 import '../../../domain/value_objects/value_objects.dart';
 import '../../core/errors/unexpected_error.dart';
 import '../../core/notifiers/current_mint_notifier.dart';
+import '../../core/providers/mint_providers.dart';
 import '../../core/themes/colors.dart';
 import '../../core/widgets/widgets.dart';
-import '../../core/providers/mint_providers.dart';
-import '../notifiers/invoice_display_notifier.dart';
 
 class InvoiceDisplay extends ConsumerWidget {
   final MintAmount amount;
@@ -69,13 +68,13 @@ class InvoiceDisplay extends ConsumerWidget {
               Error(:final error) => ErrorWidget(error),
             },
           AsyncError(:final error) => ErrorWidget(error),
-          AsyncLoading() => const Center(child: LoadingIndicator()),
+          AsyncLoading() => const Center(child: CircularProgressIndicator()),
           _ => const SizedBox(),
         };
       case AsyncError(:final error):
         return ErrorWidget(error);
       case _:
-        return const Center(child: LoadingIndicator());
+        return const Center(child: CircularProgressIndicator());
     }
   }
 

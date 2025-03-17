@@ -56,7 +56,7 @@ class MintScreen extends ConsumerWidget {
                   handleCloseInvoice: handleCloseInvoice,
                 ),
               AsyncError(:final error) => ErrorWidget(error),
-              _ => const Center(child: LoadingIndicator()),
+              _ => const Center(child: CircularProgressIndicator()),
             },
           ),
         ),

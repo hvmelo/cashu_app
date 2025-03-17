@@ -54,7 +54,7 @@ class MintManagerScreen extends ConsumerWidget {
               ),
             ),
           _ => const Center(
-              child: LoadingIndicator(),
+              child: CircularProgressIndicator(),
             ),
         });
   }
